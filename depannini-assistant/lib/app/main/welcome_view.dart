@@ -18,9 +18,8 @@ class WelcomeV extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Column(
           children: [
-            SizedBox(height: size.height * 0.15,),
-            Image.asset('assets/images/logo_white.png'),
-            SizedBox(height: size.height * 0.03,),
+            SizedBox(height: size.height * 0.1,),
+            Image.asset('assets/images/logo.png'),
             Text(
               'Welcome',
               style: theme.textTheme.headlineMedium,

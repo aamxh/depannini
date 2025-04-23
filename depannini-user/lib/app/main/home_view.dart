@@ -1,7 +1,6 @@
 import 'package:depannini_user/app/main/home_card_widget.dart';
 import 'package:depannini_user/app/settings/settings_view.dart';
 import 'package:depannini_user/core/constants.dart';
-import 'package:depannini_user/core/theme.dart';
 import 'package:depannini_user/core/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,8 +17,8 @@ class HomeV extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Container(
-          padding: EdgeInsets.only(left: 5, top: 5,),
+        leading: Container(
+          padding: EdgeInsets.only(left: 10, top: 5,),
           child: Obx(() => GestureDetector(
               onTap: () => _ctrl.switchTheme(),
               child: Icon(
@@ -30,6 +29,14 @@ class HomeV extends StatelessWidget {
           ),
         ),
         elevation: 0,
+        centerTitle: true,
+        title: Container(
+          padding: EdgeInsets.only(top: 10),
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: size.width * 0.4,
+          ),
+        ),
         actions: [
           Container(
             padding: EdgeInsets.only(right: 20),

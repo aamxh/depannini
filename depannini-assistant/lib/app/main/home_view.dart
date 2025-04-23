@@ -21,15 +21,23 @@ class HomeV extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: Container(
-          padding: EdgeInsets.only(top: 5, left: 5),
+          padding: EdgeInsets.only(top: 5, left: 10),
           child: GestureDetector(
             onTap: () => _ctrl.switchTheme(),
             child: Icon(
               _ctrl.isDark ? Icons.nightlight_round : Icons.sunny,
-              size: 32,
+              size: 35,
             ),
           ),
         ),
+        title: Container(
+          padding: EdgeInsets.only(top: 10),
+          child: Image.asset(
+            'assets/images/logo.png',
+            width: size.width * 0.4,
+          ),
+        ),
+        centerTitle: true,
         elevation: 0,
         actions: [
           Container(

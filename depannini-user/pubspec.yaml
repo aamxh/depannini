@@ -41,12 +41,13 @@ flutter:
     - assets/icons/
 
 flutter_native_splash:
-  color: "#d70005"
-  image: "assets/images/logo_red.png"
+  color: "#ffffff"
+  image: "assets/images/logo.png"
   android_12:
-    image: "assets/images/logo_red.png"
-    icon_background_color: "#d70005"
-
+    image: "assets/images/logo.png"
+    icon_background_color: "#ffffff"
+  android_gravity: center
+  ios_content_mode: center
   android: true
   ios: true
   web: false
