@@ -8,7 +8,7 @@ class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('Users must have an email address')
-        
+
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -34,23 +34,28 @@ class User(AbstractBaseUser, PermissionsMixin):
     ]
 
     SERVICE_TYPE_CHOICES = [
-        ('depanneur', 'Depanneur'),
-        ('reparateur', 'Reparateur'),
+        ('towing', 'Towing'),
+        ('rapair', 'Repair'),
     ]
 
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=20, blank=True, null=True, unique=True)
-    profile_photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
-    location = models.JSONField(blank=True, null=True)  # Storing lat/long as JSON
+    phone_number = models.CharField(
+        max_length=20, blank=True, null=True, unique=True)
+    profile_photo = models.ImageField(
+        upload_to='profile_photos/', blank=True, null=True)
+    # Storing lat/long as JSON
+    location = models.JSONField(blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
-    
+
     # Fields for assistants
-    user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='user')
-    service_type = models.CharField(max_length=10, choices=SERVICE_TYPE_CHOICES, blank=True, null=True)
+    user_type = models.CharField(
+        max_length=10, choices=USER_TYPE_CHOICES, default='user')
+    service_type = models.CharField(
+        max_length=10, choices=SERVICE_TYPE_CHOICES, blank=True, null=True)
     vehicle_type = models.CharField(max_length=100, blank=True, null=True)
     is_active_assistant = models.BooleanField(default=False)
-    
+
     # Standard Django fields
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -77,8 +82,9 @@ class VerificationCode(models.Model):
         ('phone', 'Phone Verification'),
         ('password', 'Password Reset'),
     ]
-    
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='verification_codes')
+
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='verification_codes')
     code = models.CharField(max_length=10)
     code_type = models.CharField(max_length=10, choices=CODE_TYPE_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
