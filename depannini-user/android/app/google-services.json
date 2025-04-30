@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1096207007187",
+    "project_id": "depannini-7854d",
+    "storage_bucket": "depannini-7854d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1096207007187:android:e2eedf46eae6fcd4564326",
+        "android_client_info": {
+          "package_name": "com.example.depannini_user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGX_s7bm2LqZis-6NzVHT2B8PKzXJob4s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
