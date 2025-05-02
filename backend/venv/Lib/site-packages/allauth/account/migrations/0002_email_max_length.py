@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.conf import settings
 from django.db import migrations, models
 
@@ -10,7 +7,6 @@ EMAIL_MAX_LENGTH = getattr(settings, "ACCOUNT_EMAIL_MAX_LENGTH", 254)
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("account", "0001_initial"),
     ]
@@ -22,7 +18,7 @@ class Migration(migrations.Migration):
             field=models.EmailField(
                 unique=UNIQUE_EMAIL,
                 max_length=EMAIL_MAX_LENGTH,
-                verbose_name="e-mail address",
+                verbose_name="email address",
             ),
         ),
     ]

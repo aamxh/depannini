@@ -4,17 +4,13 @@ from allauth.socialaccount.providers.base import (
     ProviderException,
 )
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
+from allauth.socialaccount.providers.quickbooks.views import (
+    QuickBooksOAuth2Adapter,
+)
 
 
 class QuickBooksAccount(ProviderAccount):
-    def to_str(self):
-        dflt = super(QuickBooksAccount, self).to_str()
-        name = self.account.extra_data.get("name", dflt)
-        first_name = self.account.extra_data.get("givenName", None)
-        last_name = self.account.extra_data.get("familyName", None)
-        if first_name and last_name:
-            name = first_name + " " + last_name
-        return name
+    pass
 
 
 class QuickBooksOAuth2Provider(OAuth2Provider):
@@ -22,6 +18,7 @@ class QuickBooksOAuth2Provider(OAuth2Provider):
     # Name is displayed to ordinary users -- don't include protocol
     name = "QuickBooks"
     account_class = QuickBooksAccount
+    oauth2_adapter_class = QuickBooksOAuth2Adapter
 
     def extract_uid(self, data):
         if "sub" not in data:

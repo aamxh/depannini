@@ -1,6 +1,3 @@
-from xml.etree import ElementTree
-from xml.parsers.expat import ExpatError
-
 from allauth.socialaccount.providers.oauth.client import OAuth
 from allauth.socialaccount.providers.oauth.views import (
     OAuthAdapter,
@@ -8,30 +5,19 @@ from allauth.socialaccount.providers.oauth.views import (
     OAuthLoginView,
 )
 
-from .provider import OpenStreetMapProvider
-
 
 class OpenStreetMapAPI(OAuth):
-
-    url = "https://www.openstreetmap.org/api/0.6/user/details"
+    url = "https://api.openstreetmap.org/api/0.6/user/details.json"
 
     def get_user_info(self):
-        raw_xml = self.query(self.url)
-        try:
-            user_element = ElementTree.fromstring(raw_xml).find("user")
-            user_info = user_element.attrib
-            user_avatar = user_element.find("img")
-            if user_avatar is not None:
-                user_info.update({"avatar": user_avatar.attrib.get("href")})
-            return user_info
-        except (ExpatError, KeyError, IndexError):
-            return None
+        data = self.query(self.url).json()
+        return data["user"]
 
 
 class OpenStreetMapOAuthAdapter(OAuthAdapter):
-    provider_id = OpenStreetMapProvider.id
-    request_token_url = "https://www.openstreetmap.org/oauth/request_token"
-    access_token_url = "https://www.openstreetmap.org/oauth/access_token"
+    provider_id = "openstreetmap"
+    request_token_url = "https://www.openstreetmap.org/oauth/request_token"  # nosec
+    access_token_url = "https://www.openstreetmap.org/oauth/access_token"  # nosec
     authorize_url = "https://www.openstreetmap.org/oauth/authorize"
 
     def complete_login(self, request, app, token, response):

@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
+from django.test import TestCase
+
 from allauth.socialaccount.providers.gumroad.provider import GumroadProvider
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 
 class GumroadTests(OAuth2TestsMixin, TestCase):
@@ -22,3 +23,6 @@ class GumroadTests(OAuth2TestsMixin, TestCase):
                 }
             }""",
         )
+
+    def get_expected_to_str(self):
+        return "johnsmith@gumroad.com"

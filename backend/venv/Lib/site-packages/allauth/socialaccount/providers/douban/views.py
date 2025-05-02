@@ -1,7 +1,6 @@
-import requests
-
 from django.utils.translation import gettext_lazy as _
 
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
@@ -9,18 +8,19 @@ from allauth.socialaccount.providers.oauth2.views import (
 )
 
 from ..base import ProviderException
-from .provider import DoubanProvider
 
 
 class DoubanOAuth2Adapter(OAuth2Adapter):
-    provider_id = DoubanProvider.id
-    access_token_url = "https://www.douban.com/service/auth2/token"
+    provider_id = "douban"
+    access_token_url = "https://www.douban.com/service/auth2/token"  # nosec
     authorize_url = "https://www.douban.com/service/auth2/auth"
     profile_url = "https://api.douban.com/v2/user/~me"
 
     def complete_login(self, request, app, token, **kwargs):
         headers = {"Authorization": "Bearer %s" % token.token}
-        resp = requests.get(self.profile_url, headers=headers)
+        resp = (
+            get_adapter().get_requests_session().get(self.profile_url, headers=headers)
+        )
         extra_data = resp.json()
         """
         Douban may return data like this:

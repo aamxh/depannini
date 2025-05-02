@@ -1,4 +1,7 @@
 from allauth.socialaccount.providers.base import ProviderAccount
+from allauth.socialaccount.providers.dataporten.views import (
+    DataportenOAuth2Adapter,
+)
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 
 
@@ -12,22 +15,12 @@ class DataportenAccount(ProviderAccount):
         base_url = "https://api.dataporten.no/userinfo/v1/user/media/"
         return base_url + self.account.extra_data["profilephoto"]
 
-    def to_str(self):
-        """
-        Returns string representation of a social account. Includes the name
-        of the user.
-        """
-        dflt = super(DataportenAccount, self).to_str()
-        return "%s (%s)" % (
-            self.account.extra_data.get("name", ""),
-            dflt,
-        )
-
 
 class DataportenProvider(OAuth2Provider):
     id = "dataporten"
     name = "Dataporten"
     account_class = DataportenAccount
+    oauth2_adapter_class = DataportenOAuth2Adapter
 
     def extract_uid(self, data):
         """

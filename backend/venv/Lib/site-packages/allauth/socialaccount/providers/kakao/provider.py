@@ -1,32 +1,39 @@
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.providers.base import ProviderAccount
+from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 
 
 class KakaoAccount(ProviderAccount):
     @property
     def properties(self):
-        return self.account.extra_data.get("properties")
+        return self.account.extra_data.get("properties", {})
+
+    @property
+    def profile(self):
+        return self.account.extra_data.get("kakao_account", {}).get("profile", {})
 
     def get_avatar_url(self):
-        return self.properties.get("profile_image")
+        return self.profile.get(
+            "profile_image_url", self.properties.get("profile_image")
+        )
 
-    def to_str(self):
-        dflt = super(KakaoAccount, self).to_str()
-        return self.properties.get("nickname", dflt)
+    def get_user_data(self):
+        return self.account.extra_data.get("kakao_account")
 
 
 class KakaoProvider(OAuth2Provider):
     id = "kakao"
     name = "Kakao"
     account_class = KakaoAccount
+    oauth2_adapter_class = KakaoOAuth2Adapter
 
     def extract_uid(self, data):
         return str(data["id"])
 
     def extract_common_fields(self, data):
         email = data.get("kakao_account", {}).get("email")
-        nickname = data.get("properties", {}).get("nickname")
+        nickname = data.get("kakao_account", {}).get("profile", {}).get("nickname")
 
         return dict(email=email, username=nickname)
 

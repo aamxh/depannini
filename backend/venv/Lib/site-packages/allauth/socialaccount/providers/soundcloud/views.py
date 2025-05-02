@@ -1,22 +1,23 @@
-import requests
-
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
     OAuth2LoginView,
 )
 
-from .provider import SoundCloudProvider
-
 
 class SoundCloudOAuth2Adapter(OAuth2Adapter):
-    provider_id = SoundCloudProvider.id
-    access_token_url = "https://api.soundcloud.com/oauth2/token"
+    provider_id = "soundcloud"
+    access_token_url = "https://api.soundcloud.com/oauth2/token"  # nosec
     authorize_url = "https://soundcloud.com/connect"
     profile_url = "https://api.soundcloud.com/me.json"
 
     def complete_login(self, request, app, token, **kwargs):
-        resp = requests.get(self.profile_url, params={"oauth_token": token.token})
+        resp = (
+            get_adapter()
+            .get_requests_session()
+            .get(self.profile_url, params={"oauth_token": token.token})
+        )
         extra_data = resp.json()
         return self.get_provider().sociallogin_from_response(request, extra_data)
 

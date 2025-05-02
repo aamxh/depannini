@@ -1,13 +1,19 @@
 from datetime import datetime, timedelta
-from typing import TYPE_CHECKING, Any, Dict, Optional, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, Optional, TypeVar
 from uuid import uuid4
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser
 from django.utils.module_loading import import_string
 from django.utils.translation import gettext_lazy as _
 
-from .exceptions import TokenBackendError, TokenError
+from .exceptions import (
+    ExpiredTokenError,
+    TokenBackendError,
+    TokenBackendExpiredToken,
+    TokenError,
+)
 from .models import TokenUser
 from .settings import api_settings
 from .token_blacklist.models import BlacklistedToken, OutstandingToken
@@ -21,6 +27,8 @@ from .utils import (
 
 if TYPE_CHECKING:
     from .backends import TokenBackend
+
+T = TypeVar("T", bound="Token")
 
 AuthUser = TypeVar("AuthUser", AbstractBaseUser, TokenUser)
 
@@ -54,8 +62,10 @@ class Token:
             # Decode token
             try:
                 self.payload = token_backend.decode(token, verify=verify)
+            except TokenBackendExpiredToken:
+                raise ExpiredTokenError(_("Token is expired"))
             except TokenBackendError:
-                raise TokenError(_("Token is invalid or expired"))
+                raise TokenError(_("Token is invalid"))
 
             if verify:
                 self.verify()
@@ -194,8 +204,33 @@ class Token:
         if claim_time <= current_time - leeway:
             raise TokenError(format_lazy(_("Token '{}' claim has expired"), claim))
 
+    def outstand(self) -> OutstandingToken:
+        """
+        Ensures this token is included in the outstanding token list and
+        adds it to the outstanding token list if not.
+        """
+        jti = self.payload[api_settings.JTI_CLAIM]
+        exp = self.payload["exp"]
+        user_id = self.payload.get(api_settings.USER_ID_CLAIM)
+        User = get_user_model()
+        try:
+            user = User.objects.get(**{api_settings.USER_ID_FIELD: user_id})
+        except User.DoesNotExist:
+            user = None
+
+        # Ensure outstanding token exists with given jti
+        return OutstandingToken.objects.get_or_create(
+            jti=jti,
+            defaults={
+                "user": user,
+                "created_at": self.current_time,
+                "token": str(self),
+                "expires_at": datetime_from_epoch(exp),
+            },
+        )
+
     @classmethod
-    def for_user(cls, user: AuthUser) -> "Token":
+    def for_user(cls: type[T], user: AuthUser) -> T:
         """
         Returns an authorization token for the given user that will be provided
         after authenticating the user's credentials.
@@ -229,7 +264,7 @@ class Token:
         return self.token_backend
 
 
-class BlacklistMixin:
+class BlacklistMixin(Generic[T]):
     """
     If the `rest_framework_simplejwt.token_blacklist` app was configured to be
     used, tokens created from `BlacklistMixin` subclasses will insert
@@ -237,7 +272,7 @@ class BlacklistMixin:
     membership in a token blacklist.
     """
 
-    payload: Dict[str, Any]
+    payload: dict[str, Any]
 
     if "rest_framework_simplejwt.token_blacklist" in settings.INSTALLED_APPS:
 
@@ -263,11 +298,19 @@ class BlacklistMixin:
             """
             jti = self.payload[api_settings.JTI_CLAIM]
             exp = self.payload["exp"]
+            user_id = self.payload.get(api_settings.USER_ID_CLAIM)
+            User = get_user_model()
+            try:
+                user = User.objects.get(**{api_settings.USER_ID_FIELD: user_id})
+            except User.DoesNotExist:
+                user = None
 
             # Ensure outstanding token exists with given jti
             token, _ = OutstandingToken.objects.get_or_create(
                 jti=jti,
                 defaults={
+                    "user": user,
+                    "created_at": self.current_time,
                     "token": str(self),
                     "expires_at": datetime_from_epoch(exp),
                 },
@@ -276,7 +319,7 @@ class BlacklistMixin:
             return BlacklistedToken.objects.get_or_create(token=token)
 
         @classmethod
-        def for_user(cls, user: AuthUser) -> Token:
+        def for_user(cls: type[T], user: AuthUser) -> T:
             """
             Adds this token to the outstanding token list.
             """
@@ -296,7 +339,7 @@ class BlacklistMixin:
             return token
 
 
-class SlidingToken(BlacklistMixin, Token):
+class SlidingToken(BlacklistMixin["SlidingToken"], Token):
     token_type = "sliding"
     lifetime = api_settings.SLIDING_TOKEN_LIFETIME
 
@@ -317,7 +360,7 @@ class AccessToken(Token):
     lifetime = api_settings.ACCESS_TOKEN_LIFETIME
 
 
-class RefreshToken(BlacklistMixin, Token):
+class RefreshToken(BlacklistMixin["RefreshToken"], Token):
     token_type = "refresh"
     lifetime = api_settings.REFRESH_TOKEN_LIFETIME
     no_copy_claims = (

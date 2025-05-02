@@ -1,5 +1,7 @@
+from django.test import TestCase
+
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import EveOnlineProvider
 
@@ -20,3 +22,6 @@ class EveOnlineTests(OAuth2TestsMixin, TestCase):
             "CharacterOwnerHash": "XM4D...FoY="
         }""",
         )
+
+    def get_expected_to_str(self):
+        return "CCP illurkall"

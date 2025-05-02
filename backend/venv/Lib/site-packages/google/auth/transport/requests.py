@@ -25,21 +25,14 @@ import time
 try:
     import requests
 except ImportError as caught_exc:  # pragma: NO COVER
-    import six
-
-    six.raise_from(
-        ImportError(
-            "The requests library is not installed, please install the "
-            "requests package to use the requests transport."
-        ),
-        caught_exc,
-    )
+    raise ImportError(
+        "The requests library is not installed from please install the requests package to use the requests transport."
+    ) from caught_exc
 import requests.adapters  # pylint: disable=ungrouped-imports
 import requests.exceptions  # pylint: disable=ungrouped-imports
 from requests.packages.urllib3.util.ssl_ import (  # type: ignore
     create_urllib3_context,
 )  # pylint: disable=ungrouped-imports
-import six  # pylint: disable=ungrouped-imports
 
 from google.auth import environment_vars
 from google.auth import exceptions
@@ -196,7 +189,7 @@ class Request(transport.Request):
             return _Response(response)
         except requests.exceptions.RequestException as caught_exc:
             new_exc = exceptions.TransportError(caught_exc)
-            six.raise_from(new_exc, caught_exc)
+            raise new_exc from caught_exc
 
 
 class _MutualTlsAdapter(requests.adapters.HTTPAdapter):
@@ -269,19 +262,14 @@ class _MutualTlsOffloadAdapter(requests.adapters.HTTPAdapter):
 
     def __init__(self, enterprise_cert_file_path):
         import certifi
-        import urllib3.contrib.pyopenssl
-
         from google.auth.transport import _custom_tls_signer
-
-        # Call inject_into_urllib3 to activate certificate checking. See the
-        # following links for more info:
-        # (1) doc: https://github.com/urllib3/urllib3/blob/cb9ebf8aac5d75f64c8551820d760b72b619beff/src/urllib3/contrib/pyopenssl.py#L31-L32
-        # (2) mTLS example: https://github.com/urllib3/urllib3/issues/474#issuecomment-253168415
-        urllib3.contrib.pyopenssl.inject_into_urllib3()
 
         self.signer = _custom_tls_signer.CustomTlsSigner(enterprise_cert_file_path)
         self.signer.load_libraries()
-        self.signer.set_up_custom_key()
+
+        import urllib3.contrib.pyopenssl
+
+        urllib3.contrib.pyopenssl.inject_into_urllib3()
 
         poolmanager = create_urllib3_context()
         poolmanager.load_verify_locations(cafile=certifi.where())
@@ -465,7 +453,7 @@ class AuthorizedSession(requests.Session):
             import OpenSSL
         except ImportError as caught_exc:
             new_exc = exceptions.MutualTLSChannelError(caught_exc)
-            six.raise_from(new_exc, caught_exc)
+            raise new_exc from caught_exc
 
         try:
             (
@@ -485,7 +473,7 @@ class AuthorizedSession(requests.Session):
             OpenSSL.crypto.Error,
         ) as caught_exc:
             new_exc = exceptions.MutualTLSChannelError(caught_exc)
-            six.raise_from(new_exc, caught_exc)
+            raise new_exc from caught_exc
 
     def request(
         self,

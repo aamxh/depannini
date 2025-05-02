@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
+from django.test import TestCase
+
 from allauth.socialaccount.providers.wahoo.provider import WahooProvider
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 
 class WahooTests(OAuth2TestsMixin, TestCase):
@@ -26,3 +27,6 @@ class WahooTests(OAuth2TestsMixin, TestCase):
             }
         """,
         )
+
+    def get_expected_to_str(self):
+        return "sample@test-domain.com"

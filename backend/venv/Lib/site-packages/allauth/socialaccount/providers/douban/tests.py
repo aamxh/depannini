@@ -1,5 +1,7 @@
+from django.test import TestCase
+
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import DoubanProvider
 
@@ -25,3 +27,6 @@ class DoubanTests(OAuth2TestsMixin, TestCase):
              "large_avatar": "http://img3.douban.com/icon/up3659811-3.jpg"}
 """,
         )
+
+    def get_expected_to_str(self):
+        return "guoqiao"

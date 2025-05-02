@@ -1,16 +1,17 @@
+from allauth.socialaccount.providers.amazon.views import AmazonOAuth2Adapter
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 
 
 class AmazonAccount(ProviderAccount):
-    def to_str(self):
-        return self.account.extra_data.get("name", super(AmazonAccount, self).to_str())
+    pass
 
 
 class AmazonProvider(OAuth2Provider):
     id = "amazon"
     name = "Amazon"
     account_class = AmazonAccount
+    oauth2_adapter_class = AmazonOAuth2Adapter
 
     def get_default_scope(self):
         return ["profile"]

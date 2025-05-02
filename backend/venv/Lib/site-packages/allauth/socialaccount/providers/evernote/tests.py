@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from django.test import TestCase
 
 from allauth.socialaccount.tests import OAuthTestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import EvernoteProvider
 
@@ -12,6 +11,9 @@ class EvernoteTests(OAuthTestsMixin, TestCase):
 
     def get_mocked_response(self):
         return []
+
+    def get_expected_to_str(self):
+        return "Evernote"
 
     def get_access_token_response(self):
         return MockedResponse(

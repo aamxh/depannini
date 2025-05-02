@@ -1,5 +1,7 @@
+from django.test import TestCase
+
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import BaiduProvider
 
@@ -14,3 +16,6 @@ class BaiduTests(OAuth2TestsMixin, TestCase):
 {"portrait": "78c0e9839de59bbde7859ccf43",
 "uname": "\u90dd\u56fd\u715c", "uid": "3225892368"}""",
         )
+
+    def get_expected_to_str(self):
+        return "\u90dd\u56fd\u715c"

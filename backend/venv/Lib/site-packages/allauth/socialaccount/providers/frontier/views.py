@@ -1,25 +1,26 @@
-import requests
-
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
     OAuth2LoginView,
 )
 
-from .provider import FrontierProvider
-
 
 class FrontierOAuth2Adapter(OAuth2Adapter):
-    provider_id = FrontierProvider.id
+    provider_id = "frontier"
     AUTH_API = "https://auth.frontierstore.net"
     access_token_url = AUTH_API + "/token"
     authorize_url = AUTH_API + "/auth"
     profile_url = AUTH_API + "/me"
 
     def complete_login(self, request, app, token, **kwargs):
-        resp = requests.get(
-            self.profile_url,
-            headers={"Authorization": "Bearer " + token.token},
+        resp = (
+            get_adapter()
+            .get_requests_session()
+            .get(
+                self.profile_url,
+                headers={"Authorization": "Bearer " + token.token},
+            )
         )
         resp.raise_for_status()
         extra_data = resp.json()

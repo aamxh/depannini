@@ -1,10 +1,11 @@
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.app_settings import QUERY_EMAIL
 from allauth.socialaccount.providers.base import AuthAction, ProviderAccount
+from allauth.socialaccount.providers.cilogon.views import CILogonOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 
 
-class Scope(object):
+class Scope:
     OPENID = "openid"
     EMAIL = "email"
     PROFILE = "profile"
@@ -12,15 +13,14 @@ class Scope(object):
 
 
 class CILogonAccount(ProviderAccount):
-    def to_str(self):
-        dflt = super(CILogonAccount, self).to_str()
-        return self.account.extra_data.get("name", dflt)
+    pass
 
 
 class CILogonProvider(OAuth2Provider):
     id = "cilogon"
     name = "CILogon"
     account_class = CILogonAccount
+    oauth2_adapter_class = CILogonOAuth2Adapter
 
     def get_default_scope(self):
         scope = [Scope.PROFILE, Scope.USERINFO, Scope.OPENID]
@@ -28,8 +28,8 @@ class CILogonProvider(OAuth2Provider):
             scope.append(Scope.EMAIL)
         return scope
 
-    def get_auth_params(self, request, action):
-        ret = super(CILogonProvider, self).get_auth_params(request, action)
+    def get_auth_params_from_request(self, request, action):
+        ret = super().get_auth_params_from_request(request, action)
         if action == AuthAction.REAUTHENTICATE:
             ret["prompt"] = "select_account consent"
         return ret

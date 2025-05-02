@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+from django.test import TestCase
+
 from allauth.socialaccount.tests import OAuthTestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import VimeoProvider
 
@@ -38,3 +39,6 @@ class VimeoTests(OAuthTestsMixin, TestCase):
 """,
             )
         ]
+
+    def get_expected_to_str(self):
+        return "user17574504"

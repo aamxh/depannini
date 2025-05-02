@@ -1,11 +1,12 @@
-# -*- coding: utf-8 -*-
 import json
+
+from django.test import TestCase
 
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.providers.gitlab.provider import GitLabProvider
 from allauth.socialaccount.providers.oauth2.client import OAuth2Error
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .views import _check_errors
 
@@ -50,6 +51,9 @@ class GitLabTests(OAuth2TestsMixin, TestCase):
             }
         """,
         )
+
+    def get_expected_to_str(self):
+        return "mr.bob"
 
     def test_valid_response(self):
         data = {"id": 12345}

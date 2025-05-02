@@ -1,12 +1,9 @@
-import requests
-
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
     OAuth2LoginView,
 )
-
-from .provider import VKProvider
 
 
 USER_FIELDS = [
@@ -36,8 +33,8 @@ USER_FIELDS = [
 
 
 class VKOAuth2Adapter(OAuth2Adapter):
-    provider_id = VKProvider.id
-    access_token_url = "https://oauth.vk.com/access_token"
+    provider_id = "vk"
+    access_token_url = "https://oauth.vk.com/access_token"  # nosec
     authorize_url = "https://oauth.vk.com/authorize"
     profile_url = "https://api.vk.com/method/users.get"
 
@@ -50,7 +47,7 @@ class VKOAuth2Adapter(OAuth2Adapter):
         }
         if uid:
             params["user_ids"] = uid
-        resp = requests.get(self.profile_url, params=params)
+        resp = get_adapter().get_requests_session().get(self.profile_url, params=params)
         resp.raise_for_status()
         extra_data = resp.json()["response"][0]
         email = kwargs["response"].get("email")

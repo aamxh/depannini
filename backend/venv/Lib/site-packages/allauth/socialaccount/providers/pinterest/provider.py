@@ -1,5 +1,8 @@
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
+from allauth.socialaccount.providers.pinterest.views import (
+    PinterestOAuth2Adapter,
+)
 
 
 class PinterestAccount(ProviderAccount):
@@ -16,15 +19,12 @@ class PinterestAccount(ProviderAccount):
     def get_avatar_url(self):
         return self.account.extra_data.get("profile_image")
 
-    def to_str(self):
-        dflt = super(PinterestAccount, self).to_str()
-        return self.account.extra_data.get("username", dflt)
-
 
 class PinterestProvider(OAuth2Provider):
     id = "pinterest"
     name = "Pinterest"
     account_class = PinterestAccount
+    oauth2_adapter_class = PinterestOAuth2Adapter
 
     @property
     def api_version(self):

@@ -1,23 +1,25 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
+from allauth.account.internal.decorators import login_not_required
+from allauth.socialaccount.forms import DisconnectForm, SignupForm
+from allauth.socialaccount.internal import flows
+from allauth.socialaccount.models import SocialAccount
+
 from ..account import app_settings as account_settings
-from ..account.adapter import get_adapter as get_account_adapter
 from ..account.views import (
     AjaxCapableProcessFormViewMixin,
     CloseableSignupMixin,
     RedirectAuthenticatedUserMixin,
 )
 from ..utils import get_form_class
-from . import app_settings, helpers
+from . import app_settings
 from .adapter import get_adapter
-from .forms import DisconnectForm, SignupForm
-from .models import SocialAccount, SocialLogin
 
 
 class SignupView(
@@ -32,11 +34,9 @@ class SignupView(
     def get_form_class(self):
         return get_form_class(app_settings.FORMS, "signup", self.form_class)
 
+    @method_decorator(login_not_required)
     def dispatch(self, request, *args, **kwargs):
-        self.sociallogin = None
-        data = request.session.get("socialaccount_sociallogin")
-        if data:
-            self.sociallogin = SocialLogin.deserialize(data)
+        self.sociallogin = flows.signup.get_pending_signup(request)
         if not self.sociallogin:
             return HttpResponseRedirect(reverse("account_login"))
         return super(SignupView, self).dispatch(request, *args, **kwargs)
@@ -52,9 +52,7 @@ class SignupView(
         return ret
 
     def form_valid(self, form):
-        self.request.session.pop("socialaccount_sociallogin", None)
-        form.save(self.request)
-        return helpers.complete_social_signup(self.request, self.sociallogin)
+        return flows.signup.signup_by_form(self.request, self.sociallogin, form)
 
     def get_context_data(self, **kwargs):
         ret = super(SignupView, self).get_context_data(**kwargs)
@@ -67,12 +65,13 @@ class SignupView(
         return ret
 
     def get_authenticated_redirect_url(self):
-        return reverse(connections)
+        return reverse("socialaccount_connections")
 
 
 signup = SignupView.as_view()
 
 
+@method_decorator(login_not_required, name="dispatch")
 class LoginCancelledView(TemplateView):
     template_name = (
         "socialaccount/login_cancelled." + account_settings.TEMPLATE_EXTENSION
@@ -91,6 +90,7 @@ class LoginErrorView(TemplateView):
 login_error = LoginErrorView.as_view()
 
 
+@method_decorator(login_required, name="dispatch")
 class ConnectionsView(AjaxCapableProcessFormViewMixin, FormView):
     template_name = "socialaccount/connections." + account_settings.TEMPLATE_EXTENSION
     form_class = DisconnectForm
@@ -105,11 +105,6 @@ class ConnectionsView(AjaxCapableProcessFormViewMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        get_account_adapter().add_message(
-            self.request,
-            messages.INFO,
-            "socialaccount/messages/account_disconnected.txt",
-        )
         form.save()
         return super(ConnectionsView, self).form_valid(form)
 
@@ -127,4 +122,4 @@ class ConnectionsView(AjaxCapableProcessFormViewMixin, FormView):
         return {"socialaccounts": account_data}
 
 
-connections = login_required(ConnectionsView.as_view())
+connections = ConnectionsView.as_view()

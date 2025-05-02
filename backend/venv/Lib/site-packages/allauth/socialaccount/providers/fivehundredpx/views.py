@@ -1,13 +1,9 @@
-import json
-
 from allauth.socialaccount.providers.oauth.client import OAuth
 from allauth.socialaccount.providers.oauth.views import (
     OAuthAdapter,
     OAuthCallbackView,
     OAuthLoginView,
 )
-
-from .provider import FiveHundredPxProvider
 
 
 API_BASE = "https://api.500px.com/v1"
@@ -21,11 +17,11 @@ class FiveHundredPxAPI(OAuth):
     url = API_BASE + "/users"
 
     def get_user_info(self):
-        return json.loads(self.query(self.url))["user"]
+        return self.query(self.url).json()["user"]
 
 
 class FiveHundredPxOAuthAdapter(OAuthAdapter):
-    provider_id = FiveHundredPxProvider.id
+    provider_id = "500px"
     request_token_url = API_BASE + "/oauth/request_token"
     access_token_url = API_BASE + "/oauth/access_token"
     authorize_url = API_BASE + "/oauth/authorize"

@@ -1,7 +1,9 @@
 import json
 
+from django.test import TestCase
+
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import DaumProvider
 
@@ -21,3 +23,6 @@ class DaumTests(OAuth2TestsMixin, TestCase):
         body["message"] = "OK"
         body["result"] = result
         return MockedResponse(200, json.dumps(body))
+
+    def get_expected_to_str(self):
+        return "xncbf"

@@ -1,6 +1,8 @@
-# -*- coding: utf-8 -*-
+from django.test import TestCase
+
+from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.tests import OAuthTestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import TwitterProvider
 
@@ -9,7 +11,7 @@ class TwitterTests(OAuthTestsMixin, TestCase):
     provider_id = TwitterProvider.id
 
     def get_mocked_response(self):
-        # FIXME: Replace with actual/complete Twitter response
+        # TODO: Replace with actual/complete Twitter response
         return [
             MockedResponse(
                 200,
@@ -28,8 +30,12 @@ class TwitterTests(OAuthTestsMixin, TestCase):
             )
         ]  # noqa
 
+    def get_expected_to_str(self):
+        return "pennersr"
+
     def test_login(self):
-        account = super(TwitterTests, self).test_login()
+        super().test_login()
+        account = SocialAccount.objects.get(uid="45671919")
         tw_account = account.get_provider_account()
         self.assertEqual(tw_account.get_screen_name(), "pennersr")
         self.assertEqual(
@@ -37,3 +43,4 @@ class TwitterTests(OAuthTestsMixin, TestCase):
             "http://pbs.twimg.com/profile_images/793142149/r.png",
         )
         self.assertEqual(tw_account.get_profile_url(), "http://twitter.com/pennersr")
+        self.assertEqual(tw_account.to_str(), "pennersr")

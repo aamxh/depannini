@@ -3,6 +3,7 @@ from allauth.socialaccount.providers.base import (
     ProviderException,
 )
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
+from allauth.socialaccount.providers.weibo.views import WeiboOAuth2Adapter
 
 
 class WeiboAccount(ProviderAccount):
@@ -13,15 +14,12 @@ class WeiboAccount(ProviderAccount):
     def get_avatar_url(self):
         return self.account.extra_data.get("avatar_large")
 
-    def to_str(self):
-        dflt = super(WeiboAccount, self).to_str()
-        return self.account.extra_data.get("name", dflt)
-
 
 class WeiboProvider(OAuth2Provider):
     id = "weibo"
     name = "Weibo"
     account_class = WeiboAccount
+    oauth2_adapter_class = WeiboOAuth2Adapter
 
     def extract_uid(self, data):
         ret = data.get("idstr")

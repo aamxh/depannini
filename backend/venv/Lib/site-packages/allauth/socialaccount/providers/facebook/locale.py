@@ -13,9 +13,10 @@ def _build_locale_table(filename_or_file):
     for that language ('en' -> 'US', 'EN') and an (arbitrary) default region.
     """
     # Require the XML parser module only if we want the default mapping
-    from xml.dom.minidom import parse
+    from xml.dom.minidom import parse  # nosec
 
-    dom = parse(filename_or_file)
+    # Trusted source
+    dom = parse(filename_or_file)  # nosec
 
     reps = dom.getElementsByTagName("representation")
     locs = map(lambda r: r.childNodes[0].data, reps)

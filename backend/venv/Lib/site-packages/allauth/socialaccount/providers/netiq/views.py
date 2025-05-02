@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-import requests
-
 from allauth.socialaccount import app_settings
-from allauth.socialaccount.providers.netiq.provider import NetIQProvider
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
@@ -11,9 +8,7 @@ from allauth.socialaccount.providers.oauth2.views import (
 
 
 class NetIQOAuth2Adapter(OAuth2Adapter):
-    provider_id = NetIQProvider.id
-    supports_state = True
-
+    provider_id = "netiq"
     settings = app_settings.PROVIDERS.get(provider_id, {})
     provider_base_url = settings.get("NETIQ_URL")
 
@@ -40,9 +35,13 @@ class NetIQOAuth2Adapter(OAuth2Adapter):
         :return:
         """
 
-        resp = requests.get(
-            self.userinfo_url,
-            headers={"Authorization": "Bearer {}".format(token.token)},
+        resp = (
+            get_adapter()
+            .get_requests_session()
+            .get(
+                self.userinfo_url,
+                headers={"Authorization": "Bearer {}".format(token.token)},
+            )
         )
 
         resp.raise_for_status()

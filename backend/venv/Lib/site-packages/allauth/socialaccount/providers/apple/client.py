@@ -1,5 +1,4 @@
-import requests
-from datetime import datetime, timedelta
+import time
 from urllib.parse import parse_qsl, quote, urlencode
 
 from django.core.exceptions import ImproperlyConfigured
@@ -21,7 +20,7 @@ def jwt_encode(*args, **kwargs):
     return resp
 
 
-class Scope(object):
+class Scope:
     EMAIL = "email"
     NAME = "name"
 
@@ -35,22 +34,23 @@ class AppleOAuth2Client(OAuth2Client):
 
     def generate_client_secret(self):
         """Create a JWT signed with an apple provided private key"""
-        now = datetime.utcnow()
-        app = get_adapter().get_app(self.request, "apple")
+        now = int(time.time())
+        app = get_adapter(self.request).get_app(self.request, "apple")
         if not app.key:
             raise ImproperlyConfigured("Apple 'key' missing")
-        if not app.certificate_key:
+        certificate_key = app.settings.get("certificate_key")
+        if not certificate_key:
             raise ImproperlyConfigured("Apple 'certificate_key' missing")
         claims = {
             "iss": app.key,
             "aud": "https://appleid.apple.com",
             "sub": self.get_client_id(),
             "iat": now,
-            "exp": now + timedelta(hours=1),
+            "exp": now + 60 * 60,
         }
         headers = {"kid": self.consumer_secret, "alg": "ES256"}
         client_secret = jwt_encode(
-            payload=claims, key=app.certificate_key, algorithm="ES256", headers=headers
+            payload=claims, key=certificate_key, algorithm="ES256", headers=headers
         )
         return client_secret
 
@@ -71,8 +71,10 @@ class AppleOAuth2Client(OAuth2Client):
         if pkce_code_verifier:
             data["code_verifier"] = pkce_code_verifier
         self._strip_empty_keys(data)
-        resp = requests.request(
-            self.access_token_method, url, data=data, headers=self.headers
+        resp = (
+            get_adapter()
+            .get_requests_session()
+            .request(self.access_token_method, url, data=data, headers=self.headers)
         )
         access_token = None
         if resp.status_code in [200, 201]:
@@ -84,12 +86,13 @@ class AppleOAuth2Client(OAuth2Client):
             raise OAuth2Error("Error retrieving access token: %s" % resp.content)
         return access_token
 
-    def get_redirect_url(self, authorization_url, extra_params):
+    def get_redirect_url(self, authorization_url, scope, extra_params):
+        scope = self.scope_delimiter.join(set(scope))
         params = {
             "client_id": self.get_client_id(),
             "redirect_uri": self.callback_url,
             "response_mode": "form_post",
-            "scope": self.scope,
+            "scope": scope,
             "response_type": "code id_token",
         }
         if self.state:

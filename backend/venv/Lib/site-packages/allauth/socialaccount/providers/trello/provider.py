@@ -1,5 +1,6 @@
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth.provider import OAuthProvider
+from allauth.socialaccount.providers.trello.views import TrelloOAuthAdapter
 
 
 class TrelloAccount(ProviderAccount):
@@ -14,6 +15,7 @@ class TrelloProvider(OAuthProvider):
     id = "trello"
     name = "Trello"
     account_class = TrelloAccount
+    oauth_adapter_class = TrelloOAuthAdapter
 
     def get_default_scope(self):
         return ["read"]
@@ -28,12 +30,10 @@ class TrelloProvider(OAuthProvider):
             name=data.get("name"),
         )
 
-    def get_auth_params(self, request, action):
-        data = super(TrelloProvider, self).get_auth_params(request, action)
-        app = self.get_app(request)
+    def get_auth_params_from_request(self, request, action):
+        data = super().get_auth_params_from_request(request, action)
         data["type"] = "web_server"
-        data["name"] = app.name
-        data["scope"] = self.get_scope(request)
+        data["name"] = self.app.name
         # define here for how long it will be, this can be configured on the
         # social app
         data["expiration"] = "never"

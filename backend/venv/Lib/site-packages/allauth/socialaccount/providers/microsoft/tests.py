@@ -1,8 +1,10 @@
 import json
 
+from django.test import TestCase
+
 from allauth.socialaccount.providers.oauth2.client import OAuth2Error
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import MicrosoftGraphProvider
 from .views import _check_errors
@@ -30,6 +32,9 @@ class MicrosoftGraphTests(OAuth2TestsMixin, TestCase):
         }
         """  # noqa
         return MockedResponse(200, response_data)
+
+    def get_expected_to_str(self):
+        return "annew@CIE493742.onmicrosoft.com"
 
     def test_invalid_data(self):
         response = MockedResponse(200, json.dumps({}))

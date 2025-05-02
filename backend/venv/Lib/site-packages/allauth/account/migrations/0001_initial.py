@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import django.utils.timezone
 from django.conf import settings
 from django.db import migrations, models
@@ -10,7 +7,6 @@ UNIQUE_EMAIL = getattr(settings, "ACCOUNT_UNIQUE_EMAIL", True)
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
@@ -33,7 +29,7 @@ class Migration(migrations.Migration):
                     models.EmailField(
                         unique=UNIQUE_EMAIL,
                         max_length=75,
-                        verbose_name="e-mail address",
+                        verbose_name="email address",
                     ),
                 ),
                 (
@@ -86,7 +82,7 @@ class Migration(migrations.Migration):
                 (
                     "email_address",
                     models.ForeignKey(
-                        verbose_name="e-mail address",
+                        verbose_name="email address",
                         to="account.EmailAddress",
                         on_delete=models.CASCADE,
                     ),

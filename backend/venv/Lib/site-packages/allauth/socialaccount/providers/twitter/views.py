@@ -1,5 +1,3 @@
-import json
-
 from allauth.socialaccount.app_settings import QUERY_EMAIL
 from allauth.socialaccount.providers.oauth.client import OAuth
 from allauth.socialaccount.providers.oauth.views import (
@@ -7,8 +5,6 @@ from allauth.socialaccount.providers.oauth.views import (
     OAuthCallbackView,
     OAuthLoginView,
 )
-
-from .provider import TwitterProvider
 
 
 class TwitterAPI(OAuth):
@@ -20,14 +16,14 @@ class TwitterAPI(OAuth):
     url = _base_url + "?include_email=true" if QUERY_EMAIL else _base_url
 
     def get_user_info(self):
-        user = json.loads(self.query(self.url))
+        user = self.query(self.url).json()
         return user
 
 
 class TwitterOAuthAdapter(OAuthAdapter):
-    provider_id = TwitterProvider.id
-    request_token_url = "https://api.twitter.com/oauth/request_token"
-    access_token_url = "https://api.twitter.com/oauth/access_token"
+    provider_id = "twitter"
+    request_token_url = "https://api.twitter.com/oauth/request_token"  # nosec
+    access_token_url = "https://api.twitter.com/oauth/access_token"  # nosec
     # Issue #42 -- this one authenticates over and over again...
     # authorize_url = 'https://api.twitter.com/oauth/authorize'
     authorize_url = "https://api.twitter.com/oauth/authenticate"

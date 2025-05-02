@@ -1,6 +1,8 @@
+from django.test import TestCase
+
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import GiteaProvider
 
@@ -35,6 +37,9 @@ class GiteaTests(OAuth2TestsMixin, TestCase):
                 "username": "giteauser"
             }""",
         )
+
+    def get_expected_to_str(self):
+        return "giteauser"
 
     def test_account_name_null(self):
         """String conversion when Gitea responds with empty username"""

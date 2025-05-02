@@ -1,24 +1,24 @@
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
+from allauth.socialaccount.providers.zoho.views import ZohoOAuth2Adapter
 
 
 class ZohoAccount(ProviderAccount):
-    def to_str(self):
-        dflt = super(ZohoAccount, self).to_str()
-        return self.account.extra_data.get("Display_Name", dflt)
+    pass
 
 
 class ZohoProvider(OAuth2Provider):
     id = "zoho"
     name = "Zoho"
     account_class = ZohoAccount
+    oauth2_adapter_class = ZohoOAuth2Adapter
 
     def get_default_scope(self):
         return ["aaaserver.profile.READ"]
 
     def extract_uid(self, data):
-        return data["ZUID"]
+        return str(data["ZUID"])
 
     def extract_common_fields(self, data):
         return dict(

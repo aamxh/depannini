@@ -1,6 +1,8 @@
-# -*- coding: utf-8 -*-
+from django.test import TestCase
+
+from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.tests import OAuthTestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import FlickrProvider
 
@@ -44,8 +46,12 @@ class FlickrTests(OAuthTestsMixin, TestCase):
             ),
         ]  # noqa
 
+    def get_expected_to_str(self):
+        return "pennersr"
+
     def test_login(self):
-        account = super(FlickrTests, self).test_login()
+        super().test_login()
+        account = SocialAccount.objects.get(uid="12345678@N00")
         f_account = account.get_provider_account()
         self.assertEqual(account.user.first_name, "raymond")
         self.assertEqual(account.user.last_name, "penners")
@@ -53,7 +59,7 @@ class FlickrTests(OAuthTestsMixin, TestCase):
             f_account.get_profile_url(),
             "http://www.flickr.com/people/12345678@N00/",
         )
-        self.assertEqual(f_account.to_str(), "raymond penners")
+        self.assertEqual(f_account.to_str(), "pennersr")
 
 
 class FlickrWithoutRealNameTests(OAuthTestsMixin, TestCase):
@@ -97,8 +103,12 @@ class FlickrWithoutRealNameTests(OAuthTestsMixin, TestCase):
             ),
         ]  # noqa
 
+    def get_expected_to_str(self):
+        return "pennersr"
+
     def test_login(self):
-        account = super(FlickrWithoutRealNameTests, self).test_login()
+        super().test_login()
+        account = SocialAccount.objects.get(uid="12345678@N00")
         f_account = account.get_provider_account()
         self.assertEqual(account.user.first_name, "")
         self.assertEqual(account.user.last_name, "")

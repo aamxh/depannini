@@ -1,18 +1,17 @@
 from allauth.socialaccount.providers.base import ProviderAccount
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
+from allauth.socialaccount.providers.reddit.views import RedditAdapter
 
 
 class RedditAccount(ProviderAccount):
-    def to_str(self):
-        dflt = super(RedditAccount, self).to_str()
-        name = self.account.extra_data.get("name", dflt)
-        return name
+    pass
 
 
 class RedditProvider(OAuth2Provider):
     id = "reddit"
     name = "Reddit"
     account_class = RedditAccount
+    oauth2_adapter_class = RedditAdapter
 
     def extract_uid(self, data):
         return data["name"]

@@ -1,14 +1,11 @@
-import requests
-
 from django.conf import settings
 
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
     OAuth2LoginView,
 )
-
-from .provider import DwollaProvider
 
 
 ENVIRONMENTS = {
@@ -37,18 +34,21 @@ class DwollaOAuth2Adapter(OAuth2Adapter):
 
     scope_delimiter = "|"
 
-    provider_id = DwollaProvider.id
+    provider_id = "dwolla"
     access_token_url = TOKEN_URL
     authorize_url = AUTH_URL
 
     def complete_login(self, request, app, token, response, **kwargs):
-
-        resp = requests.get(
-            response["_links"]["account"]["href"],
-            headers={
-                "authorization": "Bearer %s" % token.token,
-                "accept": "application/vnd.dwolla.v1.hal+json",
-            },
+        resp = (
+            get_adapter()
+            .get_requests_session()
+            .get(
+                response["_links"]["account"]["href"],
+                headers={
+                    "authorization": "Bearer %s" % token.token,
+                    "accept": "application/vnd.dwolla.v1.hal+json",
+                },
+            )
         )
 
         extra_data = resp.json()

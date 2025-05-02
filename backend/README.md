@@ -32,7 +32,7 @@ cd depannini
 2. Create and activate a virtual environment:
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv/Scripts/Activate  #if you had problem look how to change the restriction policy
 ```
 
 3. Install dependencies:
@@ -65,7 +65,8 @@ python manage.py createsuperuser
 
 7. Start the development server:
 ```bash
-python manage.py runserver
+#you have to run this command when you see in the folder a file called manage.py
+daphne depannini.asgi:application
 ```
 
 ## API Endpoints
@@ -78,8 +79,17 @@ python manage.py runserver
 - `POST /api/auth/login/email/` - Email login
 - `POST /api/auth/login/phone/` - Phone login
 - `POST /api/auth/token/refresh/` - Refresh JWT token
-- `POST /api/auth/password-reset/` - Request password reset
-- `POST /api/auth/password-reset/confirm/` - Confirm password reset
+#not yet- `POST /api/auth/password-reset/` - Request password reset 
+#not yet- `POST /api/auth/password-reset/confirm/` - Confirm password reset
+
+### User Profiles
+
+- `GET /api/profile/user/` - Get user profile
+- `PUT /api/profile/user/` - Update user profile
+- `GET /api/profile/assistant/` - Get assistant profile
+- `PUT /api/profile/assistant/` - Update assistant profile
+
+### 
 
 ### User Profiles
 

@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
+from django.test import TestCase
 
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import OdnoklassnikiProvider
 
@@ -23,6 +21,9 @@ class OdnoklassnikiTests(OAuth2TestsMixin, TestCase):
 "pic_2":"http://usd1.mycdn.me/res/stub_128x96.gif"}
 """,
         )
+
+    def get_expected_to_str(self):
+        return "Ivan Petrov"
 
     def get_login_response_json(self, with_refresh_token=True):
         return '{"access_token": "testac"}'  # noqa

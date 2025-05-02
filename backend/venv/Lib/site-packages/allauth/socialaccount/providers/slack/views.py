@@ -1,5 +1,4 @@
-import requests
-
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Error
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
@@ -7,15 +6,13 @@ from allauth.socialaccount.providers.oauth2.views import (
     OAuth2LoginView,
 )
 
-from .provider import SlackProvider
-
 
 class SlackOAuth2Adapter(OAuth2Adapter):
-    provider_id = SlackProvider.id
+    provider_id = "slack"
 
-    access_token_url = "https://slack.com/api/oauth.access"
-    authorize_url = "https://slack.com/oauth/authorize"
-    identity_url = "https://slack.com/api/users.identity"
+    access_token_url = "https://slack.com/api/openid.connect.token"  # nosec
+    authorize_url = "https://slack.com//openid/connect/authorize"
+    identity_url = "https://slack.com/api/openid.connect.userInfo"
 
     def complete_login(self, request, app, token, **kwargs):
         extra_data = self.get_data(token.token)
@@ -24,7 +21,7 @@ class SlackOAuth2Adapter(OAuth2Adapter):
     def get_data(self, token):
         # Verify the user first
         hed = {"Authorization": "Bearer " + token}
-        resp = requests.get(self.identity_url, headers=hed)
+        resp = get_adapter().get_requests_session().get(self.identity_url, headers=hed)
         resp = resp.json()
 
         if not resp.get("ok"):

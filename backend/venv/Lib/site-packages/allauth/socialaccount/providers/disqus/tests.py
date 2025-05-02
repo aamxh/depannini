@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
-
 from django.contrib.auth.models import User
+from django.test import TestCase
 from django.test.utils import override_settings
 
 from allauth.account import app_settings as account_settings
 from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import DisqusProvider
 
@@ -38,6 +36,9 @@ class DisqusTests(OAuth2TestsMixin, TestCase):
             % (name, email),
         )
 
+    def get_expected_to_str(self):
+        return "raymond.penners@example.com"
+
     def test_account_connect(self):
         email = "user@example.com"
         user = User.objects.create(username="user", is_active=True, email=email)
@@ -50,6 +51,6 @@ class DisqusTests(OAuth2TestsMixin, TestCase):
         self.assertTrue(
             SocialAccount.objects.filter(user=user, provider=DisqusProvider.id).exists()
         )
-        # For now, we do not pick up any new e-mail addresses on connect
+        # For now, we do not pick up any new email addresses on connect
         self.assertEqual(EmailAddress.objects.filter(user=user).count(), 1)
         self.assertEqual(EmailAddress.objects.filter(user=user, email=email).count(), 1)

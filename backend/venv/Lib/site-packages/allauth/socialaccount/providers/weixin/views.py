@@ -1,5 +1,4 @@
-import requests
-
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
@@ -7,12 +6,11 @@ from allauth.socialaccount.providers.oauth2.views import (
 )
 
 from .client import WeixinOAuth2Client
-from .provider import WeixinProvider
 
 
 class WeixinOAuth2Adapter(OAuth2Adapter):
-    provider_id = WeixinProvider.id
-    access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token"
+    provider_id = "weixin"
+    access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token"  # nosec
     profile_url = "https://api.weixin.qq.com/sns/userinfo"
     client_class = WeixinOAuth2Client
 
@@ -26,9 +24,13 @@ class WeixinOAuth2Adapter(OAuth2Adapter):
 
     def complete_login(self, request, app, token, **kwargs):
         openid = kwargs.get("response", {}).get("openid")
-        resp = requests.get(
-            self.profile_url,
-            params={"access_token": token.token, "openid": openid},
+        resp = (
+            get_adapter()
+            .get_requests_session()
+            .get(
+                self.profile_url,
+                params={"access_token": token.token, "openid": openid},
+            )
         )
         resp.raise_for_status()
         extra_data = resp.json()

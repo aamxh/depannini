@@ -1,29 +1,27 @@
 """Views for MailChimp API v3."""
-import requests
 
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
     OAuth2LoginView,
 )
 
-from .provider import MailChimpProvider
-
 
 class MailChimpOAuth2Adapter(OAuth2Adapter):
-
     """OAuth2Adapter for MailChimp API v3."""
 
-    provider_id = MailChimpProvider.id
-
+    provider_id = "mailchimp"
     authorize_url = "https://login.mailchimp.com/oauth2/authorize"
-    access_token_url = "https://login.mailchimp.com/oauth2/token"
+    access_token_url = "https://login.mailchimp.com/oauth2/token"  # nosec
     profile_url = "https://login.mailchimp.com/oauth2/metadata"
 
     def complete_login(self, request, app, token, **kwargs):
         """Complete login, ensuring correct OAuth header."""
         headers = {"Authorization": "OAuth {0}".format(token.token)}
-        metadata = requests.get(self.profile_url, headers=headers)
+        metadata = (
+            get_adapter().get_requests_session().get(self.profile_url, headers=headers)
+        )
         extra_data = metadata.json()
         return self.get_provider().sociallogin_from_response(request, extra_data)
 

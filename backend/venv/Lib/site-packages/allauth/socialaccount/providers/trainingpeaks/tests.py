@@ -1,16 +1,15 @@
-# -*- coding: utf-8 -*-
 """
     Run just this suite:
     python manage.py test allauth.socialaccount.providers.trainingpeaks.tests.TrainingPeaksTests
 """
-from __future__ import unicode_literals
 
 from collections import namedtuple
 
+from django.test import TestCase
 from django.test.utils import override_settings
 
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import TrainingPeaksProvider
 from .views import TrainingPeaksOAuth2Adapter
@@ -32,6 +31,9 @@ class TrainingPeaksTests(OAuth2TestsMixin, TestCase):
                 "Weight": 87.5223617553711
             }""",
         )  # noqa
+
+    def get_expected_to_str(self):
+        return "user@example.com"
 
     def get_login_response_json(self, with_refresh_token=True):
         rtoken = ""
@@ -65,7 +67,7 @@ class TrainingPeaksTests(OAuth2TestsMixin, TestCase):
     def test_scope_from_default(self):
         Request = namedtuple("request", ["GET"])
         mock_request = Request(GET={})
-        scope = self.provider.get_scope(mock_request)
+        scope = self.provider.get_scope_from_request(mock_request)
         self.assertTrue("athlete:profile" in scope)
 
     @override_settings(
@@ -76,6 +78,6 @@ class TrainingPeaksTests(OAuth2TestsMixin, TestCase):
     def test_scope_from_settings(self):
         Request = namedtuple("request", ["GET"])
         mock_request = Request(GET={})
-        scope = self.provider.get_scope(mock_request)
+        scope = self.provider.get_scope_from_request(mock_request)
         for item in ("athlete:profile", "workouts", "workouts:wod"):
             self.assertTrue(item in scope)

@@ -50,8 +50,6 @@ Cloud services do not support this feature.
 
 import datetime
 
-import six
-
 from google.auth import _helpers
 from google.auth import credentials
 from google.auth import exceptions
@@ -65,7 +63,7 @@ _STS_GRANT_TYPE = "urn:ietf:params:oauth:grant-type:token-exchange"
 # The token exchange requested_token_type. This is always an access_token.
 _STS_REQUESTED_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:access_token"
 # The STS token URL used to exchanged a short lived access token for a downscoped one.
-_STS_TOKEN_URL = "https://sts.googleapis.com/v1/token"
+_STS_TOKEN_URL_PATTERN = "https://sts.{}/v1/token"
 # The subject token type to use when exchanging a short lived access token for a
 # downscoped token.
 _STS_SUBJECT_TOKEN_TYPE = "urn:ietf:params:oauth:token-type:access_token"
@@ -224,7 +222,7 @@ class AccessBoundaryRule(object):
         Raises:
             google.auth.exceptions.InvalidType: If the value is not a string.
         """
-        if not isinstance(value, six.string_types):
+        if not isinstance(value, str):
             raise exceptions.InvalidType(
                 "The provided available_resource is not a string."
             )
@@ -252,7 +250,7 @@ class AccessBoundaryRule(object):
             InvalidValue: If the value is not valid.
         """
         for available_permission in value:
-            if not isinstance(available_permission, six.string_types):
+            if not isinstance(available_permission, str):
                 raise exceptions.InvalidType(
                     "Provided available_permissions are not a list of strings."
                 )
@@ -355,7 +353,7 @@ class AvailabilityCondition(object):
         Raises:
             google.auth.exceptions.InvalidType: If the value is not of type string.
         """
-        if not isinstance(value, six.string_types):
+        if not isinstance(value, str):
             raise exceptions.InvalidType("The provided expression is not a string.")
         self._expression = value
 
@@ -378,7 +376,7 @@ class AvailabilityCondition(object):
         Raises:
             google.auth.exceptions.InvalidType: If the value is not of type string or None.
         """
-        if not isinstance(value, six.string_types) and value is not None:
+        if not isinstance(value, str) and value is not None:
             raise exceptions.InvalidType("The provided title is not a string or None.")
         self._title = value
 
@@ -401,7 +399,7 @@ class AvailabilityCondition(object):
         Raises:
             google.auth.exceptions.InvalidType: If the value is not of type string or None.
         """
-        if not isinstance(value, six.string_types) and value is not None:
+        if not isinstance(value, str) and value is not None:
             raise exceptions.InvalidType(
                 "The provided description is not a string or None."
             )
@@ -439,7 +437,11 @@ class Credentials(credentials.CredentialsWithQuotaProject):
     """
 
     def __init__(
-        self, source_credentials, credential_access_boundary, quota_project_id=None
+        self,
+        source_credentials,
+        credential_access_boundary,
+        quota_project_id=None,
+        universe_domain=credentials.DEFAULT_UNIVERSE_DOMAIN,
     ):
         """Instantiates a downscoped credentials object using the provided source
         credentials and credential access boundary rules.
@@ -458,6 +460,7 @@ class Credentials(credentials.CredentialsWithQuotaProject):
                 the upper bound of the permissions that are available on that resource and an
                 optional condition to further restrict permissions.
             quota_project_id (Optional[str]): The optional quota project ID.
+            universe_domain (Optional[str]): The universe domain value, default is googleapis.com
         Raises:
             google.auth.exceptions.RefreshError: If the source credentials
                 return an error on token refresh.
@@ -469,7 +472,10 @@ class Credentials(credentials.CredentialsWithQuotaProject):
         self._source_credentials = source_credentials
         self._credential_access_boundary = credential_access_boundary
         self._quota_project_id = quota_project_id
-        self._sts_client = sts.Client(_STS_TOKEN_URL)
+        self._universe_domain = universe_domain or credentials.DEFAULT_UNIVERSE_DOMAIN
+        self._sts_client = sts.Client(
+            _STS_TOKEN_URL_PATTERN.format(self.universe_domain)
+        )
 
     @_helpers.copy_docstring(credentials.Credentials)
     def refresh(self, request):

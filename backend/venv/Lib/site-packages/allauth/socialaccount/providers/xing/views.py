@@ -1,5 +1,3 @@
-import json
-
 from allauth.socialaccount.providers.oauth.client import OAuth
 from allauth.socialaccount.providers.oauth.views import (
     OAuthAdapter,
@@ -7,21 +5,19 @@ from allauth.socialaccount.providers.oauth.views import (
     OAuthLoginView,
 )
 
-from .provider import XingProvider
-
 
 class XingAPI(OAuth):
     url = "https://api.xing.com/v1/users/me.json"
 
     def get_user_info(self):
-        user = json.loads(self.query(self.url))
+        user = self.query(self.url).json()
         return user
 
 
 class XingOAuthAdapter(OAuthAdapter):
-    provider_id = XingProvider.id
-    request_token_url = "https://api.xing.com/v1/request_token"
-    access_token_url = "https://api.xing.com/v1/access_token"
+    provider_id = "xing"
+    request_token_url = "https://api.xing.com/v1/request_token"  # nosec
+    access_token_url = "https://api.xing.com/v1/access_token"  # nosec
     authorize_url = "https://www.xing.com/v1/authorize"
 
     def complete_login(self, request, app, token, response):

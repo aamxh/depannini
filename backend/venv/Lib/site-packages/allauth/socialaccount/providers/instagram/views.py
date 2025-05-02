@@ -1,24 +1,25 @@
-import requests
-
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
     OAuth2LoginView,
 )
 
-from .provider import InstagramProvider
-
 
 class InstagramOAuth2Adapter(OAuth2Adapter):
-    provider_id = InstagramProvider.id
-    access_token_url = "https://api.instagram.com/oauth/access_token"
+    provider_id = "instagram"
+    access_token_url = "https://api.instagram.com/oauth/access_token"  # nosec
     authorize_url = "https://api.instagram.com/oauth/authorize"
     profile_url = "https://graph.instagram.com/me"
 
     def complete_login(self, request, app, token, **kwargs):
-        resp = requests.get(
-            self.profile_url,
-            params={"access_token": token.token, "fields": ["id", "username"]},
+        resp = (
+            get_adapter()
+            .get_requests_session()
+            .get(
+                self.profile_url,
+                params={"access_token": token.token, "fields": ["id", "username"]},
+            )
         )
         resp.raise_for_status()
         extra_data = resp.json()

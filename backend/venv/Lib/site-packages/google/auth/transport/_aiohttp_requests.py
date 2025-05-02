@@ -24,7 +24,6 @@ import asyncio
 import functools
 
 import aiohttp  # type: ignore
-import six
 import urllib3  # type: ignore
 
 from google.auth import exceptions
@@ -191,11 +190,11 @@ class Request(transport.Request):
 
         except aiohttp.ClientError as caught_exc:
             new_exc = exceptions.TransportError(caught_exc)
-            six.raise_from(new_exc, caught_exc)
+            raise new_exc from caught_exc
 
         except asyncio.TimeoutError as caught_exc:
             new_exc = exceptions.TransportError(caught_exc)
-            six.raise_from(new_exc, caught_exc)
+            raise new_exc from caught_exc
 
 
 class AuthorizedSession(aiohttp.ClientSession):
@@ -308,7 +307,8 @@ class AuthorizedSession(aiohttp.ClientSession):
                     headers[key] = headers[key].decode("utf-8")
 
         async with aiohttp.ClientSession(
-            auto_decompress=self._auto_decompress
+            auto_decompress=self._auto_decompress,
+            trust_env=kwargs.get("trust_env", False),
         ) as self._auth_request_session:
             auth_request = Request(self._auth_request_session)
             self._auth_request = auth_request

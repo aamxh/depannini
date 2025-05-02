@@ -1,24 +1,24 @@
-import requests
-
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
     OAuth2LoginView,
 )
 
-from .provider import AmazonProvider
-
 
 class AmazonOAuth2Adapter(OAuth2Adapter):
-    provider_id = AmazonProvider.id
-    access_token_url = "https://api.amazon.com/auth/o2/token"
+    provider_id = "amazon"
+    access_token_url = "https://api.amazon.com/auth/o2/token"  # nosec
     authorize_url = "http://www.amazon.com/ap/oa"
     profile_url = "https://api.amazon.com/user/profile"
-    supports_state = False
-    redirect_uri_protocol = "https"
 
     def complete_login(self, request, app, token, **kwargs):
-        response = requests.get(self.profile_url, params={"access_token": token})
+        response = (
+            get_adapter()
+            .get_requests_session()
+            .get(self.profile_url, params={"access_token": token.token})
+        )
+        response.raise_for_status()
         extra_data = response.json()
         if "Profile" in extra_data:
             extra_data = {

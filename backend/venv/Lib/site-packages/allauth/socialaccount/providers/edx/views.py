@@ -1,17 +1,14 @@
-import requests
-
 from allauth.socialaccount import app_settings
+from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount.providers.oauth2.views import (
     OAuth2Adapter,
     OAuth2CallbackView,
     OAuth2LoginView,
 )
 
-from .provider import EdxProvider
-
 
 class EdxOAuth2Adapter(OAuth2Adapter):
-    provider_id = EdxProvider.id
+    provider_id = "edx"
     provider_default_url = "https://edx.org"
 
     settings = app_settings.PROVIDERS.get(provider_id, {})
@@ -26,13 +23,21 @@ class EdxOAuth2Adapter(OAuth2Adapter):
 
     def complete_login(self, request, app, token, **kwargs):
         headers = {"Authorization": "Bearer {0}".format(token.token)}
-        response = requests.get(self.profile_url, headers=headers)
+        response = (
+            get_adapter().get_requests_session().get(self.profile_url, headers=headers)
+        )
         extra_data = response.json()
 
         if extra_data.get("email", None) is None:
-            response = requests.get(
-                self.account_url.format(self.provider_base_url, extra_data["username"]),
-                headers=headers,
+            response = (
+                get_adapter()
+                .get_requests_session()
+                .get(
+                    self.account_url.format(
+                        self.provider_base_url, extra_data["username"]
+                    ),
+                    headers=headers,
+                )
             )
             extra_data = response.json()
 

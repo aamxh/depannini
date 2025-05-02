@@ -1,5 +1,7 @@
+from django.test import TestCase
+
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import DataportenProvider
 
@@ -47,6 +49,9 @@ class DataportenTest(OAuth2TestsMixin, TestCase):
             }""",
             headers={"content-type": "application/json"},
         )
+
+    def get_expected_to_str(self):
+        return "andreas.solberg@uninett.no"
 
     def test_extract_uid(self):
         uid = self.provider.extract_uid(self.mock_data)

@@ -1,9 +1,10 @@
 from urllib.parse import parse_qs, urlencode, urlparse
 
+from django.test import TestCase
 from django.urls import reverse
 
 from allauth.socialaccount.tests import OAuthTestsMixin
-from allauth.tests import MockedResponse, TestCase, mocked_response
+from allauth.tests import MockedResponse, mocked_response
 
 from .provider import PocketProvider
 
@@ -13,6 +14,9 @@ class PocketOAuthTests(OAuthTestsMixin, TestCase):
 
     def get_mocked_response(self):
         return []
+
+    def get_expected_to_str(self):
+        return "name@example.com"
 
     def get_access_token_response(self):
         return MockedResponse(

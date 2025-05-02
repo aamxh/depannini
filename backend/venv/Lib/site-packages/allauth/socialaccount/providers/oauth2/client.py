@@ -3,12 +3,16 @@ from urllib.parse import parse_qsl
 
 from django.utils.http import urlencode
 
+from allauth.socialaccount.adapter import get_adapter
+
 
 class OAuth2Error(Exception):
     pass
 
 
-class OAuth2Client(object):
+class OAuth2Client:
+    client_id_parameter = "client_id"
+
     def __init__(
         self,
         request,
@@ -17,7 +21,6 @@ class OAuth2Client(object):
         access_token_method,
         access_token_url,
         callback_url,
-        scope,
         scope_delimiter=" ",
         headers=None,
         basic_auth=False,
@@ -28,16 +31,17 @@ class OAuth2Client(object):
         self.callback_url = callback_url
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret
-        self.scope = scope_delimiter.join(set(scope))
+        self.scope_delimiter = scope_delimiter
         self.state = None
         self.headers = headers
         self.basic_auth = basic_auth
 
-    def get_redirect_url(self, authorization_url, extra_params):
+    def get_redirect_url(self, authorization_url, scope, extra_params):
+        scope = self.scope_delimiter.join(set(scope))
         params = {
-            "client_id": self.consumer_key,
+            self.client_id_parameter: self.consumer_key,
             "redirect_uri": self.callback_url,
-            "scope": self.scope,
+            "scope": scope,
             "response_type": "code",
         }
         if self.state:
@@ -57,26 +61,30 @@ class OAuth2Client(object):
             auth = None
             data.update(
                 {
-                    "client_id": self.consumer_key,
+                    self.client_id_parameter: self.consumer_key,
                     "client_secret": self.consumer_secret,
                 }
             )
         params = None
         self._strip_empty_keys(data)
         url = self.access_token_url
-        if self.access_token_method == "GET":
+        if self.access_token_method == "GET":  # nosec
             params = data
             data = None
         if data and pkce_code_verifier:
             data["code_verifier"] = pkce_code_verifier
         # TODO: Proper exception handling
-        resp = requests.request(
-            self.access_token_method,
-            url,
-            params=params,
-            data=data,
-            headers=self.headers,
-            auth=auth,
+        resp = (
+            get_adapter()
+            .get_requests_session()
+            .request(
+                self.access_token_method,
+                url,
+                params=params,
+                data=data,
+                headers=self.headers,
+                auth=auth,
+            )
         )
 
         access_token = None

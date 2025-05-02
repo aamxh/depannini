@@ -3,6 +3,9 @@ from allauth.socialaccount.providers.base import (
     ProviderAccount,
     ProviderException,
 )
+from allauth.socialaccount.providers.linkedin_oauth2.views import (
+    LinkedInOAuth2Adapter,
+)
 from allauth.socialaccount.providers.oauth2.provider import OAuth2Provider
 
 
@@ -43,6 +46,8 @@ def _extract_email(data):
 class LinkedInOAuth2Account(ProviderAccount):
     def to_str(self):
         ret = super(LinkedInOAuth2Account, self).to_str()
+        if self.account.extra_data.get("emailAddress"):
+            return self.account.extra_data["emailAddress"]
         first_name = _extract_name_field(self.account.extra_data, "firstName")
         last_name = _extract_name_field(self.account.extra_data, "lastName")
         if first_name or last_name:
@@ -91,7 +96,12 @@ class LinkedInOAuth2Account(ProviderAccount):
             if not width == req_size[0] or not height == req_size[1]:
                 continue
             # Get the uri since actual size matches the requested size.
-            to_return = single_element.get("identifiers", [{},])[
+            to_return = single_element.get(
+                "identifiers",
+                [
+                    {},
+                ],
+            )[
                 0
             ].get("identifier")
             if to_return:
@@ -104,6 +114,7 @@ class LinkedInOAuth2Provider(OAuth2Provider):
     # Name is displayed to ordinary users -- don't include protocol
     name = "LinkedIn"
     account_class = LinkedInOAuth2Account
+    oauth2_adapter_class = LinkedInOAuth2Adapter
 
     def extract_uid(self, data):
         if "id" not in data:

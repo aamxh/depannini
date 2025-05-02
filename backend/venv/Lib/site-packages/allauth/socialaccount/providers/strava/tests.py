@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.contrib.auth.models import User
+from django.test import TestCase
 
 from allauth.socialaccount.models import SocialAccount
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase
+from allauth.tests import MockedResponse
 
 from .provider import StravaProvider
 
@@ -38,6 +36,9 @@ class StravaTests(OAuth2TestsMixin, TestCase):
                 "email": "bill@example.com"
             }""",
         )  # noqa
+
+    def get_expected_to_str(self):
+        return "bill@example.com"
 
     def get_mocked_response_avatar_invalid_id(self):
         """Profile including realistic avatar URL

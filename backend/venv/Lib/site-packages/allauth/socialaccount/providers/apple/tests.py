@@ -1,9 +1,10 @@
 import json
-from datetime import datetime, timedelta
+import time
 from importlib import import_module
 from urllib.parse import parse_qs, urlparse
 
 from django.conf import settings
+from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils.http import urlencode
@@ -11,7 +12,7 @@ from django.utils.http import urlencode
 import jwt
 
 from allauth.socialaccount.tests import OAuth2TestsMixin
-from allauth.tests import MockedResponse, TestCase, mocked_response
+from allauth.tests import MockedResponse, mocked_response
 
 from .apple_session import APPLE_SESSION_COOKIE_NAME
 from .client import jwt_encode
@@ -107,12 +108,14 @@ def sign_id_token(payload):
                 "client_id": "app123id",
                 "key": "apple",
                 "secret": "dummy",
-                "certificate_key": """-----BEGIN PRIVATE KEY-----
+                "settings": {
+                    "certificate_key": """-----BEGIN PRIVATE KEY-----
 MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQg2+Eybl8ojH4wB30C
 3/iDkpsrxuPfs3DZ+3nHNghBOpmhRANCAAQSpo1eQ+EpNgQQyQVs/F27dkq3gvAI
 28m95JEk26v64YAea5NTH56mru30RDqTKPgRVi5qRu3XGyqy3mdb8gMy
 -----END PRIVATE KEY-----
 """,
+                },
             }
         }
     },
@@ -121,11 +124,11 @@ class AppleTests(OAuth2TestsMixin, TestCase):
     provider_id = AppleProvider.id
 
     def get_apple_id_token_payload(self):
-        now = datetime.utcnow()
+        now = int(time.time())
         return {
             "iss": "https://appleid.apple.com",
             "aud": "app123id",  # Matches `setup_app`
-            "exp": now + timedelta(hours=1),
+            "exp": now + 60 * 60,
             "iat": now,
             "sub": "000313.c9720f41e9434e18987a.1218",
             "at_hash": "CkaUPjk4MJinaAq6Z0tGUA",
@@ -134,6 +137,12 @@ class AppleTests(OAuth2TestsMixin, TestCase):
             "is_private_email": "true",
             "auth_time": 1234345345,  # not converted automatically by pyjwt
         }
+
+    def test_verify_token(self):
+        id_token = sign_id_token(self.get_apple_id_token_payload())
+        with mocked_response(self.get_mocked_response()):
+            sociallogin = self.provider.verify_token(None, {"id_token": id_token})
+            assert sociallogin.user.email == "test@privaterelay.appleid.com"
 
     def get_login_response_json(self, with_refresh_token=True):
         """
@@ -161,6 +170,9 @@ class AppleTests(OAuth2TestsMixin, TestCase):
         return MockedResponse(
             200, KEY_SERVER_RESP_JSON, {"content-type": "application/json"}
         )
+
+    def get_expected_to_str(self):
+        return "A B"
 
     def get_complete_parameters(self, auth_request_params):
         """
