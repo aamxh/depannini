@@ -14,7 +14,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 import os
 from twilio.rest import Client
-from dotenv import load_dotenv
+from dotenv import load_dotenv 
 
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -85,28 +85,29 @@ def get_tokens_for_user(user):
     }
 
 
+
 class RegisterView(views.APIView):
     permission_classes = [AllowAny]
-    
+
     def post(self, request):
+        # Check if phone number exists in request data
+        phone_number = request.data.get('phone_number')
+        if phone_number:
+            # Check if phone number already exists
+            if User.objects.filter(phone_number=phone_number).exists():
+                return Response({
+                    'success': False,
+                    'message': 'This phone number is already registered. Please use a different phone number.'
+                }, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             
-            # Generate and send email verification code
-            code = generate_verification_code()
-            expiry = timezone.now() + timedelta(minutes=30)
-            VerificationCode.objects.create(
-                user=user,
-                code=code,
-                code_type='email',
-                expires_at=expiry
-            )
-            send_verification_email(user, code)
-            
             # If phone number is provided, send verification code
             if user.phone_number:
                 phone_code = generate_verification_code()
+                expiry = timezone.now() + timedelta(minutes=30)
                 VerificationCode.objects.create(
                     user=user,
                     code=phone_code,
@@ -114,22 +115,18 @@ class RegisterView(views.APIView):
                     expires_at=expiry
                 )
                 send_sms_verification(user.phone_number, phone_code)
-            
-            # Generate JWT tokens
-            tokens = get_tokens_for_user(user)
-            
+
             return Response({
-                'tokens': tokens,
+                'success': True,
                 'user': {
                     'id': user.id,
                     'email': user.email,
                     'name': user.name,
+                    'phone_number': user.phone_number,
                     'user_type': user.user_type,
-                    'email_verified': user.email_verified,
-                    'phone_verified': user.phone_verified
                 }
             }, status=status.HTTP_201_CREATED)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
