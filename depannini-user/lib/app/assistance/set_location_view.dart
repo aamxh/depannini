@@ -1,5 +1,7 @@
 import 'package:depannini_user/app/assistance/location_repo.dart';
+import 'package:depannini_user/app/assistance/repair/repair_view_model.dart';
 import 'package:depannini_user/app/assistance/set_location_view_model.dart';
+import 'package:depannini_user/app/assistance/towing/towing_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +20,7 @@ class SetLocationV extends StatefulWidget {
 class _SetLocationVS extends State<SetLocationV> {
 
   late final GoogleMapController _ctrl;
-  final _vm = SetLocationVM();
+  final _vm = Get.find<SetLocationVM>();
   final _location = Location();
   Marker? _marker;
 
@@ -49,7 +51,7 @@ class _SetLocationVS extends State<SetLocationV> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Obx(() =>
-                _vm.location.value == LatLng(0, 0) ?
+                _vm.location == LatLng(0, 0) ?
                 Center(child: CircularProgressIndicator(
                   color: MyConstants.primaryC,
                 )) :
@@ -71,8 +73,8 @@ class _SetLocationVS extends State<SetLocationV> {
                     );
                   },
                   initialCameraPosition: CameraPosition(
-                    target: _vm.location.value!,
-                    zoom: 25,
+                    target: _vm.location!,
+                    zoom: 17,
                   ),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,
@@ -89,31 +91,53 @@ class _SetLocationVS extends State<SetLocationV> {
                 children: [
                   SizedBox(height: 20),
                   Text(
-                    _vm.address.value,
+                    _vm.address,
                     style: theme.textTheme.bodyMedium,
                     textAlign: TextAlign.center,
                     maxLines: 2,
+                    overflow: TextOverflow.clip,
                   ),
                   SizedBox(height: 10,),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (_vm.isAddressValid()) {
+                        if (_vm.id == 0) {
+                          //send location to database
+                          Get.delete<SetLocationVM>();
+                        } else if (_vm.id == 1) {
+                          final towingVM = Get.find<TowingVM>();
+                          towingVM.changeAddressFrom(_vm.address);
+                        } else if (_vm.id == 2) {
+                          final towingVM = Get.find<TowingVM>();
+                          towingVM.changeAddressTo(_vm.address);
+                        } else {
+                          final repairVM = Get.find<RepairVM>();
+                          repairVM.changeAddressFrom(_vm.address);
+                        }
+                        Get.back();
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       fixedSize: Size(size.width * 0.5, size.height * 0.064),
                       backgroundColor:
-                      _vm.isAddressValid.value ?
+                      _vm.isAddressValid() ?
                       MyConstants.primaryC :
-                      MyConstants.lightGrey,
+                      theme.scaffoldBackgroundColor == Colors.white ?
+                      MyConstants.lightGrey :
+                      MyConstants.darkGrey,
                       side: BorderSide(
-                        color: _vm.isAddressValid.value ?
+                        color: _vm.isAddressValid() ?
                             MyConstants.primaryC :
-                            MyConstants.mediumGrey!,
+                            theme.scaffoldBackgroundColor == Colors.white ?
+                            MyConstants.mediumGrey! :
+                            MyConstants.lightGrey!,
                       ),
                     ),
                     child: Text(
                       'Confirm location',
                       style: theme.textTheme.titleSmall!.copyWith(
-                        color: _vm.isAddressValid.value ?
+                        color: _vm.isAddressValid() ?
                         Colors.white :
                         theme.colorScheme.secondary,
                       ),

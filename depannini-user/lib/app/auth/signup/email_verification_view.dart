@@ -1,7 +1,6 @@
 import 'package:depannini_user/app/auth/signup/email_verification_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:email_otp/email_otp.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
