@@ -82,41 +82,38 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     }
 
-
 class RegisterView(views.APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
+        # Check if phone number exists in request data
+        phone_number = request.data.get('phone_number')
+        if phone_number:
+            # Check if phone number already exists
+            if User.objects.filter(phone_number=phone_number).exists():
+                return Response({
+                    'success': False,
+                    'message': 'This phone number is already registered. Please use a different phone number.'
+                }, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            # Generate and send email verification code
-            # code = generate_verification_code()
-            # expiry = timezone.now() + timedelta(minutes=30)
-            # VerificationCode.objects.create(
-           #     user=user,
-           #     code=code,
-          #      code_type='email',
-          #      expires_at=expiry
-          #  )
-          #  send_verification_email(user, code)
-
+            
             # If phone number is provided, send verification code
-          #  if user.phone_number:
-          #      phone_code = generate_verification_code()
-          #      VerificationCode.objects.create(
-          #          user=user,
-            #        code=phone_code,
-          #          code_type='phone',
-          #          expires_at=expiry
-          #      )
-         #       send_sms_verification(user.phone_number, phone_code)
-
-            # Generate JWT tokens
-           # tokens = get_tokens_for_user(user)
+            if user.phone_number:
+                phone_code = generate_verification_code()
+                expiry = timezone.now() + timedelta(minutes=30)
+                VerificationCode.objects.create(
+                    user=user,
+                    code=phone_code,
+                    code_type='phone',
+                    expires_at=expiry
+                )
+                send_sms_verification(user.phone_number, phone_code)
 
             return Response({
-                # 'tokens': tokens,
+                'success': True,
                 'user': {
                     'id': user.id,
                     'email': user.email,
@@ -127,6 +124,7 @@ class RegisterView(views.APIView):
             }, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class EmailVerificationView(views.APIView):
