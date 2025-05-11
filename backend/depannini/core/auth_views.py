@@ -15,6 +15,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
+import os
+from twilio.rest import Client
+from dotenv import load_dotenv 
+
 from .serializers import (
     UserRegistrationSerializer, EmailVerificationSerializer,
     PhoneVerificationSerializer, PasswordResetRequestSerializer,
@@ -45,14 +49,29 @@ def send_password_reset_email(user, code):
     send_mail(subject, message, 'noreply@depannini.com', [user.email])
 
 
+load_dotenv()
+
 def send_sms_verification(phone_number, code):
-    """
-    Send verification code via SMS
-    This is a placeholder - you would integrate with an SMS provider
-    """
-    print(f"Sending SMS to {phone_number} with code {code}")
-    # In a real application, you'd use a service like Twilio here
-    return True
+    # Get credentials from environment variables
+    account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+    auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+    twilio_phone_number = os.getenv('TWILIO_PHONE_NUMBER')
+    
+    if not all([account_sid, auth_token, twilio_phone_number]):
+        raise ValueError("Twilio credentials not properly configured")
+    
+    client = Client(account_sid, auth_token)
+
+    try:
+        message = client.messages.create(
+            body=f"Your verification code is: {code}",
+            from_=twilio_phone_number,
+            to=phone_number
+        )
+        return message.sid is not None
+    except Exception as e:
+        print(f"Failed to send SMS: {e}")
+        return False
 
 
 def get_tokens_for_user(user):

@@ -328,3 +328,9 @@ For any questions or assistance with the integration, please contact the project
 ---
 
 © 2025 Depannini Project
+
+
+
+
+
+so that anes don't forget to install twilio and add it to requirements.txt 
