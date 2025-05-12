@@ -1,12 +1,11 @@
+import 'package:depannini_assistant/app/main/enable_location_view.dart';
 import 'package:depannini_assistant/core/theme_controller.dart';
-import 'app/main/welcome_view.dart';
 import 'core/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await _initializeApp();
   runApp(MyApp());
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: MyTheme.lightTheme,
       darkTheme: MyTheme.darkTheme,
       themeMode: themeCtrl.isDark ? ThemeMode.dark : ThemeMode.light,
-      home: WelcomeV(),
+      home: EnableLocationV(),
     );
   }
 

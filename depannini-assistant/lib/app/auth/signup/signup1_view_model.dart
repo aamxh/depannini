@@ -1,4 +1,3 @@
-import 'package:depannini_assistant/core/constants.dart';
 import 'package:get/get.dart';
 
 class SignUp1VM extends GetxController {

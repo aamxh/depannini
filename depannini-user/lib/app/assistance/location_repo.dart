@@ -1,5 +1,4 @@
-import 'package:depannini_user/app/assistance/set_location_view_model.dart';
-import 'package:depannini_user/core/api_key.dart';
+import 'package:depannini_user/core/api_keys.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -27,9 +26,7 @@ class MyLocationRepo {
 
   static Future<String?> getLocationDescription(LatLng latLng) async {
     final url = "${MyConstants.reverseGeoCodingApiBaseUrl}${latLng.latitude},"
-        "${latLng.longitude}&key=$apiKey";
-    final setLocationVM = SetLocationVM();
-    setLocationVM.changeIsAddressValid(false);
+        "${latLng.longitude}&key=$androidMapsSdkKey";
     try {
       final Response<Map<String, dynamic>> res = await Dio().get(url);
       if (res.statusCode == 200) {
@@ -37,7 +34,6 @@ class MyLocationRepo {
         if (results.isEmpty) return null;
         final String? address =  results[0]['formatted_address'];
         if (address == null) return null;
-        setLocationVM.changeIsAddressValid(true);
         return address;
       }
       return null;

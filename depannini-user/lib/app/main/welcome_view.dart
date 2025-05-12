@@ -1,7 +1,6 @@
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../auth/signin/signin_view.dart';
 import '../auth/signup/phone_number_view.dart';
 
@@ -18,9 +17,8 @@ class WelcomeV extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Column(
           children: [
-            SizedBox(height: size.height * 0.2,),
-            Image.asset('assets/images/logo.png'),
             SizedBox(height: size.height * 0.1,),
+            Image.asset('assets/images/logo.png'),
             Text(
               'Welcome',
               style: theme.textTheme.headlineMedium,

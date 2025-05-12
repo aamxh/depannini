@@ -40,7 +40,9 @@ class ConfirmRequestV extends StatelessWidget {
                       width: size.width * 0.3,
                       height: 3,
                       decoration: BoxDecoration(
-                        color: MyConstants.mediumGrey,
+                        color: theme.scaffoldBackgroundColor == Colors.white ?
+                        MyConstants.darkGrey :
+                        MyConstants.lightGrey,
                         borderRadius: BorderRadius.circular(1),
                       ),
                     ),
@@ -51,7 +53,9 @@ class ConfirmRequestV extends StatelessWidget {
                     ),
                     SizedBox(height: size.height * 0.025),
                     Container(
-                      color: MyConstants.mediumGrey,
+                      color: theme.scaffoldBackgroundColor == Colors.white ?
+                      MyConstants.darkGrey :
+                      MyConstants.lightGrey,
                       width: size.width,
                       height: 1,
                     ),
@@ -105,7 +109,9 @@ class ConfirmRequestV extends StatelessWidget {
                     ),
                     SizedBox(height: size.height * 0.01,),
                     Container(
-                      color: MyConstants.mediumGrey,
+                      color: theme.scaffoldBackgroundColor == Colors.white ?
+                      MyConstants.darkGrey :
+                      MyConstants.lightGrey,
                       width: size.width,
                       height: 1,
                     ),

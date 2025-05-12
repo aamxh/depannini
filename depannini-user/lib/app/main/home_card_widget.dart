@@ -1,3 +1,6 @@
+import 'package:depannini_user/app/assistance/repair/repair_view_model.dart';
+import 'package:depannini_user/app/assistance/set_location_view_model.dart';
+import 'package:depannini_user/app/assistance/towing/towing_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,6 +19,9 @@ class CardW extends StatelessWidget {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
+        Get.put(SetLocationVM());
+        Get.put(TowingVM());
+        Get.put(RepairVM());
         if (isTowing) {
           Get.to(() => TowingV());
         }

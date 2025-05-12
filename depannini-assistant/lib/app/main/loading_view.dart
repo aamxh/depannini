@@ -1,6 +1,5 @@
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class LoadingV extends StatelessWidget {
 

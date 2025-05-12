@@ -24,13 +24,14 @@ class SignUp2V extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     return Scaffold(
+      appBar: AppBar(),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
-              SizedBox(height: size.height * 0.15,),
+              SizedBox(height: size.height * 0.05,),
               Text(
                 'Complete your profile',
                 style: theme.textTheme.headlineMedium,

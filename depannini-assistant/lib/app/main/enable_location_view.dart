@@ -1,9 +1,12 @@
-import 'package:depannini_assistant/core/constants.dart';
+import 'package:depannini_assistant/app/assistance/set_location_view.dart';
+import 'package:depannini_assistant/app/assistance/set_location_view_model.dart';
+import 'package:depannini_assistant/app/main/welcome_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class LocationV extends StatelessWidget {
-  
-  const LocationV({super.key});
+class EnableLocationV extends StatelessWidget {
+
+  const EnableLocationV({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +30,8 @@ class LocationV extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: size.height * 0.06,),
-                Image.asset('assets/images/location.png', width: size.width * 0.4,),
-                SizedBox(height: size.height * 0.02,),
                 Text(
                   "Enable location setting",
                   style: theme.textTheme.titleLarge,
@@ -41,33 +42,36 @@ class LocationV extends StatelessWidget {
                   child: Text(
                     'This will enable us to find the nearest assistants for you.',
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium!.copyWith(color: MyConstants.darkGrey),
+                    style: theme.textTheme.bodyMedium,
                   ),
                 ),
-                SizedBox(height: size.height * 0.04,),
+                SizedBox(height: size.height * 0.06,),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.put(SetLocationVM());
+                    Get.to(() => SetLocationV());
+                  },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(size.width * 0.7, size.height * 0.064),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   child: Text(
                     'Use my location',
-                    style: theme.textTheme.bodyLarge!.copyWith(
-                      color: theme.colorScheme.secondary,
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: Colors.white,
                     ),
                   ),
                 ),
                 SizedBox(height: size.height * 0.02,),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.off(() => WelcomeV());
+                  },
                   child: Text(
                     'Skip for now',
-                    style: theme.textTheme.bodyLarge!.copyWith(
-                        color: MyConstants.mediumGrey,
-                    ),
+                    style: theme.textTheme.titleSmall,
                   ),
                 ),
               ],
