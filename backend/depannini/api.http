@@ -1,17 +1,12 @@
-POST http://localhost:8001/api/auth/register/ HTTP/1.1
+POST http://localhost:8000/api/auth/register/ HTTP/1.1
 Content-Type: application/json
 
 {
     "name": "anes",
-    "password": "testing321",
-    "password_confirm": "testing321",
-    "phone_number": "0658025174",
-    "user_type": "assistant",
-    "service_type": "towing",
-    "vehicle_type": "towing truck",
-    "driving_license_cat": "b",
-    "driving_license_num": 54543344,
-    "driving_license_expiry": "20:08:26"
+    "password": "test",
+    "password_confirm": "test",
+    "phone_number": "065874",
+    "user_type": "client"
 }
 
 ###
@@ -20,8 +15,8 @@ POST http://localhost:8000/api/auth/login/phone/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "phone_number": "0658025171",
-    "password": "testing321"
+    "phone_number": "0658025172",
+    "password": "test"
 }
 
 ###
@@ -51,7 +46,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 POST http://localhost:8000/api/assistance/request/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODE3MjgwLCJpYXQiOjE3NDYyMTI0ODAsImp0aSI6IjliZWM2YjE3NmIxMzRlN2ZhMjMwNmI1ZjFiMGM0YzUzIiwidXNlcl9pZCI6MTh9.nrRY4157ebnoLzQRTQmgcbCruuXCNMsIjGL2rBFM0Hw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3Njg2MTEyLCJpYXQiOjE3NDcwODEzMTIsImp0aSI6ImQ0ODM2YzQzNWM5ZjRhNjE5NGJhZTVlZDMzOWFkMDljIiwidXNlcl9pZCI6MTh9.00hrBeEPXSwfAKSZ-IEhwBgGms_pLQcb7eTx8aIbwFk
 
 {
     "pickup": {
@@ -62,14 +57,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 ###
 
-Patch http://localhost:8000/api/assistance/accept/1/ HTTP/1.1
+Patch http://localhost:8000/api/assistance/accept/2/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODE3Nzc0LCJpYXQiOjE3NDYyMTI5NzQsImp0aSI6IjdkMTI5ZDg2Mjc4YjQ5MzJhOWJiMDVhZWRlZDdmNWNiIiwidXNlcl9pZCI6MjB9.a3pSNXiITtlzwb2teS8bTM3wtiCB_zg0eRi2jIlqbrU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3Njg2Mzc4LCJpYXQiOjE3NDcwODE1NzgsImp0aSI6IjUwMmE3NDg2MjdiODQyMTBhNGRiNzM3NDA1OWVjOTliIiwidXNlcl9pZCI6MjF9.PL3mDomLzWlEVRE_fWUMpEj85AFH3ihbyRbBF5XIrUg
 ### assistant update
 
-Patch http://localhost:8000/api/assistance/update/32/ HTTP/1.1
+Patch http://localhost:8000/api/assistance/update/2/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjkxMTAxLCJpYXQiOjE3NDU2ODYzMDEsImp0aSI6IjRmM2U0YjEzOTRjNDQ3MmFhODQ4ODBmZTdkNGU3MjUyIiwidXNlcl9pZCI6MTd9.vUINAeoFTlw7OSluueNXOIE3rLBFYHaYz5KZSSsTkPo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3Njg2Mzc4LCJpYXQiOjE3NDcwODE1NzgsImp0aSI6IjUwMmE3NDg2MjdiODQyMTBhNGRiNzM3NDA1OWVjOTliIiwidXNlcl9pZCI6MjF9.PL3mDomLzWlEVRE_fWUMpEj85AFH3ihbyRbBF5XIrUg
 
 {
     "status" : "canceled"
@@ -91,3 +86,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 GET http://localhost:8000/api/assistance/view/1/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODE3Nzc0LCJpYXQiOjE3NDYyMTI5NzQsImp0aSI6IjdkMTI5ZDg2Mjc4YjQ5MzJhOWJiMDVhZWRlZDdmNWNiIiwidXNlcl9pZCI6MjB9.a3pSNXiITtlzwb2teS8bTM3wtiCB_zg0eRi2jIlqbrU
+
+
+
+###
+POST http://localhost:8000/api/token/refresh/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "refreh" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"
+}

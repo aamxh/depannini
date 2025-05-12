@@ -320,7 +320,7 @@ The application uses WebSockets for real-time communication between clients and 
 
 ### Assistant Channel
 
-- **URL**: `ws://your-domain.com/ws/assistant/<assistant_id>/`
+- **URL**: `ws://localhost:8000/ws/assistant/<assistant_id>/`
 - **Purpose**: Assistants connect to this channel to receive new assistance requests
 
 #### Events Received

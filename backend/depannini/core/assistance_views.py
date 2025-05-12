@@ -168,7 +168,7 @@ class AcceptAssistanceView(APIView):
 class AssistanceUpdateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    async def patch(self, request, assistance_id):
+    def patch(self, request, assistance_id):
         assistance_status = request.data['status']
         channel_layer = get_channel_layer()
         try:

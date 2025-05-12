@@ -1,5 +1,5 @@
 import 'package:depannini_user/app/assistance/set_location_view_model.dart';
-import 'package:depannini_user/core/api_key.dart';
+import 'package:depannini_user/core/api_keys.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -27,7 +27,7 @@ class MyLocationRepo {
 
   static Future<String?> getLocationDescription(LatLng latLng) async {
     final url = "${MyConstants.reverseGeoCodingApiBaseUrl}${latLng.latitude},"
-        "${latLng.longitude}&key=$apiKey";
+        "${latLng.longitude}&key=$androidMapsSdkKey";
     final setLocationVM = SetLocationVM();
     setLocationVM.changeIsAddressValid(false);
     try {
