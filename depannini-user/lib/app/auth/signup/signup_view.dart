@@ -1,4 +1,5 @@
 import 'package:depannini_user/app/auth/signin/signin_view.dart';
+import 'package:depannini_user/app/auth/signup/client_view_model.dart';
 import 'package:depannini_user/app/auth/signup/email_verification_view.dart';
 import 'package:depannini_user/app/auth/signup/email_verification_view_model.dart';
 import 'package:depannini_user/app/main/loading_view.dart';
@@ -173,6 +174,10 @@ class SignUpV extends StatelessWidget {
                       ));
                     } else {
                       EmailVerificationVM().changeEmail(_emailCtrl.text);
+                      final vm = Get.find<ClientVM>();
+                      vm.changeEmail(_emailCtrl.text);
+                      vm.changeName(_nameCtrl.text);
+                      vm.changePassword(_password1Ctrl.text);
                       Get.dialog(
                         Center(child: CircularProgressIndicator(
                           color: MyConstants.primaryC,

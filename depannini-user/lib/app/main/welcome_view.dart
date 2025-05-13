@@ -14,13 +14,12 @@ class WelcomeV extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     return Scaffold(
-      body: Container(
+      body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Column(
           children: [
-            SizedBox(height: size.height * 0.2,),
-            Image.asset('assets/images/logo.png'),
             SizedBox(height: size.height * 0.1,),
+            Image.asset('assets/images/logo.png'),
             Text(
               'Welcome',
               style: theme.textTheme.headlineMedium,

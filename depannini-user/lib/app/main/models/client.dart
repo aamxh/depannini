@@ -1,3 +1,8 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'client.g.dart';
+
+@JsonSerializable()
 class Client {
 
   final String name;
@@ -11,5 +16,9 @@ class Client {
     required this.password,
     required this.phoneNum,
   });
+
+  factory Client.fromJson(Map<String, dynamic> json) => _$ClientFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ClientToJson(this);
 
 }

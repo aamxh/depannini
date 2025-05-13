@@ -1,7 +1,9 @@
+import 'package:depannini_user/app/auth/auth_api.dart';
+import 'package:depannini_user/app/auth/signup/client_view_model.dart';
 import 'package:depannini_user/app/auth/signup/email_verification_view_model.dart';
+import 'package:depannini_user/app/main/models/client.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:email_otp/email_otp.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pinput/pinput.dart';
@@ -91,10 +93,20 @@ class EmailVerificationV extends StatelessWidget {
                       barrierDismissible: false,
                     );
                     final res = EmailOTP.verifyOTP(otp: _vm.code.value);
-                    Get.back();
                     if (res) {
-                      Get.offAll(() => HomeV());
+                      final vm = Get.find<ClientVM>();
+                      final res = await AuthApi.signUpUser(Client(
+                        name: vm.name,
+                        email: vm.email,
+                        password: vm.password,
+                        phoneNum: vm.num,
+                      ));
+                      Get.back();
+                      if (res) {
+                        Get.offAll(() => HomeV());
+                      }
                     } else {
+                      Get.back();
                       Get.showSnackbar(GetSnackBar(
                         messageText: Text(
                           'Either the code validity has expired or you\'ve '

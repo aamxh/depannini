@@ -12,6 +12,6 @@ class MyConstants {
   static const reverseGeoCodingApiBaseUrl =
       "https://maps.googleapis.com/maps/api/geocode/json?latlng=";
 
-  static const djangoApiBaseUrl = 'http://localhost:8000/api';
+  static const djangoApiBaseUrl = 'http://10.0.2.2:8000/api';
 
 }

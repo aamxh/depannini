@@ -5,7 +5,7 @@ Content-Type: application/json
     "name": "anes",
     "password": "test",
     "password_confirm": "test",
-    "phone_number": "065874",
+    "phone_number": "0658734",
     "user_type": "client"
 }
 
