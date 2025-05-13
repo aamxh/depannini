@@ -17,7 +17,7 @@ from google.auth.transport import requests
 
 import os
 from twilio.rest import Client
-from dotenv import load_dotenv 
+from dotenv import load_dotenv
 
 from .serializers import (
     UserRegistrationSerializer, EmailVerificationSerializer,
@@ -32,7 +32,7 @@ User = get_user_model()
 
 def generate_verification_code(length=5):
     """Generate a random verification code"""
-    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+    return ''.join(str(random.randint(0, 9)) for _ in range(length))
 
 
 def send_verification_email(user, code):
@@ -51,15 +51,16 @@ def send_password_reset_email(user, code):
 
 load_dotenv()
 
+
 def send_sms_verification(phone_number, code):
     # Get credentials from environment variables
     account_sid = os.getenv('TWILIO_ACCOUNT_SID')
     auth_token = os.getenv('TWILIO_AUTH_TOKEN')
     twilio_phone_number = os.getenv('TWILIO_PHONE_NUMBER')
-    
+
     if not all([account_sid, auth_token, twilio_phone_number]):
         raise ValueError("Twilio credentials not properly configured")
-    
+
     client = Client(account_sid, auth_token)
 
     try:
@@ -82,36 +83,14 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     }
 
+
 class RegisterView(views.APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        # Check if phone number exists in request data
-        phone_number = request.data.get('phone_number')
-        if phone_number:
-            # Check if phone number already exists
-            if User.objects.filter(phone_number=phone_number).exists():
-                return Response({
-                    'success': False,
-                    'message': 'This phone number is already registered. Please use a different phone number.'
-                }, status=status.HTTP_400_BAD_REQUEST)
-
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            
-            # If phone number is provided, send verification code
-            if user.phone_number:
-                phone_code = generate_verification_code()
-                expiry = timezone.now() + timedelta(minutes=30)
-                VerificationCode.objects.create(
-                    user=user,
-                    code=phone_code,
-                    code_type='phone',
-                    expires_at=expiry
-                )
-                send_sms_verification(user.phone_number, phone_code)
-
             return Response({
                 'success': True,
                 'user': {
@@ -120,11 +99,11 @@ class RegisterView(views.APIView):
                     'name': user.name,
                     'phone_number': user.phone_number,
                     'user_type': user.user_type,
-                }
+                },
+                'tokens': get_tokens_for_user(user)
             }, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class EmailVerificationView(views.APIView):
@@ -164,6 +143,28 @@ class EmailVerificationView(views.APIView):
 
 
 class PhoneVerificationView(views.APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        phone_number = request.data.get('phone_number')
+        if phone_number:
+            # Check if phone number already exists
+            if User.objects.filter(phone_number=phone_number).exists():
+                return Response({
+                    'success': False,
+                    'message': 'This phone number is already registered. Please use a different phone number.'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            code = generate_verification_code()
+
+            send_sms_verification(phone_number, code)
+            return Response({"success": True,
+                            'code': code})
+        return Response({
+            "phone_number": "this field is required"},
+            status=status.HTTP_400_BAD_REQUEST)
+
+
+class PhoneVerificationView0(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -206,8 +207,9 @@ class PasswordResetRequestView(views.APIView):
         serializer = PasswordResetRequestSerializer(data=request.data)
         if serializer.is_valid():
             try:
+                phone_number = serializer.validated_data['phone_number']
                 user = User.objects.get(
-                    email=serializer.validated_data['email'])
+                    phone_number=phone_number)
                 code = generate_verification_code()
                 expiry = timezone.now() + timedelta(minutes=30)
 
@@ -218,18 +220,18 @@ class PasswordResetRequestView(views.APIView):
                     expires_at=expiry
                 )
 
-                send_password_reset_email(user, code)
+                send_sms_verification(phone_number, code)
 
                 return Response({
                     'success': True,
-                    'message': 'Password reset code sent to your email'
+                    'message': 'Password reset code sent to your phone'
                 }, status=status.HTTP_200_OK)
             except User.DoesNotExist:
                 # For security reasons, still return success even if user doesn't exist
                 return Response({
-                    'success': True,
-                    'message': 'If your email is registered, you will receive a password reset code'
-                }, status=status.HTTP_200_OK)
+                    'success': False,
+                    'message': f'User with phone_number {phone_number} does not exist'
+                }, status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -242,7 +244,7 @@ class PasswordResetConfirmView(views.APIView):
         if serializer.is_valid():
             try:
                 user = User.objects.get(
-                    email=serializer.validated_data['email'])
+                    phone_number=serializer.validated_data['phone_number'])
                 verification = VerificationCode.objects.filter(
                     user=user,
                     code=serializer.validated_data['code'],

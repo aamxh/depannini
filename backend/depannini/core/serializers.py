@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'email', 'name', 'phone_number',
-            'profile_photo', 'location',
+            'profile_photo', 'current_lat', 'current_lng',
             'address'
         ]
 
@@ -22,7 +22,7 @@ class AssistantSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'email', 'name', 'phone_number', 'profile_photo', 'location',
+            'email', 'name', 'phone_number', 'profile_photo', 'current_lat', 'current_lng',
             'address', 'service_type', 'vehicle_type',
         ]
 
@@ -31,7 +31,7 @@ class AssistantProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'email', 'name', 'phone_number', 'profile_photo', 'location',
+            'email', 'name', 'phone_number', 'profile_photo', 'current_lat', 'current_lng',
             'address', 'service_type', 'vehicle_type', 'is_active_assistant',
             'driving_license_cat', 'driving_license_num', 'driving_license_expiry',
             'vehicle_registration_num',
@@ -114,11 +114,11 @@ class PhoneVerificationSerializer(serializers.Serializer):
 
 
 class PasswordResetRequestSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    phone_number = serializers.CharField()
 
 
 class PasswordResetConfirmSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    phone_number = serializers.CharField()
     code = serializers.CharField(max_length=5)
     new_password = serializers.CharField(
         validators=[validate_password],
