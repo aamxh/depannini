@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:get/get.dart';
 
-class ConfirmRequestV extends StatelessWidget {
+class AcceptedRequestV extends StatelessWidget {
 
-  const ConfirmRequestV({super.key});
+  const AcceptedRequestV({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,8 @@ class ConfirmRequestV extends StatelessWidget {
                       width: size.width * 0.3,
                       height: 3,
                       decoration: BoxDecoration(
-                        color: MyConstants.mediumGrey,
+                        color: theme.scaffoldBackgroundColor == Colors.white ?
+                        MyConstants.darkGrey : MyConstants.lightGrey,
                         borderRadius: BorderRadius.circular(1),
                       ),
                     ),
@@ -51,7 +52,8 @@ class ConfirmRequestV extends StatelessWidget {
                     ),
                     SizedBox(height: size.height * 0.025),
                     Container(
-                      color: MyConstants.mediumGrey,
+                      color: theme.scaffoldBackgroundColor == Colors.white ?
+                      MyConstants.darkGrey : MyConstants.lightGrey,
                       width: size.width,
                       height: 1,
                     ),
@@ -71,7 +73,7 @@ class ConfirmRequestV extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Name',
+                                  'Anes Adjal',
                                   style: theme.textTheme.bodyLarge,
                                 ),
                                 Text(
@@ -105,7 +107,8 @@ class ConfirmRequestV extends StatelessWidget {
                     ),
                     SizedBox(height: size.height * 0.01,),
                     Container(
-                      color: MyConstants.mediumGrey,
+                      color: theme.scaffoldBackgroundColor == Colors.white ?
+                      MyConstants.darkGrey : MyConstants.lightGrey,
                       width: size.width,
                       height: 1,
                     ),
@@ -114,7 +117,9 @@ class ConfirmRequestV extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+
+                          },
                           style: ElevatedButton.styleFrom(
                             fixedSize: Size(size.width * 0.3, size.height * 0.064),
                             elevation: 0,
@@ -132,13 +137,19 @@ class ConfirmRequestV extends StatelessWidget {
                           },
                           style: ElevatedButton.styleFrom(
                             fixedSize: Size(size.width * 0.3, size.height * 0.064),
-                            backgroundColor: MyConstants.lightGrey,
+                            backgroundColor:
+                            theme.scaffoldBackgroundColor == Colors.white ?
+                            MyConstants.lightGrey : MyConstants.mediumGrey,
+                            side: BorderSide(
+                              color: theme.scaffoldBackgroundColor == Colors.white ?
+                                  MyConstants.darkGrey! : MyConstants.lightGrey!,
+                            ),
                             elevation: 0,
                           ),
                           child: Text(
                             'Cancel',
                             style: theme.textTheme.titleSmall!.copyWith(
-                              color: MyConstants.darkGrey,
+                              color: theme.colorScheme.secondary,
                             ),
                           ),
                         ),

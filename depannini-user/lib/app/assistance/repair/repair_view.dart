@@ -1,4 +1,4 @@
-import 'package:depannini_user/app/assistance/confirm_request_view.dart';
+import 'package:depannini_user/app/assistance/accepted_request_view.dart';
 import 'package:depannini_user/app/assistance/location_field_widget.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +78,7 @@ class RepairV extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      Get.to(() => ConfirmRequestV());
+                      Get.to(() => AcceptedRequestV());
                     }
                   },
                   style: ElevatedButton.styleFrom(
