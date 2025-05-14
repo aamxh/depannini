@@ -1,4 +1,5 @@
-import 'package:depannini_assistant/app/assistance/request_details_view.dart';
+import 'package:depannini_assistant/app/assistance/repair_request_details_view.dart';
+import 'package:depannini_assistant/app/assistance/towing_request_details_view.dart';
 import 'package:depannini_assistant/core/theme_controller.dart';
 import 'app/main/welcome_view.dart';
 import 'core/theme.dart';
@@ -28,7 +29,7 @@ Future<void> _initializeApp() async {
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         if (response.payload != null) {
           print('Notification payload: ${response.payload}');
-          Get.to(() => RequestDetailsV());
+          Get.to(() => RepairRequestDetailsV());
         }
   });
   Get.put(ThemeCtrl());
