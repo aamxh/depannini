@@ -13,7 +13,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_native_splash: ^2.4.5
-  onboarding: ^4.0.2
   email_otp: ^3.0.2
   get: ^4.7.2
   google_fonts: ^6.2.1
@@ -27,12 +26,15 @@ dependencies:
   shared_preferences: ^2.5.2
   google_maps_flutter: ^2.12.1
   location: ^8.0.0
+  json_annotation: ^4.9.0
+  flutter_local_notifications: ^19.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  package_rename: ^1.9.0
+  build_runner: ^2.4.15
+  json_serializable: ^6.9.5
 
 flutter:
   uses-material-design: true

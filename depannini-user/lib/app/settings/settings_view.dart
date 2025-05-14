@@ -39,7 +39,7 @@ class SettingsV extends StatelessWidget {
                       ),
                       SizedBox(height: 5,),
                       Text(
-                        'a.a.mxhamed@gmail.com222222222',
+                        'a.a.mxhamed@gmail.com',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

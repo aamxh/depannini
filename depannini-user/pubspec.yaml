@@ -27,6 +27,7 @@ dependencies:
   location: ^8.0.0
   shared_preferences: ^2.5.2
   json_annotation: ^4.9.0
+  flutter_local_notifications: ^19.2.0
 
 dev_dependencies:
   flutter_test:
