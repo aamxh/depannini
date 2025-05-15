@@ -66,7 +66,7 @@ class AssistanceConsumer(AsyncWebsocketConsumer):
                             'type': 'location_update',
                             'lat': lat,
                             'lng': lng,
-                            'assistant_id': user_id
+                            'user_id': user_id
                         }
                     )
                 else:

@@ -181,7 +181,7 @@ class AssistanceSerializer(serializers.ModelSerializer):
             'id', 'status', 'client', 'assistant',
             'pickupLocation', 'dropoffLocation',
             'distance_km', 'total_price',
-            'createdAt', 'updatedAt'
+            'createdAt', 'updatedAt', 'assistance_type'
         ]
 
     def get_pickupLocation(self, obj):
@@ -194,9 +194,15 @@ class AssistanceSerializer(serializers.ModelSerializer):
 
 
 class AssistanceRequestSerializer(serializers.Serializer):
+    ASSISTANCE_TYPE_CHOICES = (
+        ("towing", "Towing"),
+        ("repair", "Repair")
+    )
+
     pickup = serializers.DictField(child=serializers.FloatField())
     dropoff = serializers.DictField(
         child=serializers.FloatField(), required=False)
+    assistance_type = serializers.ChoiceField(choices=ASSISTANCE_TYPE_CHOICES)
 
 
 class LocationUpdateSerializer(serializers.Serializer):

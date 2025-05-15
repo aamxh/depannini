@@ -48,19 +48,21 @@ class AssistanceRequestView(APIView):
                 pickup_lng=serializer.validated_data['pickup']['lng'],
                 dropoff_lat=dropoff_lat,
                 dropoff_lng=dropoff_lng,
-                status='requested'
+                status='requested',
+                assistance_type=serializer.validated_data['assistance_type']
             )
         else:
             assistance = Assistance.objects.create(
                 client_id=request.user.id,
                 pickup_lat=serializer.validated_data['pickup']['lat'],
                 pickup_lng=serializer.validated_data['pickup']['lng'],
-                status='requested'
+                status='requested',
+                assistance_type=serializer.validated_data['assistance_type']
             )
 
         # Find nearby drivers
         all_assistants = User.objects.filter(
-            user_type='assistant', is_active_assistant=True)
+            user_type='assistant', is_active_assistant=True, service_type=serializer.validated_data['assistance_type'])
         nearby_assistants = []
 
         for assistant in all_assistants:
