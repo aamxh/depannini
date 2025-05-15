@@ -1,10 +1,26 @@
+import 'package:depannini_user/app/assistance/location_view_model.dart';
+import 'package:depannini_user/app/assistance/set_location_view.dart';
 import 'package:flutter/material.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
-class AcceptedRequestV extends StatelessWidget {
+class LocationV extends StatefulWidget {
 
-  const AcceptedRequestV({super.key});
+  const LocationV({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _LocationVS();
+
+}
+
+class _LocationVS extends State<SetLocationV> {
+
+  late final GoogleMapController _ctrl;
+  final _vm = LocationVM();
+  final _location = Location();
+  Marker? _marker;
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +32,30 @@ class AcceptedRequestV extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          Image.asset(
-            'assets/images/map.png',
-            width: double.infinity,
-            fit: BoxFit.cover,
+          GoogleMap(
+            onMapCreated: (GoogleMapController ctrl) {
+              _ctrl = ctrl;
+              _location.onLocationChanged.listen((LocationData loc) =>
+                  _ctrl.animateCamera(CameraUpdate.newLatLng(
+                      LatLng(loc.latitude!, loc.longitude!)
+                  )));
+            },
+            onTap: (LatLng position) {
+              //_vm.changeLocation(position);
+              //_vm.changeAddress(position);
+              _marker = Marker(
+                markerId: MarkerId('Selected Location'),
+                position: position,
+                infoWindow: InfoWindow(title: 'Selected Location'),
+              );
+            },
+            initialCameraPosition: CameraPosition(
+              target: LatLng(0, 0), //_vm.location.value!,
+              zoom: 25,
+            ),
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+            markers: _marker == null ? {} : {_marker!},
           ),
           DraggableScrollableSheet(
             initialChildSize: 0.5,
@@ -88,7 +124,7 @@ class AcceptedRequestV extends StatelessWidget {
                                     ),
                                     SizedBox(width: 5,),
                                     Text(
-                                      '4.5/5',
+                                      '4/5',
                                       style: theme.textTheme.bodyMedium,
                                     ),
                                   ],

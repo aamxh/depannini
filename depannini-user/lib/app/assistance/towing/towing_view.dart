@@ -1,4 +1,5 @@
-import 'package:depannini_user/app/assistance/accepted_request_view.dart';
+import 'package:depannini_user/app/assistance/towing/towing_assistant_view.dart';
+import 'package:depannini_user/app/assistance/location_view.dart';
 import 'package:depannini_user/app/assistance/location_field_widget.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +70,7 @@ class TowingV extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Get.to(() => AcceptedRequestV());
+                  Get.to(() => TowingAssistantV());
                 },
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(size.width * 0.6, size.height * 0.064),
