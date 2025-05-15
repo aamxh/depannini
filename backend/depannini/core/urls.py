@@ -3,7 +3,7 @@ from django.urls import path
 
 
 from .auth_views import (
-    RegisterView, EmailVerificationView, PhoneVerificationView,
+    RegisterView, EmailVerificationView, EmailConfirmationRequestView, PhoneVerificationView,
     PasswordResetRequestView, PasswordResetConfirmView,
     EmailLoginView, PhoneLoginView, GoogleLoginView,
     ResendVerificationView
@@ -27,16 +27,20 @@ from .assistance_views import (
 urlpatterns = [
     # Authentication URLs
     path('auth/register/', RegisterView.as_view(), name='register'),  # done
-    path('auth/verify-email/', EmailVerificationView.as_view(), name='verify-email'),
-    path('auth/verify-phone/', PhoneVerificationView.as_view(), name='verify-phone'),
+    path('auth/verify-email/', EmailConfirmationRequestView.as_view(),
+         name='verify-email'),  #
+    path('auth/verify-email/confirm/', EmailVerificationView.as_view(),
+         name='verify-email'),  #
+    path('auth/verify-phone/', PhoneVerificationView.as_view(),
+         name='verify-phone'),  # done
     path(
         'auth/password-reset/',
         PasswordResetRequestView.as_view(), name='password-reset'
-    ),
+    ),  # done
     path(
         'auth/password-reset/confirm/',
         PasswordResetConfirmView.as_view(), name='password-reset-confirm'
-    ),
+    ),  # done
     path(
         'auth/login/email/', EmailLoginView.as_view(),
         name='login-email'
@@ -45,15 +49,14 @@ urlpatterns = [
         'auth/login/phone/', PhoneLoginView.as_view(),
         name='login-phone'
     ),  # done
-    path('auth/login/google/', GoogleLoginView.as_view(), name='login-google'),
+    path('auth/login/google/', GoogleLoginView.as_view(),
+         name='login-google'),  # not working
     path(
         'auth/resend-verification/',
         ResendVerificationView.as_view(), name='resend-verification'
-    ),
-    path(
-        'auth/token/refresh/', TokenRefreshView.as_view(),
-        name='token-refresh'
-    ),  # done
+    ),  # not working
+    path('auth/token/refresh/', TokenRefreshView.as_view(),
+         name='token-refresh'),  # done
     path(
         'token/', TokenObtainPairView.as_view(),
         name='token_obtain_pair'

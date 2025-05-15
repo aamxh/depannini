@@ -39,14 +39,14 @@ def send_verification_email(user, code):
     """Send verification code via email"""
     subject = 'Depannini - Email Verification Code'
     message = f'Your verification code is: {code}'
-    send_mail(subject, message, 'noreply@depannini.com', [user.email])
+    send_mail(subject, message, 'adjalanes9@gmail.com', [user.email])
 
 
 def send_password_reset_email(user, code):
     """Send password reset code via email"""
     subject = 'Depannini - Password Reset Code'
     message = f'Your password reset code is: {code}'
-    send_mail(subject, message, 'noreply@depannini.com', [user.email])
+    send_mail(subject, message, 'adjalanes9@gmail.com', [user.email])
 
 
 load_dotenv()
@@ -106,15 +106,37 @@ class RegisterView(views.APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class EmailConfirmationRequestView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        if not user.email_verified:
+            code = generate_verification_code()
+            expiry = timezone.now() + timedelta(minutes=30)
+            VerificationCode.objects.create(
+                user=user,
+                code=code,
+                code_type='email',
+                expires_at=expiry
+            )
+            send_verification_email(user, code)
+            return Response({
+                'success': True,
+                'message': 'Email confirmation code sent to your email'
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({"Email already verified"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class EmailVerificationView(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = EmailVerificationSerializer(data=request.data)
+        user = request.user
         if serializer.is_valid():
             try:
-                user = User.objects.get(
-                    email=serializer.validated_data['email'])
                 verification = VerificationCode.objects.filter(
                     user=user,
                     code=serializer.validated_data['code'],
@@ -133,7 +155,7 @@ class EmailVerificationView(views.APIView):
                     'success': True,
                     'message': 'Email successfully verified'
                 }, status=status.HTTP_200_OK)
-            except (User.DoesNotExist, VerificationCode.DoesNotExist):
+            except (VerificationCode.DoesNotExist):
                 return Response({
                     'success': False,
                     'message': 'Invalid verification code'

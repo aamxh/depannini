@@ -92,8 +92,6 @@ AUTH_USER_MODEL = 'core.User'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 
-
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -164,3 +162,10 @@ SIMPLE_JWT = {
 # For production, restrict to your Flutter app's domain
 CORS_ALLOW_ALL_ORIGINS = True  # For development only
 # CORS_ALLOWED_ORIGINS = ['https://example.com']  # For production
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')

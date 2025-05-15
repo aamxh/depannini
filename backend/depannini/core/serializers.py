@@ -104,7 +104,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 
 class EmailVerificationSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    # email = serializers.EmailField()
     code = serializers.CharField(max_length=5)
 
 
@@ -203,6 +203,14 @@ class AssistanceRequestSerializer(serializers.Serializer):
     dropoff = serializers.DictField(
         child=serializers.FloatField(), required=False)
     assistance_type = serializers.ChoiceField(choices=ASSISTANCE_TYPE_CHOICES)
+
+    def validate(self, attrs):
+        if attrs['assistance_type'] == 'repair' and not attrs.get('description'):
+            raise serializers.ValidationError(
+                {"description": "This field is required for assistance of type repair"})
+        if attrs['assistance_type'] == 'towing' and not attrs.get('dropoff'):
+            raise serializers.ValidationError(
+                {"dropoff": "This field is required for assistance of type towing"})
 
 
 class LocationUpdateSerializer(serializers.Serializer):
