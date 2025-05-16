@@ -28,6 +28,9 @@ dependencies:
   shared_preferences: ^2.5.2
   json_annotation: ^4.9.0
   flutter_local_notifications: ^19.2.0
+  geolocator: ^14.0.0
+  url_launcher: ^6.3.1
+  flutter_polyline_points: ^2.1.0
 
 dev_dependencies:
   flutter_test:

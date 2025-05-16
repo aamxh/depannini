@@ -1,7 +1,8 @@
+import 'package:depannini_user/app/assistance/location_api.dart';
 import 'package:depannini_user/app/assistance/location_view_model.dart';
-import 'package:depannini_user/app/assistance/set_location_view.dart';
-import 'package:flutter/material.dart';
 import 'package:depannini_user/core/constants.dart';
+import 'package:depannini_user/core/helpers.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -15,12 +16,17 @@ class LocationV extends StatefulWidget {
 
 }
 
-class _LocationVS extends State<SetLocationV> {
+class _LocationVS extends State<LocationV> {
 
   late final GoogleMapController _ctrl;
   final _vm = LocationVM();
   final _location = Location();
-  Marker? _marker;
+
+  @override
+  void initState() {
+    super.initState();
+    _vm.setPath(_vm.userLocation, _vm.assistantLocation);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,173 +36,120 @@ class _LocationVS extends State<SetLocationV> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
-      body: Stack(
-        children: [
-          GoogleMap(
-            onMapCreated: (GoogleMapController ctrl) {
-              _ctrl = ctrl;
-              _location.onLocationChanged.listen((LocationData loc) =>
-                  _ctrl.animateCamera(CameraUpdate.newLatLng(
-                      LatLng(loc.latitude!, loc.longitude!)
-                  )));
-            },
-            onTap: (LatLng position) {
-              //_vm.changeLocation(position);
-              //_vm.changeAddress(position);
-              _marker = Marker(
-                markerId: MarkerId('Selected Location'),
-                position: position,
-                infoWindow: InfoWindow(title: 'Selected Location'),
-              );
-            },
-            initialCameraPosition: CameraPosition(
-              target: LatLng(0, 0), //_vm.location.value!,
-              zoom: 25,
-            ),
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            markers: _marker == null ? {} : {_marker!},
-          ),
-          DraggableScrollableSheet(
-            initialChildSize: 0.5,
-            minChildSize: 0.06,
-            maxChildSize: 0.7,
-            builder: (context, ctrl) => Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
-                color: theme.scaffoldBackgroundColor,
-              ),
-              child: SingleChildScrollView(
-                controller: ctrl,
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
-                child: Column(
-                  children: [
-                    SizedBox(height: 15,),
-                    Container(
-                      width: size.width * 0.3,
-                      height: 3,
-                      decoration: BoxDecoration(
-                        color: theme.scaffoldBackgroundColor == Colors.white ?
-                        MyConstants.darkGrey : MyConstants.lightGrey,
-                        borderRadius: BorderRadius.circular(1),
-                      ),
+      body: SingleChildScrollView(
+        child: Obx(() =>
+          Column(
+            children: [
+              SizedBox(
+                height: size.height * 0.7,
+                child: GoogleMap(
+                  onMapCreated: (GoogleMapController ctrl) {
+                    _ctrl = ctrl;
+                    _location.onLocationChanged.listen((LocationData loc) =>
+                        _ctrl.animateCamera(CameraUpdate.newLatLng(
+                            LatLng(loc.latitude!, loc.longitude!)
+                        )));
+                  },
+                  initialCameraPosition: CameraPosition(
+                    target: _vm.userLocation,
+                    zoom: 18,
+                  ),
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  markers: {
+                    Marker(
+                      markerId: MarkerId('assistant'),
+                      position: _vm.assistantLocation,
+                      infoWindow: InfoWindow(title: "Assistant"),
+                      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
                     ),
-                    SizedBox(height: size.height * 0.05),
-                    Text(
-                      'We\'ve found you an assistant',
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    SizedBox(height: size.height * 0.025),
-                    Container(
-                      color: theme.scaffoldBackgroundColor == Colors.white ?
-                      MyConstants.darkGrey : MyConstants.lightGrey,
-                      width: size.width,
-                      height: 1,
-                    ),
-                    SizedBox(height: size.height * 0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.account_circle_rounded,
-                              size: 70,
-                            ),
-                            SizedBox(width: 10),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Anes Adjal',
-                                  style: theme.textTheme.bodyLarge,
-                                ),
-                                Text(
-                                  '800 m away',
-                                  style: theme.textTheme.bodyMedium,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.star_rate,
-                                      color: MyConstants.primaryC,
-                                    ),
-                                    SizedBox(width: 5,),
-                                    Text(
-                                      '4/5',
-                                      style: theme.textTheme.bodyMedium,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Image.asset(
-                          theme.scaffoldBackgroundColor == Colors.white ?
-                          'assets/icons/towing_light.png' :
-                          'assets/icons/towing_dark.png',
-                          width: 50,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: size.height * 0.01,),
-                    Container(
-                      color: theme.scaffoldBackgroundColor == Colors.white ?
-                      MyConstants.darkGrey : MyConstants.lightGrey,
-                      width: size.width,
-                      height: 1,
-                    ),
-                    SizedBox(height: size.height * 0.1),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-
-                          },
-                          style: ElevatedButton.styleFrom(
-                            fixedSize: Size(size.width * 0.3, size.height * 0.064),
-                            elevation: 0,
-                          ),
-                          child: Text(
-                            'Confirm',
-                            style: theme.textTheme.titleSmall!.copyWith(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            fixedSize: Size(size.width * 0.3, size.height * 0.064),
-                            backgroundColor:
-                            theme.scaffoldBackgroundColor == Colors.white ?
-                            MyConstants.lightGrey : MyConstants.mediumGrey,
-                            side: BorderSide(
-                              color: theme.scaffoldBackgroundColor == Colors.white ?
-                                  MyConstants.darkGrey! : MyConstants.lightGrey!,
-                            ),
-                            elevation: 0,
-                          ),
-                          child: Text(
-                            'Cancel',
-                            style: theme.textTheme.titleSmall!.copyWith(
-                              color: theme.colorScheme.secondary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                  },
+                  polylines: _vm.path,
                 ),
               ),
-            ),
+              SizedBox(height: size.height * 0.02,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Assistant phone number: ${_vm.assistantPhoneNum}',
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                  TextButton(
+                    onPressed: () => MyHelpers.makePhoneCall(_vm.assistantPhoneNum),
+                    child: Text(
+                      'Call',
+                      style: theme.textTheme.bodyLarge!.copyWith(
+                        color: MyConstants.primaryC,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: size.height * 0.02,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Assistance status: ',
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                  Text(
+                    _vm.assistanceStatus,
+                    style: theme.textTheme.bodyLarge,
+                  ),
+                ],
+              ),
+              SizedBox(height: size.height * 0.02,),
+              _vm.assistanceStatus == 'on-going' ? Container() :
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(size.width * 0.25, size.height * 0.064),
+                      backgroundColor: _vm.assistanceStatus == 'arrived' ?
+                      MyConstants.primaryC :
+                      theme.scaffoldBackgroundColor == Colors.white ?
+                      MyConstants.lightGrey :
+                      MyConstants.darkGrey,
+                      side: BorderSide(
+                        color: _vm.assistanceStatus == 'arrived' ?
+                        MyConstants.primaryC :
+                        theme.scaffoldBackgroundColor == Colors.white ?
+                        MyConstants.darkGrey! :
+                        MyConstants.lightGrey!,
+                      ),
+                    ),
+                    child: Text(
+                      'Completed',
+                      style: theme.textTheme.titleSmall,
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      fixedSize: Size(size.width * 0.25, size.height * 0.064),
+                      backgroundColor: theme.scaffoldBackgroundColor == Colors.white ?
+                      MyConstants.lightGrey : MyConstants.darkGrey,
+                      side: BorderSide(
+                        color: theme.scaffoldBackgroundColor == Colors.white ?
+                        MyConstants.darkGrey! : MyConstants.lightGrey!,
+                      ),
+                    ),
+                    child: Text(
+                      'Cancel',
+                      style: theme.textTheme.titleSmall,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

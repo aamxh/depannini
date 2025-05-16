@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 class MyHelpers {
 
   MyHelpers._();
@@ -12,6 +14,15 @@ class MyHelpers {
     if (code < 200) return false;
     if (code >= 300) return false;
     return true;
+  }
+
+  static Future<void> makePhoneCall(String num) async {
+    final Uri url = Uri(scheme: 'tel', path: num);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+
+    }
   }
 
 }

@@ -39,13 +39,21 @@ class _SignInVS extends State<SignInV> {
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: size.height * 0.2),
-              Text(
-                'Login to your account',
-                style: theme.textTheme.headlineMedium,
+              SizedBox(height: size.height * 0.15),
+              Center(
+                child: Text(
+                  'Login to your account',
+                  style: theme.textTheme.headlineMedium,
+                ),
               ),
               SizedBox(height: size.height * 0.1),
+              Text(
+                'Your phone number',
+                style: theme.textTheme.bodyLarge,
+              ),
+              SizedBox(height: size.height * 0.01),
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
@@ -94,7 +102,7 @@ class _SignInVS extends State<SignInV> {
                         textAlign: TextAlign.center,
                         maxLength: 10,
                         decoration: InputDecoration(
-                          hintText: "Your phone number..",
+                          hintText: "Ex: 0557038640",
                           hintStyle: theme.textTheme.bodyLarge!.copyWith(
                             color: MyConstants.mediumGrey,
                           ),
@@ -109,6 +117,11 @@ class _SignInVS extends State<SignInV> {
                 ),
               ),
               SizedBox(height: size.height * 0.03),
+              Text(
+                'Your password',
+                style: theme.textTheme.bodyLarge,
+              ),
+              SizedBox(height: size.height * 0.01),
               TextFormField(
                 obscureText: true,
                 //cursorColor: MyConstants.primaryC,
@@ -116,7 +129,7 @@ class _SignInVS extends State<SignInV> {
                 controller: _passwordCtrl,
                 validator: (val) => MyHelpers.validatePassword(val!),
                 decoration: InputDecoration(
-                  hintText: 'Your password..',
+                  hintText: 'Ex: 22GAh^sg@',
                   hintStyle: theme.textTheme.bodyLarge!.copyWith(
                     color: MyConstants.mediumGrey,
                   ),
@@ -133,84 +146,84 @@ class _SignInVS extends State<SignInV> {
                 ),
               ),
               SizedBox(height: size.height * 0.01),
-              GestureDetector(
-                onTap: () => Get.to(() => ResetPasswordV()),
-                child: Text(
-                  'Forgot password?',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.primaryColor,
+              Center(
+                child: GestureDetector(
+                  onTap: () => Get.to(() => ResetPasswordV()),
+                  child: Text(
+                    'Forgot password?',
+                    style: theme.textTheme.bodyLarge!.copyWith(
+                      color: theme.primaryColor,
+                    ),
+                    textAlign: TextAlign.start,
                   ),
-                  textAlign: TextAlign.start,
                 ),
               ),
               SizedBox(height: size.height * 0.08),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    Get.offAll(() => HomeV());
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(size.width * 0.5, size.height * 0.064),
-                ),
-                child: Text(
-                  'Sign-in',
-                  style: theme.textTheme.titleSmall!.copyWith(
-                    color: Colors.white,
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      Get.offAll(() => HomeV());
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(size.width * 0.5, size.height * 0.064),
+                  ),
+                  child: Text(
+                    'Sign-in',
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
               SizedBox(height: size.height * 0.01),
-              RichText(
-                text: TextSpan(
-                  text: 'Do not have an account? ',
-                  style: theme.textTheme.bodyLarge,
-                  children: [
-                    TextSpan(
-                      text: 'Create one',
-                      style: theme.textTheme.bodyLarge!.copyWith(
-                        color: MyConstants.primaryC,
+              Center(
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Do not have an account? ',
+                    style: theme.textTheme.bodyLarge,
+                    children: [
+                      TextSpan(
+                        text: 'Create one',
+                        style: theme.textTheme.bodyLarge!.copyWith(
+                          color: MyConstants.primaryC,
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap =
+                            () => Get.offAll(() => PhoneNumberV()),
                       ),
-                      recognizer: TapGestureRecognizer()..onTap =
-                          () => Get.offAll(() => PhoneNumberV()),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: size.height * 0.03,),
-              Text(
-                'Or',
-                style: theme.textTheme.titleSmall,
-              ),
-              SizedBox(height: size.height * 0.03,),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(size.width * 0.64, size.height * 0.064),
-                  foregroundColor: theme.colorScheme.secondary,
-                  backgroundColor: theme.scaffoldBackgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28),
+                    ],
                   ),
-                  elevation: 0,
-                  side: BorderSide(color: theme.colorScheme.secondary, width: 2),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      theme.scaffoldBackgroundColor == Colors.white ?
-                          'assets/icons/google_light.png' :
-                          'assets/icons/google_dark.png',
-                      width: 25,
+              ),
+              SizedBox(height: size.height * 0.03,),
+              Center(
+                child: Text(
+                  'Or',
+                  style: theme.textTheme.titleSmall,
+                ),
+              ),
+              SizedBox(height: size.height * 0.03,),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(size.width * 0.64, size.height * 0.064),
+                    foregroundColor: theme.colorScheme.secondary,
+                    backgroundColor: theme.scaffoldBackgroundColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(28),
                     ),
-                    Text(
-                      'Sign-in with Google',
-                      style: theme.textTheme.titleSmall!.copyWith(
-                        color: theme.colorScheme.secondary,
-                      ),
-                    ),
-                  ],
+                    elevation: 0,
+                    side: BorderSide(color: theme.colorScheme.secondary, width: 2),
+                  ),
+                  child:
+                      Text(
+                        'Sign-in with Email',
+                        style: theme.textTheme.titleSmall!.copyWith(
+                          color: theme.colorScheme.secondary,
+                        ),
+                  ),
                 ),
               ),
             ],

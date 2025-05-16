@@ -1,4 +1,4 @@
-import 'package:depannini_user/app/assistance/location_repo.dart';
+import 'package:depannini_user/app/assistance/location_api.dart';
 import 'package:depannini_user/app/assistance/set_location_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class _SetLocationVS extends State<SetLocationV> {
   Marker? _marker;
 
   Future<void> _initState() async {
-    final locData = await MyLocationRepo.getCurrentLocation();
+    final locData = await LocationApi.getCurrentLocation();
     if (locData == null) return;
     _vm.changeLocation(LatLng(locData.latitude ?? 0, locData.longitude ?? 0));
     _vm.changeAddress(LatLng(locData.latitude ?? 0, locData.longitude ?? 0));
@@ -72,7 +72,7 @@ class _SetLocationVS extends State<SetLocationV> {
                   },
                   initialCameraPosition: CameraPosition(
                     target: _vm.location.value!,
-                    zoom: 25,
+                    zoom: 18,
                   ),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,

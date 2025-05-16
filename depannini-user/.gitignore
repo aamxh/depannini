@@ -42,3 +42,4 @@ app.*.map.json
 
 # Android Studio will place build artifacts here
 /ios/Runner/AppDelegate.swift
+/android/app/src/main/AndroidManifest.xml

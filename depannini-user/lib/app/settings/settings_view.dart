@@ -60,9 +60,14 @@ class SettingsV extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: size.height * 0.1,),
+            SizedBox(height: size.height * 0.03,),
             Column(
               children: [
+                SizedBox(height: size.height * 0.03,),
+                SettingsTileW(
+                  title: 'History',
+                  icon: Icons.history,
+                ),
                 SizedBox(height: size.height * 0.03,),
                 SettingsTileW(
                   title: 'Change password',

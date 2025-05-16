@@ -31,16 +31,24 @@ class SignUpV extends StatelessWidget {
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: size.height * 0.15,),
-              Text(
-                'Complete your profile',
-                style: theme.textTheme.headlineMedium,
+              Center(
+                child: Text(
+                  'Complete your profile',
+                  style: theme.textTheme.headlineMedium,
+                ),
               ),
               SizedBox(height: size.height * 0.064,),
+              Text(
+                'Your name',
+                style: theme.textTheme.bodyLarge,
+              ),
+              SizedBox(height: size.height * 0.01,),
               TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'Your name..',
+                  hintText: 'Ex: Hakmi Zohir',
                   hintStyle: theme.textTheme.bodyLarge!.copyWith(
                     color: MyConstants.mediumGrey,
                   ),
@@ -67,9 +75,14 @@ class SignUpV extends StatelessWidget {
                 },
               ),
               SizedBox(height: size.height * 0.03,),
+              Text(
+                'Your email',
+                style: theme.textTheme.bodyLarge,
+              ),
+              SizedBox(height: size.height * 0.01),
               TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'Your email..',
+                  hintText: 'Ex: h_zohir@gmail.com',
                   hintStyle: theme.textTheme.bodyLarge!.copyWith(
                     color: MyConstants.mediumGrey,
                   ),
@@ -98,9 +111,14 @@ class SignUpV extends StatelessWidget {
                 },
               ),
               SizedBox(height: size.height * 0.03,),
+              Text(
+                'Your password',
+                style: theme.textTheme.bodyLarge,
+              ),
+              SizedBox(height: size.height * 0.01),
               TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'Your password..',
+                  hintText: 'Ex: age#H2352',
                   hintStyle: theme.textTheme.bodyLarge!.copyWith(
                     color: MyConstants.mediumGrey,
                   ),
@@ -128,9 +146,14 @@ class SignUpV extends StatelessWidget {
                 },
               ),
               SizedBox(height: size.height * 0.03,),
+              Text(
+                'Confirm your password',
+                style: theme.textTheme.bodyLarge,
+              ),
+              SizedBox(height: size.height * 0.01),
               TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'Confirm your password..',
+                  hintText: 'Ex: age#H2352',
                   hintStyle: theme.textTheme.bodyLarge!.copyWith(
                     color: MyConstants.mediumGrey,
                   ),
@@ -156,49 +179,14 @@ class SignUpV extends StatelessWidget {
                 validator: (val) => MyHelpers.validatePassword(val!),
               ),
               SizedBox(height: size.height * 0.04,),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    if (_password1Ctrl.text != _password2Ctrl.text) {
-                      Get.showSnackbar(GetSnackBar(
-                        messageText: Text(
-                          'Passwords are different!',
-                          style: theme.textTheme.titleSmall!.copyWith(
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        duration: Duration(seconds: 5),
-                        backgroundColor: MyConstants.primaryC,
-                        borderRadius: 10,
-                      ));
-                    } else {
-                      EmailVerificationVM().changeEmail(_emailCtrl.text);
-                      final vm = Get.find<ClientVM>();
-                      vm.changeEmail(_emailCtrl.text);
-                      vm.changeName(_nameCtrl.text);
-                      vm.changePassword(_password1Ctrl.text);
-                      Get.dialog(
-                        Center(child: CircularProgressIndicator(
-                          color: MyConstants.primaryC,
-                        ),),
-                        barrierDismissible: false,
-                      );
-                      EmailOTP.config(
-                        appName: 'Depannini',
-                        otpLength: 5,
-                        otpType: OTPType.numeric,
-                        expiry: 180000,
-                        emailTheme: EmailTheme.v4,
-                      );
-                      final res = await EmailOTP.sendOTP(email: _emailCtrl.text);
-                      Get.back();
-                      if (res) {
-                        Get.to(() => EmailVerificationV());
-                      } else {
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      if (_password1Ctrl.text != _password2Ctrl.text) {
                         Get.showSnackbar(GetSnackBar(
                           messageText: Text(
-                            'Unable to send a verification email!',
+                            'Passwords are different!',
                             style: theme.textTheme.titleSmall!.copyWith(
                               color: Colors.white,
                             ),
@@ -208,75 +196,109 @@ class SignUpV extends StatelessWidget {
                           backgroundColor: MyConstants.primaryC,
                           borderRadius: 10,
                         ));
+                      } else {
+                        EmailVerificationVM().changeEmail(_emailCtrl.text);
+                        final vm = Get.find<ClientVM>();
+                        vm.changeEmail(_emailCtrl.text);
+                        vm.changeName(_nameCtrl.text);
+                        vm.changePassword(_password1Ctrl.text);
+                        Get.dialog(
+                          Center(child: CircularProgressIndicator(
+                            color: MyConstants.primaryC,
+                          ),),
+                          barrierDismissible: false,
+                        );
+                        EmailOTP.config(
+                          appName: 'Depannini',
+                          otpLength: 5,
+                          otpType: OTPType.numeric,
+                          expiry: 180000,
+                          emailTheme: EmailTheme.v4,
+                        );
+                        final res = await EmailOTP.sendOTP(email: _emailCtrl.text);
+                        Get.back();
+                        if (res) {
+                          Get.to(() => EmailVerificationV());
+                        } else {
+                          Get.showSnackbar(GetSnackBar(
+                            messageText: Text(
+                              'Unable to send a verification email!',
+                              style: theme.textTheme.titleSmall!.copyWith(
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            duration: Duration(seconds: 5),
+                            backgroundColor: MyConstants.primaryC,
+                            borderRadius: 10,
+                          ));
+                        }
                       }
                     }
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  fixedSize: Size(size.width * 0.5, size.height * 0.064),
-                ),
-                child: Text(
-                  'Sign-up',
-                  style: theme.textTheme.titleSmall!.copyWith(
-                    color: Colors.white,
+                  },
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    fixedSize: Size(size.width * 0.5, size.height * 0.064),
+                  ),
+                  child: Text(
+                    'Sign-up',
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
               SizedBox(height: size.height * 0.01),
-              RichText(
-                text: TextSpan(
-                  text: 'Already have an account? ',
-                  style: theme.textTheme.bodyLarge,
-                  children: [
-                    TextSpan(
-                      text: 'Login',
-                      style: theme.textTheme.bodyLarge!.copyWith(
-                        color: MyConstants.primaryC,
+              Center(
+                child: RichText(
+                  text: TextSpan(
+                    text: 'Already have an account? ',
+                    style: theme.textTheme.bodyLarge,
+                    children: [
+                      TextSpan(
+                        text: 'Login',
+                        style: theme.textTheme.bodyLarge!.copyWith(
+                          color: MyConstants.primaryC,
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap =
+                            () => Get.offAll(() => SignInV()),
                       ),
-                      recognizer: TapGestureRecognizer()..onTap =
-                          () => Get.offAll(() => SignInV()),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: size.height * 0.03,),
-              Text(
-                'Or',
-                style: theme.textTheme.titleSmall,
+              Center(
+                child: Text(
+                  'Or',
+                  style: theme.textTheme.titleSmall,
+                ),
               ),
               SizedBox(height: size.height * 0.03,),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(size.width * 0.64, size.height * 0.064),
-                  backgroundColor: theme.scaffoldBackgroundColor,
-                  foregroundColor: theme.colorScheme.secondary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28),
-                  ),
-                  elevation: 0,
-                  side: BorderSide(
-                    color: theme.colorScheme.secondary,
-                    width: 2,
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      theme.scaffoldBackgroundColor == Colors.white ?
-                      'assets/icons/google_light.png' :
-                      'assets/icons/google_dark.png',
-                      width: 25,
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(size.width * 0.64, size.height * 0.064),
+                    backgroundColor: theme.scaffoldBackgroundColor,
+                    foregroundColor: theme.colorScheme.secondary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(28),
                     ),
-                    Text(
-                      'Sign-in with Google',
-                      style: theme.textTheme.titleSmall,
+                    elevation: 0,
+                    side: BorderSide(
+                      color: theme.colorScheme.secondary,
+                      width: 2,
                     ),
-                  ],
+                  ),
+                  child:
+                      Text(
+                        'Sign-in with Google',
+                        style: theme.textTheme.titleSmall,
+                      ),
                 ),
               ),
+              SizedBox(height: size.height * 0.2,),
             ],
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:depannini_user/app/assistance/location_view.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,7 +60,7 @@ class TowingAssistantV extends StatelessWidget {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-
+                  Get.to(() => LocationV());
                 },
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(size.width * 0.5, size.height * 0.064),
