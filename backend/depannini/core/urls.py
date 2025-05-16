@@ -3,7 +3,7 @@ from django.urls import path
 
 
 from .auth_views import (
-    RegisterView, EmailVerificationView, EmailConfirmationRequestView, PhoneVerificationView,
+    RegisterView, EmailVerificationView, EmailVerificationRequestView, PhoneVerificationView,
     PasswordResetRequestView, PasswordResetConfirmView,
     EmailLoginView, PhoneLoginView, GoogleLoginView,
     ResendVerificationView
@@ -27,7 +27,7 @@ from .assistance_views import (
 urlpatterns = [
     # Authentication URLs
     path('auth/register/', RegisterView.as_view(), name='register'),  # done
-    path('auth/verify-email/', EmailConfirmationRequestView.as_view(),
+    path('auth/verify-email/', EmailVerificationRequestView.as_view(),
          name='verify-email'),  #
     path('auth/verify-email/confirm/', EmailVerificationView.as_view(),
          name='verify-email'),  #

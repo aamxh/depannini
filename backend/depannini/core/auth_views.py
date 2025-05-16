@@ -2,6 +2,7 @@
 import random
 import string
 from datetime import timedelta
+from depannini import settings
 
 from django.utils import timezone
 from django.contrib.auth import get_user_model, authenticate
@@ -39,14 +40,14 @@ def send_verification_email(user, code):
     """Send verification code via email"""
     subject = 'Depannini - Email Verification Code'
     message = f'Your verification code is: {code}'
-    send_mail(subject, message, 'adjalanes9@gmail.com', [user.email])
+    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
 
 
 def send_password_reset_email(user, code):
     """Send password reset code via email"""
     subject = 'Depannini - Password Reset Code'
     message = f'Your password reset code is: {code}'
-    send_mail(subject, message, 'adjalanes9@gmail.com', [user.email])
+    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
 
 
 load_dotenv()
@@ -106,7 +107,7 @@ class RegisterView(views.APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class EmailConfirmationRequestView(views.APIView):
+class EmailVerificationRequestView(views.APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -139,11 +140,13 @@ class EmailVerificationView(views.APIView):
             try:
                 verification = VerificationCode.objects.filter(
                     user=user,
-                    code=serializer.validated_data['code'],
                     code_type='email',
                     is_used=False,
                     expires_at__gt=timezone.now()
                 ).latest('created_at')
+
+                if verification.code != serializer.validated_data['code']:
+                    verification = None
 
                 verification.is_used = True
                 verification.save()
@@ -155,7 +158,7 @@ class EmailVerificationView(views.APIView):
                     'success': True,
                     'message': 'Email successfully verified'
                 }, status=status.HTTP_200_OK)
-            except (VerificationCode.DoesNotExist):
+            except:
                 return Response({
                     'success': False,
                     'message': 'Invalid verification code'

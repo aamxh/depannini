@@ -211,6 +211,7 @@ class AssistanceRequestSerializer(serializers.Serializer):
         if attrs['assistance_type'] == 'towing' and not attrs.get('dropoff'):
             raise serializers.ValidationError(
                 {"dropoff": "This field is required for assistance of type towing"})
+        return attrs
 
 
 class LocationUpdateSerializer(serializers.Serializer):

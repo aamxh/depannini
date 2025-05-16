@@ -1,27 +1,78 @@
-POST http://localhost:8001/api/auth/register/ HTTP/1.1
+POST http://localhost:8000/api/auth/register/ HTTP/1.1
 Content-Type: application/json
 
 {
     "name": "anes",
-    "password": "testing321",
-    "password_confirm": "testing321",
-    "phone_number": "0658025174",
-    "user_type": "assistant",
-    "service_type": "towing",
-    "vehicle_type": "towing truck",
-    "driving_license_cat": "b",
-    "driving_license_num": 54543344,
-    "driving_license_expiry": "20:08:26"
+    "password": "test",
+    "password_confirm": "test",
+    "phone_number": "+213783072562",
+    "user_type": "client"
+}
+###
+POST http://localhost:8000/api/auth/register/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "anes",
+    "password": "test",
+    "password_confirm": "test",
+    "phone_number": "+213783961958",
+    "user_type": "client"
 }
 
+###
+POST http://localhost:8000/api/auth/verify-phone/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "phone_number" : "+213783072562"
+}
+
+###
+
+
+POST http://localhost:8000/api/auth/verify-email/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3OTM1ODUzLCJpYXQiOjE3NDczMzEwNTMsImp0aSI6IjM4MWRmNDIzMjAyODRiYWY5ZDliYWE2ODVkMTQ0YTkxIiwidXNlcl9pZCI6MTh9.M8sSNcV9ON1VBS_L9HHjYb3y1-pvXIpvMSjgHs5TS6w
+
+###
+
+
+POST http://localhost:8000/api/auth/verify-email/confirm/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3OTM1ODUzLCJpYXQiOjE3NDczMzEwNTMsImp0aSI6IjM4MWRmNDIzMjAyODRiYWY5ZDliYWE2ODVkMTQ0YTkxIiwidXNlcl9pZCI6MTh9.M8sSNcV9ON1VBS_L9HHjYb3y1-pvXIpvMSjgHs5TS6w
+
+{
+    "code" : 14884
+}
+###
+POST http://localhost:8000/api/auth/password-reset/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "phone_number": "+213783072562"
+}
+
+###
+
+
+POST http://localhost:8000/api/auth/password-reset/confirm/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "new_password" : "testing",
+    "new_password_confirm" : "testing",
+    "phone_number": "+213783072562",
+    "code" : "84766"
+}
 ###
 
 POST http://localhost:8000/api/auth/login/phone/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "phone_number": "0658025171",
-    "password": "testing321"
+    "phone_number": "+1234567890",
+    "password": "test"
 }
 
 ###
@@ -37,7 +88,7 @@ Content-Type: application/json
 ###
 GET http://localhost:8000/api/profile/user/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NjA0NzM4LCJpYXQiOjE3NDU2MDExMzgsImp0aSI6IjYwZDhmZjFkYzNiYTRiYzFiM2M4NjcxM2U0MzMwODliIiwidXNlcl9pZCI6MTd9.M_wXq0cwnGrsa43GICE--E6YUs7eQbFKc6qqrSoTMhk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3OTM1ODUzLCJpYXQiOjE3NDczMzEwNTMsImp0aSI6IjM4MWRmNDIzMjAyODRiYWY5ZDliYWE2ODVkMTQ0YTkxIiwidXNlcl9pZCI6MTh9.M8sSNcV9ON1VBS_L9HHjYb3y1-pvXIpvMSjgHs5TS6w
 ###
 get http://localhost:8000/api/assistants/ HTTP/1.1
 Content-Type: application/json
@@ -51,12 +102,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 POST http://localhost:8000/api/assistance/request/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODE3MjgwLCJpYXQiOjE3NDYyMTI0ODAsImp0aSI6IjliZWM2YjE3NmIxMzRlN2ZhMjMwNmI1ZjFiMGM0YzUzIiwidXNlcl9pZCI6MTh9.nrRY4157ebnoLzQRTQmgcbCruuXCNMsIjGL2rBFM0Hw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3OTAxNzY5LCJpYXQiOjE3NDcyOTY5NjksImp0aSI6IjE5OTVmZGI0ZDE5YTRhN2Q5OTJkZTg0MjUwMjM2NTFmIiwidXNlcl9pZCI6MTh9._lahAvMqjIa0ZRfsy8ayNZxKcdLucOhUjBhblL8xVQM
 
 {
     "pickup": {
         "lat" : 34.052235,
         "lng" : -118.243683
+    },
+    "assistance_type": "towing",
+    "dropoff": {
+        "lat" : 35.052235,
+        "lng" : -117.243683
     }
 }
 
