@@ -123,6 +123,11 @@ class Assistance(models.Model):
         ('towing', 'Towing'),
     ]
 
+    VEHICLE_TYPE_CHOICES = [
+        ('light', 'Light'),
+        ('heavy', 'Heavy'),
+    ]
+
     client = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="assistances_as_client")
     assistant = models.ForeignKey(
@@ -137,6 +142,9 @@ class Assistance(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
     assistance_type = models.CharField(choices=ASSISTANCE_TYPE_CHOICES)
+    description = models.TextField(null=True, blank=True)
+    vehicle_type = models.CharField(
+        max_length=100, blank=True, null=True, choices=VEHICLE_TYPE_CHOICES)
     status = models.CharField(max_length=10, choices=ASSISTANCE_STATUE_CHOICES)
     rating = models.SmallIntegerField(default=0)
 

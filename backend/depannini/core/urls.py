@@ -20,8 +20,8 @@ from .assistance_views import (
     AssistanceRequestView,
     AssistanceListDetailView,
     AcceptAssistanceView,
-    AssistanceUpdateView,
-
+    AssistanceStatusUpdateView,
+    AssistancePriceUpdateView
 )
 
 urlpatterns = [
@@ -103,7 +103,11 @@ urlpatterns = [
         name='assistance-accept'
     ),
     path(
-        'assistance/update/<int:assistance_id>/', AssistanceUpdateView.as_view(),
+        'assistance/update/status/<int:assistance_id>/', AssistanceStatusUpdateView.as_view(),
+        name='status-update'
+    ),
+    path(
+        'assistance/update/price/<int:assistance_id>/', AssistancePriceUpdateView.as_view(),
         name='status-update'
     ),
 ]

@@ -14,6 +14,20 @@ from django.shortcuts import get_object_or_404
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
+LIGHT_BASE_FARE = 1500
+LIGHT_KM_PRICE = 50
+
+HEAVY_BASE_FARE = 3000
+HEAVY_KM_PRICE = 150
+
+
+def calculate_fare(assistance_type, vehicle_type, distance_km):
+    if assistance_type == 'towing':
+        if vehicle_type == 'light':
+            return LIGHT_BASE_FARE + distance_km * LIGHT_KM_PRICE
+        return HEAVY_BASE_FARE + distance_km * HEAVY_KM_PRICE
+    return 0.0  # for now it's zero in the future maybe will set specific pricing for each repair type
+
 
 class AssistanceRequestView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -40,16 +54,29 @@ class AssistanceRequestView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         if serializer.validated_data.get('dropoff', None):
+            assistance_type = serializer.validated_data['assistance_type']
+            vehicle_type = serializer.validated_data['vehicle_type']
+            pickup_lat = serializer.validated_data['pickup']['lat']
+            pickup_lng = serializer.validated_data['pickup']['lng']
             dropoff_lat = serializer.validated_data['dropoff']['lat']
             dropoff_lng = serializer.validated_data['dropoff']['lng']
+            distance_km = haversine(
+                pickup_lat, pickup_lng,
+                dropoff_lat, dropoff_lng
+            )
+            total_price = calculate_fare(
+                assistance_type, vehicle_type, distance_km)
             assistance = Assistance.objects.create(
                 client_id=request.user.id,
-                pickup_lat=serializer.validated_data['pickup']['lat'],
-                pickup_lng=serializer.validated_data['pickup']['lng'],
+                pickup_lat=pickup_lat,
+                pickup_lng=pickup_lng,
                 dropoff_lat=dropoff_lat,
                 dropoff_lng=dropoff_lng,
                 status='requested',
-                assistance_type=serializer.validated_data['assistance_type']
+                assistance_type=assistance_type,
+                distance_km=distance_km,
+                vehicle_type=vehicle_type,
+                total_price=total_price
             )
         else:
             assistance = Assistance.objects.create(
@@ -167,7 +194,7 @@ class AcceptAssistanceView(APIView):
             )
 
 
-class AssistanceUpdateView(APIView):
+class AssistanceStatusUpdateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def patch(self, request, assistance_id):
@@ -187,15 +214,23 @@ class AssistanceUpdateView(APIView):
                         'description': 'available choices: ongoing, completed, canceled'},
                     status=status.HTTP_404_NOT_FOUND
                 )
-            elif assistance_status != 'canceled' and request.user.user_type == 'client':
+            if assistance_status != 'canceled' and request.user.user_type == 'client':
                 return Response(
-                    {'error': 'Unauthorized update for a client'},
+                    {'error': 'Unauthorized update for a client',
+                     'description': 'cannot update'},
                     status=status.HTTP_403_FORBIDDEN
                 )
-            elif assistance.status == 'completed' or assistance.status == 'canceled':
+            if assistance.status == 'completed' or assistance.status == 'canceled':
                 return Response(
-                    {'error': 'You cannot perform this update'},
-                    status=status.HTTP_304_NOT_MODIFIED
+                    {'error': 'Not allowed',
+                        'description': 'This assistance is no longer editable'},
+                    status=status.HTTP_406_NOT_ACCEPTABLE
+                )
+            if assistance_status == 'completed' and assistance.total_price == 0:
+                return Response(
+                    {'error': 'Status not accepted',
+                        'description': 'Cannot complete assistance before setting its price'},
+                    status=status.HTTP_406_NOT_ACCEPTABLE
                 )
             assistance.status = assistance_status
             assistance.save()
@@ -220,6 +255,36 @@ class AssistanceUpdateView(APIView):
         except:
             return Response(
                 {'error': 'Assistance not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class AssistancePriceUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, assistance_id):
+        try:
+            assistance_price = request.data['price']
+            assistance = get_object_or_404(Assistance, id=assistance_id)
+            if request.user != assistance.assistant:
+                return Response(
+                    {'error': 'Unauthorized update',
+                        'description': 'you must be an assistant in this assistant to update price'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            if assistance.assistance_type != 'repair':
+                return Response(
+                    {'error': 'Unauthorized update',
+                        'description': 'Assistant can update only assistance of type repair'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            assistance.total_price = assistance_price
+            assistance.save()
+            return Response(AssistanceSerializer(assistance).data, status=status.HTTP_202_ACCEPTED)
+
+        except:
+            return Response(
+                {'error': 'Assistance not found or you missed the "price" field'},
                 status=status.HTTP_404_NOT_FOUND
             )
 
