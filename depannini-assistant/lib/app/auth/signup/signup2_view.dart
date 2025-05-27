@@ -36,122 +36,162 @@ class SignUp2V extends StatelessWidget {
                 style: theme.textTheme.headlineMedium,
               ),
               SizedBox(height: size.height * 0.064,),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Your name..',
-                  hintStyle: theme.textTheme.bodyLarge!.copyWith(
-                    color: MyConstants.mediumGrey,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your name',
+                    style: theme.textTheme.bodyLarge,
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.secondary,
-                      width: 2,
+                  SizedBox(height: 5,),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Ex: Anes Adjal',
+                      hintStyle: theme.textTheme.bodyLarge!.copyWith(
+                        color: MyConstants.mediumGrey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: theme.colorScheme.secondary,
+                          width: 2,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: MyConstants.primaryC,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
+                    controller: _nameCtrl,
+                    cursorColor: MyConstants.primaryC,
+                    style: theme.textTheme.bodyLarge,
+                    validator: (val) {
+                      return val!.isEmpty ? 'Name field cannot be empty!' : null;
+                    },
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MyConstants.primaryC,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                controller: _nameCtrl,
-                cursorColor: MyConstants.primaryC,
-                style: theme.textTheme.bodyLarge,
-                validator: (val) {
-                  return val!.isEmpty ? 'Name field cannot be empty!' : null;
-                },
+                ],
               ),
               SizedBox(height: size.height * 0.03,),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Your email..',
-                  hintStyle: theme.textTheme.bodyLarge!.copyWith(
-                    color: MyConstants.mediumGrey,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your email',
+                    style: theme.textTheme.bodyLarge,
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.secondary,
-                      width: 2,
+                  SizedBox(height: 5,),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Ex: anesadjal@gmail.com',
+                      hintStyle: theme.textTheme.bodyLarge!.copyWith(
+                        color: MyConstants.mediumGrey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: theme.colorScheme.secondary,
+                          width: 2,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: MyConstants.primaryC,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
+                    controller: _emailCtrl,
+                    cursorColor: MyConstants.primaryC,
+                    style: theme.textTheme.bodyLarge,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (val) {
+                      return EmailValidator.validate(val!) ? null :
+                          'Invalid email!';
+                    },
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MyConstants.primaryC,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                controller: _emailCtrl,
-                cursorColor: MyConstants.primaryC,
-                style: theme.textTheme.bodyLarge,
-                keyboardType: TextInputType.emailAddress,
-                validator: (val) {
-                  return EmailValidator.validate(val!) ? null :
-                      'Invalid email!';
-                },
+                ],
               ),
               SizedBox(height: size.height * 0.03,),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Your password..',
-                  hintStyle: theme.textTheme.bodyLarge!.copyWith(
-                    color: MyConstants.mediumGrey,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your password',
+                    style: theme.textTheme.bodyLarge,
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.secondary,
-                      width: 2,
+                  SizedBox(height: 5,),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Ex: gaA25^@',
+                      hintStyle: theme.textTheme.bodyLarge!.copyWith(
+                        color: MyConstants.mediumGrey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: theme.colorScheme.secondary,
+                          width: 2,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: MyConstants.primaryC,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
+                    controller: _password1Ctrl,
+                    cursorColor: MyConstants.primaryC,
+                    style: theme.textTheme.bodyLarge,
+                    obscureText: true,
+                    validator: (val) {
+                      return MyHelpers.validatePassword(val!);
+                    },
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MyConstants.primaryC,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                controller: _password1Ctrl,
-                cursorColor: MyConstants.primaryC,
-                style: theme.textTheme.bodyLarge,
-                obscureText: true,
-                validator: (val) {
-                  return MyHelpers.validatePassword(val!);
-                },
+                ],
               ),
               SizedBox(height: size.height * 0.03,),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Confirm your password..',
-                  hintStyle: theme.textTheme.bodyLarge!.copyWith(
-                    color: MyConstants.mediumGrey,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Confirm you password',
+                    style: theme.textTheme.bodyLarge,
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.secondary,
-                      width: 2,
+                  SizedBox(height: 5,),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Ex: gaA25^@',
+                      hintStyle: theme.textTheme.bodyLarge!.copyWith(
+                        color: MyConstants.mediumGrey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: theme.colorScheme.secondary,
+                          width: 2,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: MyConstants.primaryC,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                     ),
+                    controller: _password2Ctrl,
+                    cursorColor: MyConstants.primaryC,
+                    style: theme.textTheme.bodyLarge,
+                    obscureText: true,
+                    validator: (val) => MyHelpers.validatePassword(val!),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: MyConstants.primaryC,
-                      width: 2,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                controller: _password2Ctrl,
-                cursorColor: MyConstants.primaryC,
-                style: theme.textTheme.bodyLarge,
-                obscureText: true,
-                validator: (val) => MyHelpers.validatePassword(val!),
+                ],
               ),
               SizedBox(height: size.height * 0.04,),
               ElevatedButton(
@@ -255,22 +295,12 @@ class SignUp2V extends StatelessWidget {
                     width: 2,
                   ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      theme.scaffoldBackgroundColor == Colors.white ?
-                      'assets/icons/google_light.png' :
-                      'assets/icons/google_dark.png',
-                      width: 25,
-                    ),
-                    Text(
-                      'Sign-in with Google',
+                child: Text(
+                      'Sign-in with Email',
                       style: theme.textTheme.titleSmall,
                     ),
-                  ],
-                ),
               ),
+              SizedBox(height: size.height * 0.15,),
             ],
           ),
         ),

@@ -40,101 +40,121 @@ class _SignInVS extends State<SignInV> {
           key: _formKey,
           child: Column(
             children: [
-              SizedBox(height: size.height * 0.2),
+              SizedBox(height: size.height * 0.15),
               Text(
                 'Login to your account',
                 style: theme.textTheme.headlineMedium,
               ),
               SizedBox(height: size.height * 0.1),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: _focusNode.hasFocus ?
-                    MyConstants.primaryC :
-                    theme.colorScheme.secondary,
-                    width: 2,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your phone number',
+                    style: theme.textTheme.bodyLarge,
                   ),
-                ),
-                height: size.height * 0.068,
-                child: Row(
-                  children: [
-                    SizedBox(width: size.width * 0.04),
-                    Text(
-                      '+213',
-                      style: theme.textTheme.titleSmall,
-                    ),
-                    SizedBox(width: size.width * 0.03),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Container(
+                  SizedBox(height: 5,),
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(
+                        color: _focusNode.hasFocus ?
+                        MyConstants.primaryC :
+                        theme.colorScheme.secondary,
                         width: 2,
-                        decoration: BoxDecoration(
-                          color: MyConstants.mediumGrey,
-                        ),
                       ),
                     ),
-                    Expanded(
-                      child: TextFormField(
-                        validator: (val) {
-                          if (val == null || val.length != 9 || !val.isNum) {
-                            return "Invalid phone number format!";
-                          }
-                          return null;
-                        },
-                        focusNode: _focusNode,
-                        style: theme.textTheme.headlineSmall!.copyWith(
-                          color: MyConstants.primaryC,
-                          letterSpacing: 5,
+                    height: size.height * 0.068,
+                    child: Row(
+                      children: [
+                        SizedBox(width: size.width * 0.04),
+                        Text(
+                          '+213',
+                          style: theme.textTheme.titleSmall,
                         ),
-                        buildCounter: (context, {
-                          required currentLength,
-                          required isFocused,
-                          required maxLength,
-                        }) => null,
-                        textAlign: TextAlign.center,
-                        maxLength: 10,
-                        decoration: InputDecoration(
-                          hintText: "Your phone number..",
-                          hintStyle: theme.textTheme.bodyLarge!.copyWith(
-                            color: MyConstants.mediumGrey,
+                        SizedBox(width: size.width * 0.03),
+                        Container(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Container(
+                            width: 2,
+                            decoration: BoxDecoration(
+                              color: MyConstants.mediumGrey,
+                            ),
                           ),
-                          border: InputBorder.none,
                         ),
-                        controller: _phoneNumCtrl,
-                        keyboardType: TextInputType.phone,
-                      ),
+                        Expanded(
+                          child: TextFormField(
+                            validator: (val) {
+                              if (val == null || val.length != 9 || !val.isNum) {
+                                return "Invalid phone number format!";
+                              }
+                              return null;
+                            },
+                            focusNode: _focusNode,
+                            style: theme.textTheme.headlineSmall!.copyWith(
+                              color: MyConstants.primaryC,
+                              letterSpacing: 5,
+                            ),
+                            buildCounter: (context, {
+                              required currentLength,
+                              required isFocused,
+                              required maxLength,
+                            }) => null,
+                            textAlign: TextAlign.center,
+                            maxLength: 10,
+                            decoration: InputDecoration(
+                              hintText: "Ex: 557038640",
+                              hintStyle: theme.textTheme.bodyLarge!.copyWith(
+                                color: MyConstants.mediumGrey,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                            controller: _phoneNumCtrl,
+                            keyboardType: TextInputType.phone,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               SizedBox(height: size.height * 0.03),
-              TextFormField(
-                obscureText: true,
-                //cursorColor: MyConstants.primaryC,
-                style: theme.textTheme.bodyLarge,
-                controller: _passwordCtrl,
-                validator: (val) => MyHelpers.validatePassword(val!),
-                decoration: InputDecoration(
-                  hintText: 'Your password..',
-                  hintStyle: theme.textTheme.bodyLarge!.copyWith(
-                    color: MyConstants.mediumGrey,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your password',
+                    style: theme.textTheme.bodyLarge,
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: theme.colorScheme.secondary,
-                      width: 2,
+                  SizedBox(height: 5,),
+                  TextFormField(
+                    obscureText: true,
+                    //cursorColor: MyConstants.primaryC,
+                    style: theme.textTheme.bodyLarge,
+                    controller: _passwordCtrl,
+                    validator: (val) => MyHelpers.validatePassword(val!),
+                    decoration: InputDecoration(
+                      hintText: 'Ex: at^#w3sD',
+                      hintStyle: theme.textTheme.bodyLarge!.copyWith(
+                        color: MyConstants.mediumGrey,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: theme.colorScheme.secondary,
+                          width: 2,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          color: MyConstants.primaryC,
+                          width: 2,
+                        ),
+                      ),
                     ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: MyConstants.primaryC,
-                      width: 2,
-                    ),
-                  ),
-                ),
+                ],
               ),
               SizedBox(height: size.height * 0.01),
               GestureDetector(
@@ -200,22 +220,11 @@ class _SignInVS extends State<SignInV> {
                   elevation: 0,
                   side: BorderSide(color: theme.colorScheme.secondary, width: 2),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Image.asset(
-                      theme.scaffoldBackgroundColor == Colors.white ?
-                      'assets/icons/google_light.png' :
-                      'assets/icons/google_dark.png',
-                      width: 25,
-                    ),
-                    Text(
-                      'Sign-in with Google',
+                child: Text(
+                      'Sign-in with Email',
                       style: theme.textTheme.titleSmall!.copyWith(
                         color: theme.colorScheme.secondary,
                       ),
-                    ),
-                  ],
                 ),
               ),
             ],

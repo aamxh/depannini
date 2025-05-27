@@ -1,9 +1,13 @@
 import 'package:depannini_assistant/app/main/welcome_view.dart';
+import 'package:depannini_assistant/app/settings/change_password_view.dart';
 import 'package:depannini_assistant/app/settings/edit_profile_view.dart';
+import 'package:depannini_assistant/app/settings/history_view.dart';
+import 'package:depannini_assistant/app/settings/privacy_policy_view.dart';
 import 'package:depannini_assistant/app/settings/settings_tile_widget.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsV extends StatelessWidget {
 
@@ -19,7 +23,7 @@ class SettingsV extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Column(
           children: [
-            SizedBox(height: size.height * 0.1,),
+            SizedBox(height: size.height * 0.06,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -60,18 +64,31 @@ class SettingsV extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: size.height * 0.1,),
+            SizedBox(height: size.height * 0.06,),
             Column(
               children: [
-                SizedBox(height: size.height * 0.03,),
-                SettingsTileW(
-                  title: 'Change password',
-                  icon: Icons.lock_rounded,
+                GestureDetector(
+                  onTap: () => Get.to(() => HistoryV()),
+                  child: SettingsTileW(
+                    title: 'History',
+                    icon: Icons.history,
+                  ),
                 ),
                 SizedBox(height: size.height * 0.03,),
-                SettingsTileW(
-                  title: 'Privacy policy',
-                  icon: Icons.my_library_books,
+                GestureDetector(
+                  onTap: () => Get.to(() => ChangePasswordV()),
+                  child: SettingsTileW(
+                    title: 'Change password',
+                    icon: Icons.lock_rounded,
+                  ),
+                ),
+                SizedBox(height: size.height * 0.03,),
+                GestureDetector(
+                  onTap: () => Get.to(() => PrivacyPolicyV()),
+                  child: SettingsTileW(
+                    title: 'Privacy policy',
+                    icon: Icons.my_library_books,
+                  ),
                 ),
                 SizedBox(height: size.height * 0.03,),
                 SettingsTileW(
@@ -79,9 +96,12 @@ class SettingsV extends StatelessWidget {
                   icon: Icons.star,
                 ),
                 SizedBox(height: size.height * 0.03,),
-                SettingsTileW(
-                  title: 'Github repository',
-                  icon: Icons.code,
+                GestureDetector(
+                  onTap: () => launchUrl(Uri.parse('https://github.com/aamxh/depannini')),
+                  child: SettingsTileW(
+                    title: 'Github repository',
+                    icon: Icons.code,
+                  ),
                 ),
               ],
             ),
