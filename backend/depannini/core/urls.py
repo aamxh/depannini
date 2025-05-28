@@ -31,9 +31,11 @@ urlpatterns = [
     path('auth/verify-email/', EmailVerificationRequestView.as_view(),
          name='verify-email'),  #
     path('auth/verify-email/confirm/', EmailVerificationView.as_view(),
-         name='verify-email'),  #
+         name='verify-email-confirm'),  #
+
     path('auth/verify-phone/', PhoneVerificationView.as_view(),
          name='verify-phone'),  # done
+
     path(
         'auth/password-reset/',
         PasswordResetRequestView.as_view(), name='password-reset'
@@ -80,8 +82,8 @@ urlpatterns = [
         UpdateLocationView.as_view(), name='update-location'
     ),
     path(
-        'profile/assistant-status/',
-        AssistantStatusView.as_view(), name='assistant-status'
+        'profile/update-status/',
+        AssistantStatusView.as_view(), name='update-status'
     ),
     path('assistants/', AssistantListView.as_view(), name='assistant-list'),
 

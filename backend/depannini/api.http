@@ -16,8 +16,16 @@ Content-Type: application/json
     "name": "anes",
     "password": "test",
     "password_confirm": "test",
-    "phone_number": "+213783961958",
-    "user_type": "client"
+    "phone_number": "+213783961920",
+    "user_type": "assistant",
+    "service_type": "towing",
+    "vehicle_type": "light",
+    "current_lat" : 3423,
+    "current_lng" : 222,
+    "driving_license_cat": "b",
+    "driving_license_num": 32434,
+    "driving_license_expiry": "20:03:26",
+    "vehicle_registration_num": 2343
 }
 
 ###
@@ -71,7 +79,7 @@ POST http://localhost:8000/api/auth/login/phone/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "phone_number": "+1234567890",
+    "phone_number": "0658025173",
     "password": "test"
 }
 
@@ -85,14 +93,54 @@ Content-Type: application/json
     "password": "test"
 }
 
-###
+### view user profile
 GET http://localhost:8000/api/profile/user/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3OTM1ODUzLCJpYXQiOjE3NDczMzEwNTMsImp0aSI6IjM4MWRmNDIzMjAyODRiYWY5ZDliYWE2ODVkMTQ0YTkxIiwidXNlcl9pZCI6MTh9.M8sSNcV9ON1VBS_L9HHjYb3y1-pvXIpvMSjgHs5TS6w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY2Mzc4LCJpYXQiOjE3NDg0NjE1NzgsImp0aSI6ImYxNDUwMjkxYWM4ODQ3MWNiNjgxOWNiZTY3MDA2YTljIiwidXNlcl9pZCI6Mn0.jbGl0Ful3dN6_Vtqu8XsAqpjKl1pIoDBbcTrnZg8rn4
+### update user profile 'except password'
+PUT http://localhost:8000/api/profile/user/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY2Mzc4LCJpYXQiOjE3NDg0NjE1NzgsImp0aSI6ImYxNDUwMjkxYWM4ODQ3MWNiNjgxOWNiZTY3MDA2YTljIiwidXNlcl9pZCI6Mn0.jbGl0Ful3dN6_Vtqu8XsAqpjKl1pIoDBbcTrnZg8rn4
+
+{
+    "address" : "Setif-Algeria"
+}
+
+### update location
+PATCH http://localhost:8000/api/profile/update-location/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY4NzkzLCJpYXQiOjE3NDg0NjM5OTMsImp0aSI6ImJjYTQxYjY2MjUzMDRlYTE5MjI3ODNjMDk2N2IxN2RjIiwidXNlcl9pZCI6Mn0.VKiEcPV_-LoMoyonbNiWJ3kl5Z5fAgiUb648Ffqz5z4
+
+{
+    "lat" :  34.052235,
+    "lng" : -118.243683
+}
+### update status
+PATCH http://localhost:8000/api/profile/update-status/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY5MjMyLCJpYXQiOjE3NDg0NjQ0MzIsImp0aSI6ImZlOGM3ODhhMTIwMzQ0ZTVhZmMzZDM2ZTMwYTMwY2U4IiwidXNlcl9pZCI6Nn0.nCz6xlZegzSkVQO-wFvv1FV1-VdS6QJCF1XiLjFOTt4
+
+{
+    "is_active" : true
+}
+
+### view assistant profile
+GET http://localhost:8000/api/profile/assistant/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY0NDY3LCJpYXQiOjE3NDg0NTk2NjcsImp0aSI6ImU5N2E1NjliNTk4MTRkMTJhYWNmYzk3NTc4YzA0ZWU4IiwidXNlcl9pZCI6NH0.pR3WCC2PHj5d5TdCLaCAawTUyT7DHSHgnU96bYaSaU4
+
+### update assistant profile
+PUT http://localhost:8000/api/profile/assistant/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY0NDY3LCJpYXQiOjE3NDg0NTk2NjcsImp0aSI6ImU5N2E1NjliNTk4MTRkMTJhYWNmYzk3NTc4YzA0ZWU4IiwidXNlcl9pZCI6NH0.pR3WCC2PHj5d5TdCLaCAawTUyT7DHSHgnU96bYaSaU4
+
+{
+    "driving_license_expiry": "20:03:50"
+}
 ###
 get http://localhost:8000/api/assistants/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ1NjA0NzM4LCJpYXQiOjE3NDU2MDExMzgsImp0aSI6IjYwZDhmZjFkYzNiYTRiYzFiM2M4NjcxM2U0MzMwODliIiwidXNlcl9pZCI6MTd9.M_wXq0cwnGrsa43GICE--E6YUs7eQbFKc6qqrSoTMhk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY0NDY3LCJpYXQiOjE3NDg0NTk2NjcsImp0aSI6ImU5N2E1NjliNTk4MTRkMTJhYWNmYzk3NTc4YzA0ZWU4IiwidXNlcl9pZCI6NH0.pR3WCC2PHj5d5TdCLaCAawTUyT7DHSHgnU96bYaSaU4
 
 {
     "vehicle_registration_num": "4342342"

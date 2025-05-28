@@ -16,6 +16,10 @@ class UserSerializer(serializers.ModelSerializer):
             'profile_photo', 'current_lat', 'current_lng',
             'address'
         ]
+        extra_kwargs = {
+            'phone_number': {'required': False, 'allow_blank': True},
+            'name': {'required': False, 'allow_blank': True}
+        }
 
 
 class AssistantSerializer(serializers.ModelSerializer):
@@ -28,6 +32,13 @@ class AssistantSerializer(serializers.ModelSerializer):
 
 
 class AssistantProfileSerializer(serializers.ModelSerializer):
+
+    driving_license_expiry = serializers.DateField(
+        input_formats=["%d:%m:%y"],
+        format="%d:%m:%y",
+        required=False
+    )
+
     class Meta:
         model = User
         fields = [
@@ -36,6 +47,16 @@ class AssistantProfileSerializer(serializers.ModelSerializer):
             'driving_license_cat', 'driving_license_num', 'driving_license_expiry',
             'vehicle_registration_num',
         ]
+        extra_kwargs = {
+            'phone_number': {'required': False, 'allow_blank': True},
+            'name': {'required': False, 'allow_blank': True}
+        }
+
+    def validate(self, attrs):
+        if attrs.get('driving_license_expiry') is not None and attrs.get('driving_license_expiry') < date.today():
+            raise serializers.ValidationError(
+                "Expiry date cannot be in the past.")
+        return attrs
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -53,7 +74,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     driving_license_expiry = serializers.DateField(
         input_formats=["%d:%m:%y"],
-        format=["%d:%m:%y"],
+        format="%d:%m:%y",
         required=False
     )
 
@@ -155,8 +176,8 @@ class GoogleLoginSerializer(serializers.Serializer):
 
 
 class UpdateLocationSerializer(serializers.Serializer):
-    latitude = serializers.FloatField()
-    longitude = serializers.FloatField()
+    lat = serializers.FloatField()
+    lng = serializers.FloatField()
 
 
 class UserAssistanceSerializer(serializers.ModelSerializer):
