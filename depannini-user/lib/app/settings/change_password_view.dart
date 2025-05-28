@@ -83,7 +83,9 @@ class _ChangePasswordVState extends State<ChangePasswordV> {
                   ),
                   child: Text(
                     'Change Password',
-                    style: theme.textTheme.titleSmall,
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: Colors.white,
+                    ),
                   ),
               ),
             ],

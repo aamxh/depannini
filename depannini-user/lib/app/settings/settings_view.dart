@@ -36,14 +36,14 @@ class SettingsV extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        'Mohammed',
+                        'Hakmi Zohir',
                         style: theme.textTheme.titleSmall,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 5,),
                       Text(
-                        'a.a.mxhamed@gmail.com',
+                        'hakmizohir@gmail.com',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
