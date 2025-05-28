@@ -71,7 +71,7 @@ POST http://localhost:8000/api/auth/login/phone/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "phone_number": "0658025172",
+    "phone_number": "+1234567890",
     "password": "test"
 }
 
@@ -102,17 +102,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 POST http://localhost:8000/api/assistance/request/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4OTczNDc2LCJpYXQiOjE3NDgzNjg2NzYsImp0aSI6ImM0NjI1Y2YzOTg3NjRkY2U4YmI5NjdjNjllODU1MzFhIiwidXNlcl9pZCI6MTh9.3iBzevu7fnbO3HB87tgTQ0frfOAyPNvpAVXhd_fUFE0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDQwNzgxLCJpYXQiOjE3NDg0MzU5ODEsImp0aSI6ImRiYmY1MTAxYmJlYjQ3NWFiOTY2OGE2YTgyYjIzMGM3IiwidXNlcl9pZCI6Mn0.7M4TMV5FB63lOX6Jqrc1ysbC9weUnwaVeemdfmRpg94
 
 {
     "pickup": {
-        "lat" : 36.1903,
-        "lng" : 5.4108
+        "lat" : 34.052235,
+        "lng" : -118.243683
     },
     "assistance_type": "towing",
     "dropoff": {
-        "lat" : 36.1903,
-        "lng" : 6.5219
+        "lat" : 34.085652,
+        "lng" : -118.232176
     },
     "vehicle_type" : "heavy"
 }
@@ -152,8 +152,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "price" : "1800.34"
 }
 
-###
+### rating update
 
-GET http://localhost:8000/api/assistance/view/1/ HTTP/1.1
+Patch http://localhost:8000/api/assistance/update/rating/7/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODE3Nzc0LCJpYXQiOjE3NDYyMTI5NzQsImp0aSI6IjdkMTI5ZDg2Mjc4YjQ5MzJhOWJiMDVhZWRlZDdmNWNiIiwidXNlcl9pZCI6MjB9.a3pSNXiITtlzwb2teS8bTM3wtiCB_zg0eRi2jIlqbrU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDI3MDMzLCJpYXQiOjE3NDg0MjIyMzMsImp0aSI6IjAzZTA3ZmMwMDEzYTRhN2FhYjdhOGFlNDBhM2Q1MTU1IiwidXNlcl9pZCI6MTh9.SzXlG2CLN6ZsBaZBvPwAA6C102zT-qHSUs9iMo0P4X4
+
+{
+    "rating" : "3.5"
+}
+
+###
+GET http://localhost:8000/api/assistance/view/7/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4OTc2MDU3LCJpYXQiOjE3NDgzNzEyNTcsImp0aSI6IjNhYmRhYjg1N2Y5NjQ1ZDk4Mzg2OWYyZDU3MWY1YTM2IiwidXNlcl9pZCI6MjF9.jERb-hxATE3kF0en1iwa-a73-paDirT50VQ6LqGpIRQ

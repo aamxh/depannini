@@ -34,51 +34,54 @@ class AssistanceConsumer(AsyncWebsocketConsumer):
         try:
             data = json.loads(text_data)
             message_type = data.get('type')
-            user_id = data.get('user_id')
-            lat = data.get('lat')
-            lng = data.get('lng')
 
-            if lat is not None and lng is not None and user_id is not None:
-                from django.contrib.auth import get_user_model
-                from asgiref.sync import sync_to_async
-                User = get_user_model()
+            if message_type == 'location':
+                user_id = data.get('user_id')
+                lat = data.get('lat')
+                lng = data.get('lng')
+                if lat is not None and lng is not None and user_id is not None:
+                    from django.contrib.auth import get_user_model
+                    # from asgiref.sync import sync_to_async
+                    from channels.db import database_sync_to_async
+                    from django.db import transaction
+                    User = get_user_model()
 
-                @sync_to_async
-                def update_user_location():
-                    print('saving to database ..')
-                    try:
-                        user = User.objects.get(id=user_id)
-                        print(f'user {user} found')
-                        user.current_lat = lat
-                        user.current_lng = lng
-                        user.save()
-                        return True
-                    except:
-                        return False
+                    @database_sync_to_async
+                    def update_user_location():
+                        print('saving to database ..')
+                        with transaction.atomic():
+                            user = User.objects.get(id=user_id)
+                            print(f'user {user} found')
+                            user.current_lat = lat
+                            user.current_lng = lng
+                            user.save()
+                            return True
 
-                success = await update_user_location()
+                    success = await update_user_location()
 
-                if success:
-                    # Still broadcast the location update to the room group
-                    await self.channel_layer.group_send(
-                        self.room_group_name,
-                        {
-                            'type': 'location_update',
-                            'lat': lat,
-                            'lng': lng,
-                            'user_id': user_id
-                        }
-                    )
+                    if success:
+                        # Still broadcast the location update to the room group
+                        await self.channel_layer.group_send(
+                            self.room_group_name,
+                            {
+                                'type': 'location_update',
+                                'lat': lat,
+                                'lng': lng,
+                                'user_id': user_id
+                            }
+                        )
+                    else:
+                        await self.send(text_data=json.dumps({
+                            'type': 'error',
+                            'message': f'User with ID {user_id} not found'
+                        }))
                 else:
                     await self.send(text_data=json.dumps({
                         'type': 'error',
-                        'message': f'User with ID {user_id} not found'
+                        'message': 'Not valid data'
                     }))
-            else:
-                await self.send(text_data=json.dumps({
-                    'type': 'error',
-                    'message': 'Not valid data'
-                }))
+
+            # handling another message type
         except json.JSONDecodeError:
             await self.send(text_data=json.dumps({
                 'type': 'error',
