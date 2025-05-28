@@ -232,6 +232,7 @@ class AssistanceStatusUpdateView(APIView):
                         'description': 'Cannot complete assistance before setting its price'},
                     status=status.HTTP_406_NOT_ACCEPTABLE
                 )
+
             assistance.status = assistance_status
             assistance.save()
 
@@ -285,6 +286,36 @@ class AssistancePriceUpdateView(APIView):
         except:
             return Response(
                 {'error': 'Assistance not found or you missed the "price" field'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class AssistanceRatingUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, assistance_id):
+        try:
+            assistance_rating = request.data['rating']
+            assistance = get_object_or_404(Assistance, id=assistance_id)
+            if request.user != assistance.client:
+                return Response(
+                    {'error': 'Unauthorized update',
+                        'description': 'you must be a client in this assistant to be able to make this update'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            if assistance.status != 'completed':
+                return Response(
+                    {'error': 'Unauthorized update',
+                        'description': 'Assistance cannot be rated before completion'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            assistance.rating = assistance_rating
+            assistance.save()
+            return Response(AssistanceSerializer(assistance).data, status=status.HTTP_202_ACCEPTED)
+
+        except:
+            return Response(
+                {'error': 'Assistance not found or you missed the "rating" field'},
                 status=status.HTTP_404_NOT_FOUND
             )
 

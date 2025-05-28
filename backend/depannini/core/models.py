@@ -146,7 +146,7 @@ class Assistance(models.Model):
     vehicle_type = models.CharField(
         max_length=100, blank=True, null=True, choices=VEHICLE_TYPE_CHOICES)
     status = models.CharField(max_length=10, choices=ASSISTANCE_STATUE_CHOICES)
-    rating = models.SmallIntegerField(default=0)
+    rating = models.FloatField(default=0)
 
     distance_km = models.FloatField(default=0.0)
     total_price = models.DecimalField(

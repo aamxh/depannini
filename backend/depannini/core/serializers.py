@@ -181,7 +181,7 @@ class AssistanceSerializer(serializers.ModelSerializer):
             'id', 'status', 'client', 'assistant',
             'pickupLocation', 'dropoffLocation',
             'distance_km', 'total_price',
-            'createdAt', 'updatedAt', 'assistance_type'
+            'createdAt', 'updatedAt', 'assistance_type', 'rating'
         ]
 
     def get_pickupLocation(self, obj):
