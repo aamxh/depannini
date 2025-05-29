@@ -1,5 +1,5 @@
-import 'package:depannini_assistant/app/auth/signup/signup1_view_model.dart';
 import 'package:depannini_assistant/app/auth/signup/signup2_view.dart';
+import 'package:depannini_assistant/app/main/assistant_view_model.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:depannini_assistant/core/helpers.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class SignUp1V extends StatelessWidget {
   final _licenseNumCtrl = TextEditingController();
   final _regNumCtrl = TextEditingController();
   final _licenseDateCtrl = TextEditingController();
-  final _vm = SignUp1VM();
+  final _vm = Get.find<AssistantVM>();
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +62,7 @@ class SignUp1V extends StatelessWidget {
                       dividerColor: MyConstants.mediumGrey!,
                       fontSize: 18,
                       cornerRadius: 20,
-                      onToggle: (idx) => _vm.changeLicenseCat(idx!),
+                      onToggle: (idx) => _vm.serviceType = idx!,
                     ),
                   ),
                   SizedBox(height: size.height * 0.09,),
@@ -99,6 +99,7 @@ class SignUp1V extends StatelessWidget {
                         validator: (val) {
                           if (val!.isEmpty) return 'Empty Field!';
                           if (val.length < 5) return 'Invalid license number!';
+                          if (!val.isNum) return 'Invalid license number!';
                           return null;
                         },
                       ),
@@ -161,7 +162,7 @@ class SignUp1V extends StatelessWidget {
                         borderWidth: 2,
                         fontSize: 20,
                         cornerRadius: 20,
-                        onToggle: (idx) => _vm.changeLicenseCat(idx!),
+                        onToggle: (idx) => _vm.licenseCat = (idx!),
                       ),
                     ],
                   ),
@@ -189,7 +190,7 @@ class SignUp1V extends StatelessWidget {
                         dividerMargin: 0,
                         fontSize: 18,
                         cornerRadius: 20,
-                        onToggle: (idx) => _vm.changeVehicleType(idx!),
+                        onToggle: (idx) => _vm.vehicleType = idx!,
                       ),
                     ],
                   ),
@@ -213,6 +214,8 @@ class SignUp1V extends StatelessWidget {
                       ));
                     }
                     else {
+                      _vm.regNum = _regNumCtrl.text;
+                      _vm.licenseNum = _licenseNumCtrl.text;
                       Get.to(() => SignUp2V());
                     }
                   }

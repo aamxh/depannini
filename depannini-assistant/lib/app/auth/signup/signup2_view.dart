@@ -1,6 +1,7 @@
 import 'package:depannini_assistant/app/auth/signin/signin_view.dart';
 import 'package:depannini_assistant/app/auth/signup/email_verification_view.dart';
 import 'package:depannini_assistant/app/auth/signup/email_verification_view_model.dart';
+import 'package:depannini_assistant/app/main/assistant_view_model.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:email_validator/email_validator.dart';
@@ -228,6 +229,10 @@ class SignUp2V extends StatelessWidget {
                       final res = await EmailOTP.sendOTP(email: _emailCtrl.text);
                       Get.back();
                       if (res) {
+                        final vm = Get.find<AssistantVM>();
+                        vm.name = _nameCtrl.text;
+                        vm.email = _emailCtrl.text;
+                        vm.password = _password1Ctrl.text;
                         Get.to(() => EmailVerificationV());
                       } else {
                         Get.showSnackbar(GetSnackBar(

@@ -7,7 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class LocationVM extends GetxController {
 
   final Rx<LatLng> _userLocation = LatLng(37.422, -122.084).obs;
-  final Rx<LatLng> _assistantLocation = LatLng(37.4, -122.0).obs;
+  final Rx<LatLng> _assistantLocation = LatLng(37.3861, -122.0839).obs;
   final Rx<String> _assistanceStatus = 'accepted'.obs;
   final Rx<String> _assistantPhoneNum = '0557038640'.obs;
   final RxSet<Polyline> _path = <Polyline>{}.obs;

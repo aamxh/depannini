@@ -1,3 +1,4 @@
+import 'package:depannini_assistant/app/main/assistant_view_model.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -109,6 +110,7 @@ class PhoneNumberVS extends State<PhoneNumberV> {
               ElevatedButton(
                 onPressed: () {
                   if (_key.currentState!.validate()) {
+                    Get.find<AssistantVM>().num = _ctrl.text;
                     Get.to(() => PhoneNumberVerificationV());
                   }
                 },

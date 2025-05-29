@@ -1,5 +1,5 @@
 import 'package:depannini_assistant/app/assistance/repair_request_details_view.dart';
-import 'package:depannini_assistant/app/assistance/towing_request_details_view.dart';
+import 'package:depannini_assistant/app/main/enable_location_view.dart';
 import 'package:depannini_assistant/core/theme_controller.dart';
 import 'app/main/welcome_view.dart';
 import 'core/theme.dart';
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
       theme: MyTheme.lightTheme,
       darkTheme: MyTheme.darkTheme,
       themeMode: themeCtrl.isDark ? ThemeMode.dark : ThemeMode.light,
-      home: WelcomeV(),
+      home: EnableLocationV(),
     );
   }
 

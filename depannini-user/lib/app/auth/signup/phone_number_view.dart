@@ -1,4 +1,4 @@
-import 'package:depannini_user/app/auth/signup/client_view_model.dart';
+import 'package:depannini_user/app/main/client_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,7 +17,6 @@ class PhoneNumberVS extends State<PhoneNumberV> {
   
   final _ctrl = TextEditingController();
   final _key = GlobalKey<FormState>();
-  final _vm = ClientVM();
   final _focusNode = FocusNode();
 
   @override
@@ -111,8 +110,7 @@ class PhoneNumberVS extends State<PhoneNumberV> {
               ElevatedButton(
                 onPressed: () {
                   if (_key.currentState!.validate()) {
-                    Get.put(ClientVM());
-                    Get.find<ClientVM>().changeNum(_ctrl.text);
+                    Get.find<ClientVM>().num = (_ctrl.text);
                     Get.to(() => PhoneNumberVerificationV());
                   }
                 },

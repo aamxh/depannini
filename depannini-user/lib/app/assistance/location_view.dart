@@ -19,7 +19,7 @@ class LocationV extends StatefulWidget {
 class _LocationVS extends State<LocationV> {
 
   late final GoogleMapController _ctrl;
-  final _vm = LocationVM();
+  final _vm = Get.find<LocationVM>();
   final _location = Location();
 
   @override
@@ -52,7 +52,7 @@ class _LocationVS extends State<LocationV> {
                   },
                   initialCameraPosition: CameraPosition(
                     target: _vm.userLocation,
-                    zoom: 18,
+                    zoom: 15,
                   ),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,

@@ -1,7 +1,7 @@
-import 'package:depannini_user/app/assistance/set_location_view_model.dart';
-import 'package:depannini_user/core/api_keys.dart';
-import 'package:depannini_user/core/constants.dart';
-import 'package:depannini_user/core/helpers.dart';
+import 'package:depannini_assistant/app/assistance/set_location_view_model.dart';
+import 'package:depannini_assistant/core/api_keys.dart';
+import 'package:depannini_assistant/core/constants.dart';
+import 'package:depannini_assistant/core/helpers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -58,10 +58,10 @@ class LocationApi {
 
   static double getDistance(LatLng start, LatLng dest) {
     final distance = Geolocator.distanceBetween(
-        start.latitude,
-        start.longitude,
-        dest.latitude,
-        dest.longitude,
+      start.latitude,
+      start.longitude,
+      dest.latitude,
+      dest.longitude,
     ) / 1000;
     return distance;
   }
