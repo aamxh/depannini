@@ -75,7 +75,7 @@ class _SetLocationVS extends State<SetLocationV> {
                   },
                   initialCameraPosition: CameraPosition(
                     target: _vm.location!,
-                    zoom: 15,
+                    zoom: 13,
                   ),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,

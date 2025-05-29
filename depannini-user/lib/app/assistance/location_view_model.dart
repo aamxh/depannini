@@ -20,7 +20,7 @@ class LocationVM extends GetxController {
 
   String get assistantPhoneNum => _assistantPhoneNum.value;
 
-  Set<Polyline> get path => _path.toSet();
+  RxSet<Polyline> get path => _path;
 
   void setUserLocation(LatLng val) => _userLocation.value = val;
 
@@ -33,6 +33,13 @@ class LocationVM extends GetxController {
   Future<void> setPath(LatLng start, LatLng end) async {
     final res = await LocationApi.getPath(start, end);
     _path.assignAll(res);
+  }
+
+  Future<void> initializeCurrentLocation() async {
+    final locationData = await LocationApi.getCurrentLocation();
+    if (locationData != null) {
+      setUserLocation(LatLng(locationData.latitude!, locationData.longitude!));
+    }
   }
 
 }

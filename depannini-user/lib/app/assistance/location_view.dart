@@ -25,7 +25,12 @@ class _LocationVS extends State<LocationV> {
   @override
   void initState() {
     super.initState();
-    _vm.setPath(_vm.userLocation, _vm.assistantLocation);
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    await _vm.initializeCurrentLocation();
+    await _vm.setPath(_vm.userLocation, _vm.assistantLocation);
   }
 
   @override
@@ -41,10 +46,12 @@ class _LocationVS extends State<LocationV> {
           Column(
             children: [
               SizedBox(
-                height: size.height * 0.7,
+                height: size.height * 0.64,
                 child: GoogleMap(
                   onMapCreated: (GoogleMapController ctrl) {
                     _ctrl = ctrl;
+                    print("Map created - User: ${_vm.userLocation}, Assistant: ${_vm.assistantLocation}");
+                    print("Path polylines count: ${_vm.path.length}");
                     _location.onLocationChanged.listen((LocationData loc) =>
                         _ctrl.animateCamera(CameraUpdate.newLatLng(
                             LatLng(loc.latitude!, loc.longitude!)
@@ -52,10 +59,14 @@ class _LocationVS extends State<LocationV> {
                   },
                   initialCameraPosition: CameraPosition(
                     target: _vm.userLocation,
-                    zoom: 15,
+                    zoom: 13,
                   ),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,
+                  scrollGesturesEnabled: true,
+                  zoomGesturesEnabled: true,
+                  tiltGesturesEnabled: true,
+                  rotateGesturesEnabled: true,
                   markers: {
                     Marker(
                       markerId: MarkerId('assistant'),
@@ -64,10 +75,10 @@ class _LocationVS extends State<LocationV> {
                       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
                     ),
                   },
-                  polylines: _vm.path,
+                  polylines: _vm.path.toSet(),
                 ),
               ),
-              SizedBox(height: size.height * 0.02,),
+              SizedBox(height: size.height * 0.01,),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
                 child: Column(
@@ -90,7 +101,6 @@ class _LocationVS extends State<LocationV> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 5),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -156,7 +166,6 @@ class _LocationVS extends State<LocationV> {
                   ],
                 ),
               ),
-              SizedBox(height: size.height * 0.05,),
             ],
           ),
         ),

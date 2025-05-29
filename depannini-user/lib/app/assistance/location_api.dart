@@ -85,7 +85,7 @@ class LocationApi {
         Polyline(
           polylineId: const PolylineId("route"),
           points: polylineCoordinates,
-          color: Colors.blue,
+          color: MyConstants.primaryC,
           width: 4,
         ),
       };

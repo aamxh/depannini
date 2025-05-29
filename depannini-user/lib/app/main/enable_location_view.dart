@@ -32,10 +32,8 @@ class EnableLocationV extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: size.height * 0.06,),
-                Image.asset('assets/images/location.png', width: size.width * 0.4,),
-                SizedBox(height: size.height * 0.02,),
                 Text(
                   "Enable location setting",
                   style: theme.textTheme.titleLarge,
@@ -46,7 +44,7 @@ class EnableLocationV extends StatelessWidget {
                   child: Text(
                     'This will enable us to find the nearest assistants for you.',
                     textAlign: TextAlign.center,
-                    style: theme.textTheme.bodyMedium!.copyWith(color: MyConstants.darkGrey),
+                    style: theme.textTheme.bodyMedium,
                   ),
                 ),
                 SizedBox(height: size.height * 0.04,),
@@ -69,13 +67,13 @@ class EnableLocationV extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(size.width * 0.7, size.height * 0.064),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                   child: Text(
                     'Use my location',
-                    style: theme.textTheme.bodyLarge!.copyWith(
-                      color: theme.colorScheme.secondary,
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: Colors.white,
                     ),
                   ),
                 ),
@@ -87,9 +85,7 @@ class EnableLocationV extends StatelessWidget {
                   },
                   child: Text(
                     'Skip for now',
-                    style: theme.textTheme.bodyLarge!.copyWith(
-                        color: MyConstants.mediumGrey,
-                    ),
+                    style: theme.textTheme.titleSmall,
                   ),
                 ),
               ],
