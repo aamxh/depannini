@@ -1,3 +1,4 @@
+import 'package:depannini_user/app/assistance/end_assistance_view.dart';
 import 'package:depannini_user/app/assistance/location_api.dart';
 import 'package:depannini_user/app/assistance/location_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
@@ -120,7 +121,7 @@ class _LocationVS extends State<LocationV> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () => Get.to(() => EndAssistanceV()),
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             fixedSize: Size(size.width * 0.35, size.height * 0.064),
