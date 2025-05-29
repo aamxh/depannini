@@ -4,17 +4,29 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SetLocationVM extends GetxController {
 
-  Rx<LatLng?> location = LatLng(0, 0).obs;
-  Rx<String> address = ''.obs;
-  Rx<bool> isAddressValid = false.obs;
+  final Rx<int> _id = 0.obs;
+  final Rx<LatLng?> _location = LatLng(0, 0).obs;
+  final Rx<String> _address = ''.obs;
+  final Rx<bool> _isAddressValid = false.obs;
 
-  void changeLocation(LatLng newLocation) => location.value = newLocation;
+  set location(LatLng? newLocation) => _location.value = newLocation;
+  set isAddressValid(bool val) => _isAddressValid.value = val;
+  set id(int val) => _id.value = val;
+
+  LatLng? get location => _location.value;
+  bool get isAddressValid => _isAddressValid.value;
+  String get address => _address.value;
+  int get id => _id.value;
 
   Future<void> changeAddress(LatLng newLocation) async {
     final newAddress = await LocationApi.getLocationDescription(newLocation);
-    address.value = newAddress ?? 'Location not specified.';
+    if (newAddress == null) {
+      _address.value = 'Location not specified.';
+      _isAddressValid.value = false;
+    } else {
+      _address.value = newAddress;
+      _isAddressValid.value = true;
+    }
   }
-
-  void changeIsAddressValid(bool val) => isAddressValid.value = val;
 
 }

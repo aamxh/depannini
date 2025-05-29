@@ -68,85 +68,95 @@ class _LocationVS extends State<LocationV> {
                 ),
               ),
               SizedBox(height: size.height * 0.02,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Assistant phone number: ${_vm.assistantPhoneNum}',
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                  TextButton(
-                    onPressed: () => MyHelpers.makePhoneCall(_vm.assistantPhoneNum),
-                    child: Text(
-                      'Call',
-                      style: theme.textTheme.bodyLarge!.copyWith(
-                        color: MyConstants.primaryC,
-                      ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          'Assistant phone number: ${_vm.assistantPhoneNum}',
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                        TextButton(
+                          onPressed: () => MyHelpers.makePhoneCall(_vm.assistantPhoneNum),
+                          child: Text(
+                            'Call',
+                            style: theme.textTheme.bodyMedium!.copyWith(
+                              color: MyConstants.primaryC,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text(
+                          'Assistance status: ',
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                        Text(
+                          _vm.assistanceStatus,
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: size.height * 0.03,),
+                    _vm.assistanceStatus == 'on-going' ? Container() :
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            fixedSize: Size(size.width * 0.35, size.height * 0.064),
+                            backgroundColor: _vm.assistanceStatus == 'arrived' ?
+                            MyConstants.primaryC :
+                            theme.scaffoldBackgroundColor == Colors.white ?
+                            MyConstants.lightGrey :
+                            MyConstants.darkGrey,
+                            side: BorderSide(
+                              color: _vm.assistanceStatus == 'arrived' ?
+                              MyConstants.primaryC :
+                              theme.scaffoldBackgroundColor == Colors.white ?
+                              MyConstants.darkGrey! :
+                              MyConstants.lightGrey!,
+                            ),
+                          ),
+                          child: Text(
+                            'Completed',
+                            style: theme.textTheme.bodyLarge,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            fixedSize: Size(size.width * 0.35, size.height * 0.064),
+                            backgroundColor: theme.scaffoldBackgroundColor == Colors.white ?
+                            MyConstants.lightGrey : MyConstants.darkGrey,
+                            side: BorderSide(
+                              color: theme.scaffoldBackgroundColor == Colors.white ?
+                              MyConstants.darkGrey! : MyConstants.lightGrey!,
+                            ),
+                          ),
+                          child: Text(
+                            'Cancel',
+                            style: theme.textTheme.bodyLarge,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: size.height * 0.02,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Assistance status: ',
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                  Text(
-                    _vm.assistanceStatus,
-                    style: theme.textTheme.bodyLarge,
-                  ),
-                ],
-              ),
-              SizedBox(height: size.height * 0.02,),
-              _vm.assistanceStatus == 'on-going' ? Container() :
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(size.width * 0.25, size.height * 0.064),
-                      backgroundColor: _vm.assistanceStatus == 'arrived' ?
-                      MyConstants.primaryC :
-                      theme.scaffoldBackgroundColor == Colors.white ?
-                      MyConstants.lightGrey :
-                      MyConstants.darkGrey,
-                      side: BorderSide(
-                        color: _vm.assistanceStatus == 'arrived' ?
-                        MyConstants.primaryC :
-                        theme.scaffoldBackgroundColor == Colors.white ?
-                        MyConstants.darkGrey! :
-                        MyConstants.lightGrey!,
-                      ),
-                    ),
-                    child: Text(
-                      'Completed',
-                      style: theme.textTheme.titleSmall,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(size.width * 0.25, size.height * 0.064),
-                      backgroundColor: theme.scaffoldBackgroundColor == Colors.white ?
-                      MyConstants.lightGrey : MyConstants.darkGrey,
-                      side: BorderSide(
-                        color: theme.scaffoldBackgroundColor == Colors.white ?
-                        MyConstants.darkGrey! : MyConstants.lightGrey!,
-                      ),
-                    ),
-                    child: Text(
-                      'Cancel',
-                      style: theme.textTheme.titleSmall,
-                    ),
-                  ),
-                ],
-              ),
+              SizedBox(height: size.height * 0.05,),
             ],
           ),
         ),

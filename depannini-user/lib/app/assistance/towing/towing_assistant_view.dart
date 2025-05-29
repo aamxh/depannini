@@ -68,7 +68,9 @@ class TowingAssistantV extends StatelessWidget {
                 ),
                 child: Text(
                   'Accept',
-                  style: theme.textTheme.titleSmall,
+                  style: theme.textTheme.titleSmall!.copyWith(
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

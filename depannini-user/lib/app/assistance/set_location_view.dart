@@ -1,10 +1,13 @@
 import 'package:depannini_user/app/assistance/location_api.dart';
 import 'package:depannini_user/app/assistance/set_location_view_model.dart';
+import 'package:depannini_user/app/assistance/towing/towing_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+
+import 'repair/repair_view_model.dart';
 
 class SetLocationV extends StatefulWidget {
 
@@ -18,14 +21,14 @@ class SetLocationV extends StatefulWidget {
 class _SetLocationVS extends State<SetLocationV> {
 
   late final GoogleMapController _ctrl;
-  final _vm = SetLocationVM();
+  final _vm = Get.find<SetLocationVM>();
   final _location = Location();
   Marker? _marker;
 
   Future<void> _initState() async {
     final locData = await LocationApi.getCurrentLocation();
     if (locData == null) return;
-    _vm.changeLocation(LatLng(locData.latitude ?? 0, locData.longitude ?? 0));
+    _vm.location = (LatLng(locData.latitude ?? 0, locData.longitude ?? 0));
     _vm.changeAddress(LatLng(locData.latitude ?? 0, locData.longitude ?? 0));
   }
 
@@ -49,7 +52,7 @@ class _SetLocationVS extends State<SetLocationV> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Obx(() =>
-                _vm.location.value == LatLng(0, 0) ?
+                _vm.location == LatLng(0, 0) ?
                 Center(child: CircularProgressIndicator(
                   color: MyConstants.primaryC,
                 )) :
@@ -62,7 +65,7 @@ class _SetLocationVS extends State<SetLocationV> {
                     )));
                   },
                   onTap: (LatLng position) {
-                    _vm.changeLocation(position);
+                    _vm.location = (position);
                     _vm.changeAddress(position);
                     _marker = Marker(
                       markerId: MarkerId('Selected Location'),
@@ -71,7 +74,7 @@ class _SetLocationVS extends State<SetLocationV> {
                     );
                   },
                   initialCameraPosition: CameraPosition(
-                    target: _vm.location.value!,
+                    target: _vm.location!,
                     zoom: 18,
                   ),
                   myLocationEnabled: true,
@@ -89,23 +92,38 @@ class _SetLocationVS extends State<SetLocationV> {
                 children: [
                   SizedBox(height: 20),
                   Text(
-                    _vm.address.value,
+                    _vm.address,
                     style: theme.textTheme.bodyMedium,
                     textAlign: TextAlign.center,
                     maxLines: 2,
                   ),
                   SizedBox(height: 10,),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (_vm.isAddressValid) {
+                        if (_vm.id == 0) {
+                          Get.find<TowingVM>().fromLocation = _vm.location!;
+                          Get.find<TowingVM>().fromAddress = _vm.address;
+                        } else if (_vm.id == 1) {
+                          Get.find<TowingVM>().toLocation = _vm.location!;
+                          Get.find<TowingVM>().toAddress = _vm.address;
+                        } else {
+                          Get.find<RepairVM>().location = _vm.location!;
+                          Get.find<RepairVM>().address = _vm.address;
+                        }
+                        Get.delete<SetLocationVM>();
+                        Get.back();
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       fixedSize: Size(size.width * 0.5, size.height * 0.064),
                       backgroundColor:
-                      _vm.isAddressValid.value ?
+                      _vm.isAddressValid ?
                       MyConstants.primaryC :
                       MyConstants.lightGrey,
                       side: BorderSide(
-                        color: _vm.isAddressValid.value ?
+                        color: _vm.isAddressValid ?
                             MyConstants.primaryC :
                             MyConstants.mediumGrey!,
                       ),
@@ -113,7 +131,7 @@ class _SetLocationVS extends State<SetLocationV> {
                     child: Text(
                       'Confirm location',
                       style: theme.textTheme.titleSmall!.copyWith(
-                        color: _vm.isAddressValid.value ?
+                        color: _vm.isAddressValid ?
                         Colors.white :
                         theme.colorScheme.secondary,
                       ),

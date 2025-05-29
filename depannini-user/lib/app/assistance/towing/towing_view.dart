@@ -1,6 +1,7 @@
 import 'package:depannini_user/app/assistance/towing/towing_assistant_view.dart';
 import 'package:depannini_user/app/assistance/location_view.dart';
 import 'package:depannini_user/app/assistance/location_field_widget.dart';
+import 'package:depannini_user/app/assistance/towing/towing_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +9,9 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 class TowingV extends StatelessWidget {
 
-  const TowingV({super.key});
+  TowingV({super.key});
+
+  final _vm = Get.find<TowingVM>();
 
   @override
   Widget build(BuildContext context) {
@@ -49,38 +52,46 @@ class TowingV extends StatelessWidget {
                 borderWidth: 1,
                 fontSize: 18,
                 cornerRadius: 20,
-                onToggle: (idx) {},
+                onToggle: (idx) => _vm.isHeavy = idx == 0 ? false : true,
               ),
             ),
             SizedBox(height: size.height * 0.04),
-            LocationFieldW(
-              label: 'From',
-              icon: theme.scaffoldBackgroundColor == Colors.white ?
-              'assets/icons/from_light.png' :
-              'assets/icons/from_dark.png',
-            ),
+            LocationFieldW(id: 0),
             SizedBox(height: size.height * 0.04,),
-            LocationFieldW(
-              label: 'To',
-              icon: theme.scaffoldBackgroundColor == Colors.white ?
-              'assets/icons/to_light.png' :
-              'assets/icons/to_dark.png',
-            ),
+            LocationFieldW(id: 1),
             SizedBox(height: size.height * 0.1),
             Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  Get.to(() => TowingAssistantV());
-                },
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(size.width * 0.6, size.height * 0.064),
-                ),
-                child: Text(
-                  'Request assistant',
-                  style: theme.textTheme.titleSmall!.copyWith(
-                    color: Colors.white,
+              child: Obx(() =>
+                ElevatedButton(
+                  onPressed: () {
+                    //if (_vm.isReady) {
+                      Get.to(() => TowingAssistantV());
+                    //}
+                  },
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(size.width * 0.6, size.height * 0.064),
+                    elevation: 0,
+                    backgroundColor: _vm.isReady ? MyConstants.primaryC :
+                        theme.scaffoldBackgroundColor == Colors.white ?
+                            MyConstants.lightGrey :
+                            MyConstants.darkGrey,
+                    side: BorderSide(
+                      color: _vm.isReady ? MyConstants.primaryC :
+                          theme.scaffoldBackgroundColor == Colors.white ?
+                              MyConstants.darkGrey! :
+                              MyConstants.lightGrey!,
+                    ),
                   ),
-                  maxLines: 1,
+                  child: Text(
+                    'Request assistant',
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: _vm.isReady ? Colors.white :
+                          theme.scaffoldBackgroundColor == Colors.white ?
+                              MyConstants.darkGrey :
+                              MyConstants.lightGrey,
+                    ),
+                    maxLines: 1,
+                  ),
                 ),
               ),
             ),

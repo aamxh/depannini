@@ -5,6 +5,7 @@ import 'package:depannini_user/core/helpers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:geolocator/geolocator.dart';
@@ -32,8 +33,8 @@ class LocationApi {
   static Future<String?> getLocationDescription(LatLng latLng) async {
     final url = "${MyConstants.reverseGeoCodingApiBaseUrl}${latLng.latitude},"
         "${latLng.longitude}&key=$androidMapsSdkKey";
-    final setLocationVM = SetLocationVM();
-    setLocationVM.changeIsAddressValid(false);
+    final setLocationVM = Get.find<SetLocationVM>();
+    setLocationVM.isAddressValid = false;
     try {
       final Response<Map<String, dynamic>> res = await Dio().get(url);
       if (res.statusCode == 200) {
@@ -41,7 +42,7 @@ class LocationApi {
         if (results.isEmpty) return null;
         final String? address =  results[0]['formatted_address'];
         if (address == null) return null;
-        setLocationVM.changeIsAddressValid(true);
+        setLocationVM.isAddressValid = true;
         return address;
       }
       return null;
