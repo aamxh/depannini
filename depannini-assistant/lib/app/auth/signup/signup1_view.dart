@@ -58,11 +58,13 @@ class SignUp1V extends StatelessWidget {
                       minHeight: size.height * 0.05,
                       minWidth: size.width * 0.25,
                       borderColor: [theme.colorScheme.secondary],
-                      borderWidth: 2,
+                      borderWidth: 1,
                       dividerColor: MyConstants.mediumGrey!,
                       fontSize: 18,
                       cornerRadius: 20,
-                      onToggle: (idx) => _vm.serviceType = idx!,
+                      onToggle: (idx) {
+                        _vm.serviceType = idx! == 0 ? 'towing' : 'repair';
+                      },
                     ),
                   ),
                   SizedBox(height: size.height * 0.09,),
@@ -90,7 +92,7 @@ class SignUp1V extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                             borderSide: BorderSide(
                               color: MyConstants.primaryC,
-                              width: 2,
+                              width: 1,
                             ),
                           ),
                         ),
@@ -118,7 +120,7 @@ class SignUp1V extends StatelessWidget {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(20),
                             borderSide: BorderSide(
-                              width: 2,
+                              width: 1,
                               color: theme.colorScheme.secondary,
                             ),
                           ),
@@ -129,7 +131,7 @@ class SignUp1V extends StatelessWidget {
                               color: MyConstants.primaryC,
                             ),
                           ),
-                          hintText: 'Ex: 2425 016 00',
+                          hintText: 'Ex: 24251600',
                           hintStyle: theme.textTheme.bodyLarge!.copyWith(
                             color: MyConstants.mediumGrey,
                           ),
@@ -150,7 +152,7 @@ class SignUp1V extends StatelessWidget {
                       SizedBox(height: 10,),
                       ToggleSwitch(
                         totalSwitches: 2,
-                        labels: ['B', "C"],
+                        labels: ["B", "C"],
                         initialLabelIndex: 0,
                         inactiveBgColor: theme.scaffoldBackgroundColor,
                         activeBgColor: [MyConstants.primaryC],
@@ -159,10 +161,12 @@ class SignUp1V extends StatelessWidget {
                         minHeight: size.height * 0.05,
                         minWidth: size.width * 0.2,
                         borderColor: [theme.colorScheme.secondary],
-                        borderWidth: 2,
+                        borderWidth: 1,
                         fontSize: 20,
                         cornerRadius: 20,
-                        onToggle: (idx) => _vm.licenseCat = (idx!),
+                        onToggle: (idx) {
+                          _vm.drivingLicenseCat = idx! == 0 ? 'b' : 'c';
+                        },
                       ),
                     ],
                   ),
@@ -185,12 +189,15 @@ class SignUp1V extends StatelessWidget {
                         minHeight: size.height * 0.05,
                         minWidth: size.width * 0.2,
                         borderColor: [theme.colorScheme.secondary],
-                        borderWidth: 2,
+                        borderWidth: 1,
                         dividerColor: MyConstants.mediumGrey!,
                         dividerMargin: 0,
                         fontSize: 18,
                         cornerRadius: 20,
-                        onToggle: (idx) => _vm.vehicleType = idx!,
+                        onToggle: (idx) {
+                          _vm.vehicleType = idx! == 0 ?
+                          'car' : idx == 1 ? 'van' : 'truck';
+                        },
                       ),
                     ],
                   ),
@@ -214,8 +221,6 @@ class SignUp1V extends StatelessWidget {
                       ));
                     }
                     else {
-                      _vm.regNum = _regNumCtrl.text;
-                      _vm.licenseNum = _licenseNumCtrl.text;
                       Get.to(() => SignUp2V());
                     }
                   }

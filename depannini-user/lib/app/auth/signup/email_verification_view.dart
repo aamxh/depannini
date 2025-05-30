@@ -6,6 +6,7 @@ import 'package:depannini_user/core/constants.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pinput/pinput.dart';
 import '../../main/home_view.dart';
 
@@ -100,6 +101,7 @@ class EmailVerificationV extends StatelessWidget {
                         email: vm.email,
                         password: vm.password,
                         phoneNum: vm.num,
+                        location: vm.location,
                       ));
                       Get.back();
                       if (res) {
@@ -107,7 +109,6 @@ class EmailVerificationV extends StatelessWidget {
                         Get.offAll(() => HomeV());
                       }
                     } else {
-                      Get.back();
                       Get.showSnackbar(GetSnackBar(
                         messageText: Text(
                           'Either the code validity has expired or you\'ve '

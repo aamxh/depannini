@@ -110,7 +110,7 @@ class PhoneNumberVS extends State<PhoneNumberV> {
               ElevatedButton(
                 onPressed: () {
                   if (_key.currentState!.validate()) {
-                    Get.find<ClientVM>().num = (_ctrl.text);
+                    Get.find<ClientVM>().num = ("+213${_ctrl.text}");
                     Get.to(() => PhoneNumberVerificationV());
                   }
                 },

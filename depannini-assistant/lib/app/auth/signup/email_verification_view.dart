@@ -1,4 +1,7 @@
+import 'package:depannini_assistant/app/auth/auth_api.dart';
 import 'package:depannini_assistant/app/auth/signup/email_verification_view_model.dart';
+import 'package:depannini_assistant/app/main/assistant_view_model.dart';
+import 'package:depannini_assistant/app/main/models/assistant.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
@@ -93,7 +96,25 @@ class EmailVerificationV extends StatelessWidget {
                   final res = EmailOTP.verifyOTP(otp: _vm.code.value);
                   Get.back();
                   if (res) {
-                    Get.offAll(() => HomeV());
+                    final vm = Get.find<AssistantVM>();
+                    final res = await AuthApi.signUpUser(Assistant(
+                      name: vm.name,
+                      email: vm.email,
+                      password: vm.password,
+                      phoneNum: vm.phoneNumber,
+                      currentLat: vm.currentLat,
+                      currentLng: vm.currentLng,
+                      serviceType: vm.serviceType,
+                      vehicleType: vm.vehicleType,
+                      drivingLicenseCat: vm.drivingLicenseCat,
+                      drivingLicenseNum: vm.drivingLicenseNum,
+                      drivingLicenseExpiry: vm.drivingLicenseExpiry,
+                      vehicleRegistrationNumber: vm.vehicleRegistrationNumber,
+                    ));
+                    if (res) {
+                      Get.delete<AssistantVM>();
+                      Get.offAll(() => HomeV());
+                    }
                   } else {
                     Get.showSnackbar(GetSnackBar(
                       messageText: Text(

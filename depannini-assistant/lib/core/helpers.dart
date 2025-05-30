@@ -1,4 +1,6 @@
 import 'package:depannini_assistant/app/main/assistant_view_model.dart';
+import 'package:depannini_assistant/app/main/models/assistant.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyHelpers {
@@ -27,22 +29,55 @@ class MyHelpers {
   }
 
   static String? validateRegistrationNumber(String val) {
-    RegExp exp = RegExp(r'^\d{4} \d{3} \d{2}$');
     if (val.isEmpty) return 'Empty field!';
-    if (!exp.hasMatch(val)) return 'Invalid vehicle registration number!';
+    if (!val.isNum) return 'Invalid vehicle registration number!';
+    if (val.length < 8) return 'Invalid vehicle registration number!';
     return null;
   }
 
   static String? vehicleTypeMatchesLicenseCategory(AssistantVM vm) {
-    if (vm.serviceType == 0) {
-      if (vm.licenseCat != 1) return "You can't do towing with this driving license category!";
-      if (vm.vehicleType != 2) return "You can't do towing with this vehicle type!";
+    if (vm.serviceType == 'towing') {
+      if (vm.drivingLicenseCat != 'c') return "You can't do towing with this driving license category!";
+      if (vm.vehicleType != 'truck') return "You can't do towing with this vehicle type!";
     }
     else {
-      if (vm.licenseCat == 1) return "You can't do repairing with this driving license category!";
-      if (vm.vehicleType == 2) return "You can't do repairing with this vehicle type!";
+      if (vm.drivingLicenseCat == 'c') return "You can't do repairing with this driving license category!";
+      if (vm.vehicleType == 'truck') return "You can't do repairing with this vehicle type!";
     }
     return null;
+  }
+
+  static Map<String, dynamic> modifySignUpDataFormat(Assistant assistant) {
+    Map<String, dynamic> assistantMap = assistant.toJson();
+    assistantMap.addAll({
+    'password_confirm': assistantMap['password'],
+    'user_type': "assistant"
+    });
+    assistantMap.remove('email');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'phoneNum');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'serviceType');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'vehicleType');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'currentLat');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'currentLng');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'drivingLicenseCat');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'drivingLicenseNum');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'drivingLicenseExpiry');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'vehicleRegistrationNumber');
+    return assistantMap;
+  }
+
+  static Map<String, dynamic> modifyCamelToSnakeForOneKey(Map<String, dynamic> map, String key) {
+    final String val = map[key];
+    map.remove(key);
+    map[camelToSnake(key)] = val;
+    return map;
+  }
+
+  static String camelToSnake(String input) {
+    return input.replaceAllMapped(
+      RegExp(r'([a-z])([A-Z])'),
+          (Match m) => '${m.group(1)}_${m.group(2)}',
+    ).toLowerCase();
   }
 
 }

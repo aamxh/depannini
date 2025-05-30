@@ -13,10 +13,15 @@ class AuthApi {
     final dio = Dio();
     final clientMap = client.toJson();
     clientMap.addAll({
-      'address': null,
-      'password_confirm': null,
-      'user_type': client
+      'password_confirm': clientMap['password'],
+      'user_type': "client"
     });
+    clientMap.remove('email');
+    clientMap.remove('location');
+    final String num = clientMap['phoneNum'];
+    clientMap.remove('phoneNum');
+    clientMap['phone_number'] = num;
+    print(clientMap);
     try {
       final res = await dio.post('$baseUrl/auth/register/',
         data: jsonEncode(clientMap),);

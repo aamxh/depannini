@@ -16,7 +16,7 @@ class ClientVM extends GetxController {
   set location(LatLng val) => _location.value = val;
 
   String get name => _name.value;
-  String get num => _name.value;
+  String get num => _num.value;
   String get password => _password.value;
   String get email => _email.value;
   LatLng get location => _location.value;

@@ -61,8 +61,8 @@ class EnableLocationV extends StatelessWidget {
                     Get.back;
                     if (res == null) return;
                     Get.put(AssistantVM());
-                    Get.find<AssistantVM>().location =
-                    (LatLng(res.latitude!, res.longitude!));
+                    Get.find<AssistantVM>().currentLat = res.latitude!;
+                    Get.find<AssistantVM>().currentLng = res.longitude!;
                     Get.off(() => WelcomeV());
                   },
                   style: ElevatedButton.styleFrom(

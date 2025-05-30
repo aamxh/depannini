@@ -11,6 +11,8 @@ Client _$ClientFromJson(Map<String, dynamic> json) => Client(
       email: json['email'] as String,
       password: json['password'] as String,
       phoneNum: json['phoneNum'] as String,
+      location: const LatLngConverter()
+          .fromJson(json['location'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$ClientToJson(Client instance) => <String, dynamic>{
@@ -18,4 +20,5 @@ Map<String, dynamic> _$ClientToJson(Client instance) => <String, dynamic>{
       'email': instance.email,
       'password': instance.password,
       'phoneNum': instance.phoneNum,
+      'location': const LatLngConverter().toJson(instance.location),
     };
