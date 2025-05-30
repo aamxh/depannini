@@ -1,4 +1,5 @@
 import 'package:depannini_user/app/assistance/repair/repair_view_model.dart';
+import 'package:depannini_user/app/assistance/set_location_view_model.dart';
 import 'package:depannini_user/app/assistance/towing/towing_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';

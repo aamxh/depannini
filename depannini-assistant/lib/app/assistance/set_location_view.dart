@@ -25,7 +25,7 @@ class _SetLocationVS extends State<SetLocationV> {
   Future<void> _initState() async {
     final locData = await MyLocationRepo.getCurrentLocation();
     if (locData == null) return;
-    _vm.changeLocation(LatLng(locData.latitude ?? 0, locData.longitude ?? 0));
+    _vm.location = (LatLng(locData.latitude ?? 0, locData.longitude ?? 0));
     _vm.changeAddress(LatLng(locData.latitude ?? 0, locData.longitude ?? 0));
   }
 
@@ -62,7 +62,7 @@ class _SetLocationVS extends State<SetLocationV> {
                       )));
                 },
                 onTap: (LatLng position) {
-                  _vm.changeLocation(position);
+                  _vm.location = (position);
                   _vm.changeAddress(position);
                   _marker = Marker(
                     markerId: MarkerId('Selected Location'),
@@ -71,7 +71,7 @@ class _SetLocationVS extends State<SetLocationV> {
                   );
                 },
                 initialCameraPosition: CameraPosition(
-                  target: _vm.location,
+                  target: _vm.location!,
                   zoom: 17,
                 ),
                 myLocationEnabled: true,
@@ -98,7 +98,7 @@ class _SetLocationVS extends State<SetLocationV> {
                 SizedBox(height: 10,),
                 ElevatedButton(
                   onPressed: () {
-                    if (_vm.isAddressValid()) {
+                    if (_vm.isAddressValid) {
                       Get.delete<SetLocationVM>();
                       //save location to database
                       Get.back();
@@ -108,13 +108,13 @@ class _SetLocationVS extends State<SetLocationV> {
                     elevation: 0,
                     fixedSize: Size(size.width * 0.5, size.height * 0.064),
                     backgroundColor:
-                    _vm.isAddressValid() ?
+                    _vm.isAddressValid ?
                     MyConstants.primaryC :
                     theme.scaffoldBackgroundColor == Colors.white ?
                     MyConstants.lightGrey :
                     MyConstants.darkGrey,
                     side: BorderSide(
-                      color: _vm.isAddressValid() ?
+                      color: _vm.isAddressValid ?
                       MyConstants.primaryC :
                       theme.scaffoldBackgroundColor == Colors.white ?
                       MyConstants.mediumGrey! :
@@ -124,7 +124,7 @@ class _SetLocationVS extends State<SetLocationV> {
                   child: Text(
                     'Confirm location',
                     style: theme.textTheme.titleSmall!.copyWith(
-                      color: _vm.isAddressValid() ?
+                      color: _vm.isAddressValid ?
                       Colors.white :
                       theme.colorScheme.secondary,
                     ),
