@@ -83,7 +83,7 @@ class UpdateLocationView(views.APIView):
     """View for updating user's location"""
     permission_classes = [IsAuthenticated]
 
-    def patch(self, request):
+    def put(self, request):
         serializer = UpdateLocationSerializer(data=request.data)
         if serializer.is_valid():
             user = request.user
@@ -108,7 +108,7 @@ class AssistantStatusView(views.APIView):
     """View for toggling assistant active status"""
     permission_classes = [IsAuthenticated]
 
-    def patch(self, request):
+    def put(self, request):
         if request.user.user_type != 'assistant':
             return Response({
                 'success': False,

@@ -41,19 +41,18 @@ Content-Type: application/json
 
 POST http://localhost:8000/api/auth/verify-email/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3OTM1ODUzLCJpYXQiOjE3NDczMzEwNTMsImp0aSI6IjM4MWRmNDIzMjAyODRiYWY5ZDliYWE2ODVkMTQ0YTkxIiwidXNlcl9pZCI6MTh9.M8sSNcV9ON1VBS_L9HHjYb3y1-pvXIpvMSjgHs5TS6w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MjA3Nzg4LCJpYXQiOjE3NDg2MDI5ODgsImp0aSI6IjlkN2I1ODJjMGIyODQ2MjFhMjNlNzU5YTQyNjhkOThjIiwidXNlcl9pZCI6MX0.044c8GhgTMOnJthdkjaMMo19f0Y0hPFMq3grN1Q6VGA
 
 ###
-
-
 POST http://localhost:8000/api/auth/verify-email/confirm/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3OTM1ODUzLCJpYXQiOjE3NDczMzEwNTMsImp0aSI6IjM4MWRmNDIzMjAyODRiYWY5ZDliYWE2ODVkMTQ0YTkxIiwidXNlcl9pZCI6MTh9.M8sSNcV9ON1VBS_L9HHjYb3y1-pvXIpvMSjgHs5TS6w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MjA3Nzg4LCJpYXQiOjE3NDg2MDI5ODgsImp0aSI6IjlkN2I1ODJjMGIyODQ2MjFhMjNlNzU5YTQyNjhkOThjIiwidXNlcl9pZCI6MX0.044c8GhgTMOnJthdkjaMMo19f0Y0hPFMq3grN1Q6VGA
 
 {
-    "code" : 14884
+    "code" : 06197
 }
 ###
+
 POST http://localhost:8000/api/auth/password-reset/ HTTP/1.1
 Content-Type: application/json
 
@@ -79,7 +78,7 @@ POST http://localhost:8000/api/auth/login/phone/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "phone_number": "0658025173",
+    "phone_number": "0540",
     "password": "test"
 }
 
