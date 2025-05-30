@@ -4,7 +4,6 @@ import "package:depannini_assistant/core/constants.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 import "package:pinput/pinput.dart";
-import 'package:depannini_assistant/app/auth/signup/signup2_view.dart';
 
 class PhoneNumberVerificationV extends StatelessWidget {
 

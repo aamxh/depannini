@@ -47,7 +47,7 @@ class EnableLocationV extends StatelessWidget {
                     style: theme.textTheme.bodyMedium,
                   ),
                 ),
-                SizedBox(height: size.height * 0.04,),
+                SizedBox(height: size.height * 0.06,),
                 ElevatedButton(
                   onPressed: () async {
                     Get.dialog(

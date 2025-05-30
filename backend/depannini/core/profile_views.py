@@ -83,20 +83,19 @@ class UpdateLocationView(views.APIView):
     """View for updating user's location"""
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def patch(self, request):
         serializer = UpdateLocationSerializer(data=request.data)
         if serializer.is_valid():
             user = request.user
-            user.location = {
-                'latitude': serializer.validated_data['latitude'],
-                'longitude': serializer.validated_data['longitude']
-            }
+            user.current_lat = serializer.validated_data['lat']
+            user.current_lng = serializer.validated_data['lng']
             user.save()
 
             return Response({
                 'success': True,
                 'message': 'Location updated successfully',
-                'location': user.location
+                'latitude': user.current_lat,
+                'longitude': user.current_lng
             }, status=status.HTTP_200_OK)
 
         return Response({
@@ -109,7 +108,7 @@ class AssistantStatusView(views.APIView):
     """View for toggling assistant active status"""
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def patch(self, request):
         if request.user.user_type != 'assistant':
             return Response({
                 'success': False,

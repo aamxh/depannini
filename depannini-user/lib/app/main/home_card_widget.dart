@@ -18,6 +18,9 @@ class CardW extends StatelessWidget {
     final theme = Theme.of(context);
     return GestureDetector(
       onTap: () {
+        Get.put(SetLocationVM());
+        Get.put(TowingVM());
+        Get.put(RepairVM());
         if (isTowing) {
           Get.put(TowingVM());
           Get.to(() => TowingV());

@@ -118,9 +118,14 @@ class Assistance(models.Model):
         ('canceled', 'Canceled')
     ]
 
-    ASSISTANCE_STATUE_TYPE = [
+    ASSISTANCE_TYPE_CHOICES = [
         ('repair', 'Repair'),
         ('towing', 'Towing'),
+    ]
+
+    VEHICLE_TYPE_CHOICES = [
+        ('light', 'Light'),
+        ('heavy', 'Heavy'),
     ]
 
     client = models.ForeignKey(
@@ -136,8 +141,12 @@ class Assistance(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, blank=True, auto_now=True)
 
+    assistance_type = models.CharField(choices=ASSISTANCE_TYPE_CHOICES)
+    description = models.TextField(null=True, blank=True)
+    vehicle_type = models.CharField(
+        max_length=100, blank=True, null=True, choices=VEHICLE_TYPE_CHOICES)
     status = models.CharField(max_length=10, choices=ASSISTANCE_STATUE_CHOICES)
-    rating = models.SmallIntegerField(default=0)
+    rating = models.FloatField(default=0)
 
     distance_km = models.FloatField(default=0.0)
     total_price = models.DecimalField(

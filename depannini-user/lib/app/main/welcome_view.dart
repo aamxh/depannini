@@ -1,7 +1,6 @@
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../auth/signin/signin_view.dart';
 import '../auth/signup/phone_number_view.dart';
 

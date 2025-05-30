@@ -73,7 +73,6 @@ class HomeV extends StatelessWidget {
             ],
           ),
           SizedBox(height: size.height * 0.02,),
-          SizedBox(height: size.height * 0.02,),
         ],
       ),
     );

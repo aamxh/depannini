@@ -13,29 +13,50 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'email', 'name', 'phone_number',
-            'profile_photo', 'location',
+            'profile_photo', 'current_lat', 'current_lng',
             'address'
         ]
+        extra_kwargs = {
+            'phone_number': {'required': False, 'allow_blank': True},
+            'name': {'required': False, 'allow_blank': True}
+        }
 
 
 class AssistantSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'email', 'name', 'phone_number', 'profile_photo', 'location',
+            'email', 'name', 'phone_number', 'profile_photo', 'current_lat', 'current_lng',
             'address', 'service_type', 'vehicle_type',
         ]
 
 
 class AssistantProfileSerializer(serializers.ModelSerializer):
+
+    driving_license_expiry = serializers.DateField(
+        input_formats=["%d:%m:%y"],
+        format="%d:%m:%y",
+        required=False
+    )
+
     class Meta:
         model = User
         fields = [
-            'email', 'name', 'phone_number', 'profile_photo', 'location',
+            'email', 'name', 'phone_number', 'profile_photo', 'current_lat', 'current_lng',
             'address', 'service_type', 'vehicle_type', 'is_active_assistant',
             'driving_license_cat', 'driving_license_num', 'driving_license_expiry',
             'vehicle_registration_num',
         ]
+        extra_kwargs = {
+            'phone_number': {'required': False, 'allow_blank': True},
+            'name': {'required': False, 'allow_blank': True}
+        }
+
+    def validate(self, attrs):
+        if attrs.get('driving_license_expiry') is not None and attrs.get('driving_license_expiry') < date.today():
+            raise serializers.ValidationError(
+                "Expiry date cannot be in the past.")
+        return attrs
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -53,7 +74,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     driving_license_expiry = serializers.DateField(
         input_formats=["%d:%m:%y"],
-        format=["%d:%m:%y"],
+        format="%d:%m:%y",
         required=False
     )
 
@@ -104,7 +125,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
 
 class EmailVerificationSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    # email = serializers.EmailField()
     code = serializers.CharField(max_length=5)
 
 
@@ -114,11 +135,11 @@ class PhoneVerificationSerializer(serializers.Serializer):
 
 
 class PasswordResetRequestSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    phone_number = serializers.CharField()
 
 
 class PasswordResetConfirmSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    phone_number = serializers.CharField()
     code = serializers.CharField(max_length=5)
     new_password = serializers.CharField(
         validators=[validate_password],
@@ -155,8 +176,8 @@ class GoogleLoginSerializer(serializers.Serializer):
 
 
 class UpdateLocationSerializer(serializers.Serializer):
-    latitude = serializers.FloatField()
-    longitude = serializers.FloatField()
+    lat = serializers.FloatField()
+    lng = serializers.FloatField()
 
 
 class UserAssistanceSerializer(serializers.ModelSerializer):
@@ -181,7 +202,7 @@ class AssistanceSerializer(serializers.ModelSerializer):
             'id', 'status', 'client', 'assistant',
             'pickupLocation', 'dropoffLocation',
             'distance_km', 'total_price',
-            'createdAt', 'updatedAt'
+            'createdAt', 'updatedAt', 'assistance_type', 'rating'
         ]
 
     def get_pickupLocation(self, obj):
@@ -194,9 +215,34 @@ class AssistanceSerializer(serializers.ModelSerializer):
 
 
 class AssistanceRequestSerializer(serializers.Serializer):
+    ASSISTANCE_TYPE_CHOICES = (
+        ("towing", "Towing"),
+        ("repair", "Repair")
+    )
+
+    VEHICLE_TYPE_CHOICES = [
+        ('light', 'Light'),
+        ('heavy', 'Heavy'),
+    ]
+
     pickup = serializers.DictField(child=serializers.FloatField())
     dropoff = serializers.DictField(
         child=serializers.FloatField(), required=False)
+    assistance_type = serializers.ChoiceField(choices=ASSISTANCE_TYPE_CHOICES)
+    vehicle_type = serializers.ChoiceField(
+        choices=VEHICLE_TYPE_CHOICES, required=False)
+
+    def validate(self, attrs):
+        if attrs['assistance_type'] == 'repair' and not attrs.get('description'):
+            raise serializers.ValidationError(
+                {"description": "This field is required for assistance of type repair"})
+        if attrs['assistance_type'] == 'towing' and not attrs.get('dropoff'):
+            raise serializers.ValidationError(
+                {"dropoff": "This field is required for assistance of type towing"})
+        if attrs['assistance_type'] == 'towing' and not attrs.get('vehicle_type'):
+            raise serializers.ValidationError(
+                {"vehicle_type": "This field is required for assistance of type towing"})
+        return attrs
 
 
 class LocationUpdateSerializer(serializers.Serializer):

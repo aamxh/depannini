@@ -96,6 +96,7 @@ class _SetLocationVS extends State<SetLocationV> {
                     style: theme.textTheme.bodyMedium,
                     textAlign: TextAlign.center,
                     maxLines: 2,
+                    overflow: TextOverflow.clip,
                   ),
                   SizedBox(height: 10,),
                   ElevatedButton(
@@ -121,11 +122,15 @@ class _SetLocationVS extends State<SetLocationV> {
                       backgroundColor:
                       _vm.isAddressValid ?
                       MyConstants.primaryC :
-                      MyConstants.lightGrey,
+                      theme.scaffoldBackgroundColor == Colors.white ?
+                      MyConstants.lightGrey :
+                      MyConstants.darkGrey,
                       side: BorderSide(
                         color: _vm.isAddressValid ?
                             MyConstants.primaryC :
-                            MyConstants.mediumGrey!,
+                            theme.scaffoldBackgroundColor == Colors.white ?
+                            MyConstants.mediumGrey! :
+                            MyConstants.lightGrey!,
                       ),
                     ),
                     child: Text(

@@ -3,7 +3,7 @@ from django.urls import path
 
 
 from .auth_views import (
-    RegisterView, EmailVerificationView, PhoneVerificationView,
+    RegisterView, EmailVerificationView, EmailVerificationRequestView, PhoneVerificationView,
     PasswordResetRequestView, PasswordResetConfirmView,
     EmailLoginView, PhoneLoginView, GoogleLoginView,
     ResendVerificationView
@@ -20,23 +20,30 @@ from .assistance_views import (
     AssistanceRequestView,
     AssistanceListDetailView,
     AcceptAssistanceView,
-    AssistanceUpdateView,
-
+    AssistanceStatusUpdateView,
+    AssistancePriceUpdateView,
+    AssistanceRatingUpdateView
 )
 
 urlpatterns = [
     # Authentication URLs
     path('auth/register/', RegisterView.as_view(), name='register'),  # done
-    path('auth/verify-email/', EmailVerificationView.as_view(), name='verify-email'),
-    path('auth/verify-phone/', PhoneVerificationView.as_view(), name='verify-phone'),
+    path('auth/verify-email/', EmailVerificationRequestView.as_view(),
+         name='verify-email'),  #
+    path('auth/verify-email/confirm/', EmailVerificationView.as_view(),
+         name='verify-email-confirm'),  #
+
+    path('auth/verify-phone/', PhoneVerificationView.as_view(),
+         name='verify-phone'),  # done
+
     path(
         'auth/password-reset/',
         PasswordResetRequestView.as_view(), name='password-reset'
-    ),
+    ),  # done
     path(
         'auth/password-reset/confirm/',
         PasswordResetConfirmView.as_view(), name='password-reset-confirm'
-    ),
+    ),  # done
     path(
         'auth/login/email/', EmailLoginView.as_view(),
         name='login-email'
@@ -45,15 +52,14 @@ urlpatterns = [
         'auth/login/phone/', PhoneLoginView.as_view(),
         name='login-phone'
     ),  # done
-    path('auth/login/google/', GoogleLoginView.as_view(), name='login-google'),
+    path('auth/login/google/', GoogleLoginView.as_view(),
+         name='login-google'),  # not working
     path(
         'auth/resend-verification/',
         ResendVerificationView.as_view(), name='resend-verification'
-    ),
-    path(
-        'auth/token/refresh/', TokenRefreshView.as_view(),
-        name='token-refresh'
-    ),  # done
+    ),  # not working
+    path('auth/token/refresh/', TokenRefreshView.as_view(),
+         name='token-refresh'),  # done
     path(
         'token/', TokenObtainPairView.as_view(),
         name='token_obtain_pair'
@@ -76,8 +82,8 @@ urlpatterns = [
         UpdateLocationView.as_view(), name='update-location'
     ),
     path(
-        'profile/assistant-status/',
-        AssistantStatusView.as_view(), name='assistant-status'
+        'profile/update-status/',
+        AssistantStatusView.as_view(), name='update-status'
     ),
     path('assistants/', AssistantListView.as_view(), name='assistant-list'),
 
@@ -100,7 +106,15 @@ urlpatterns = [
         name='assistance-accept'
     ),
     path(
-        'assistance/update/<int:assistance_id>/', AssistanceUpdateView.as_view(),
+        'assistance/update/status/<int:assistance_id>/', AssistanceStatusUpdateView.as_view(),
         name='status-update'
+    ),
+    path(
+        'assistance/update/price/<int:assistance_id>/', AssistancePriceUpdateView.as_view(),
+        name='price-update'
+    ),
+    path(
+        'assistance/update/rating/<int:assistance_id>/', AssistanceRatingUpdateView.as_view(),
+        name='rating-update'
     ),
 ]
