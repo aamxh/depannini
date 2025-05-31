@@ -63,7 +63,7 @@ class EnableLocationV extends StatelessWidget {
                     Get.put(AssistantVM());
                     Get.find<AssistantVM>().currentLat = res.latitude!;
                     Get.find<AssistantVM>().currentLng = res.longitude!;
-                    Get.off(() => WelcomeV());
+                    Get.to(() => WelcomeV());
                   },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(size.width * 0.7, size.height * 0.064),
@@ -82,7 +82,7 @@ class EnableLocationV extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     Get.put(AssistantVM());
-                    Get.off(() => WelcomeV());
+                    Get.to(() => WelcomeV());
                   },
                   child: Text(
                     'Skip for now',

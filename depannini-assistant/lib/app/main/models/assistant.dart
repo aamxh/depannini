@@ -8,7 +8,7 @@ class Assistant {
   final String name;
   final String email;
   final String password;
-  final String phoneNum;
+  final String phoneNumber;
   final double currentLat;
   final double currentLng;
   final String serviceType;
@@ -16,13 +16,13 @@ class Assistant {
   final String drivingLicenseCat;
   final String drivingLicenseNum;
   final String drivingLicenseExpiry;
-  final int vehicleRegistrationNumber;
+  final int vehicleRegistrationNum;
 
   Assistant({
     required this.name,
     required this.email,
     required this.password,
-    required this.phoneNum,
+    required this.phoneNumber,
     required this.currentLat,
     required this.currentLng,
     required this.serviceType,
@@ -30,7 +30,7 @@ class Assistant {
     required this.drivingLicenseCat,
     required this.drivingLicenseNum,
     required this.drivingLicenseExpiry,
-    required this.vehicleRegistrationNumber,
+    required this.vehicleRegistrationNum,
   });
 
   factory Assistant.fromJson(Map<String, dynamic> json) => _$AssistantFromJson(json);

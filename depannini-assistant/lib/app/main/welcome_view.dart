@@ -34,9 +34,7 @@ class WelcomeV extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.15,),
             ElevatedButton(
-              onPressed: () {
-                Get.to(() => PhoneNumberV());
-              },
+              onPressed: () => Get.to(() => PhoneNumberV()),
               style: ElevatedButton.styleFrom(
                 fixedSize: Size(size.width * 0.6, size.height * 0.064),
               ),
@@ -49,9 +47,7 @@ class WelcomeV extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.03,),
             ElevatedButton(
-              onPressed: () {
-                Get.to(SignInV());
-              },
+              onPressed: () => Get.to(SignInV()),
               style: ElevatedButton.styleFrom(
                 elevation: 0,
                 backgroundColor: theme.scaffoldBackgroundColor,

@@ -180,7 +180,7 @@ class SignUp1V extends StatelessWidget {
                       SizedBox(height: 10,),
                       ToggleSwitch(
                         totalSwitches: 3,
-                        labels: ['Car', "Van", 'Truck'],
+                        labels: ["Car", "Van", "Truck"],
                         initialLabelIndex: 0,
                         inactiveBgColor: theme.scaffoldBackgroundColor,
                         activeBgColor: [MyConstants.primaryC],
@@ -195,8 +195,13 @@ class SignUp1V extends StatelessWidget {
                         fontSize: 18,
                         cornerRadius: 20,
                         onToggle: (idx) {
-                          _vm.vehicleType = idx! == 0 ?
-                          'car' : idx == 1 ? 'van' : 'truck';
+                          if (idx == 0) {
+                            _vm.vehicleType = 'car';
+                          } else if (idx == 1) {
+                            _vm.vehicleType = 'van';
+                          } else {
+                            _vm.vehicleType = 'truck';
+                          }
                         },
                       ),
                     ],
@@ -221,6 +226,8 @@ class SignUp1V extends StatelessWidget {
                       ));
                     }
                     else {
+                      _vm.drivingLicenseNum = _licenseNumCtrl.text;
+                      _vm.vehicleRegistrationNum = int.parse(_regNumCtrl.text);
                       Get.to(() => SignUp2V());
                     }
                   }

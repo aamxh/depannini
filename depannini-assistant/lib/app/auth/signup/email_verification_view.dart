@@ -101,7 +101,7 @@ class EmailVerificationV extends StatelessWidget {
                       name: vm.name,
                       email: vm.email,
                       password: vm.password,
-                      phoneNum: vm.phoneNumber,
+                      phoneNumber: vm.phoneNumber,
                       currentLat: vm.currentLat,
                       currentLng: vm.currentLng,
                       serviceType: vm.serviceType,
@@ -109,7 +109,7 @@ class EmailVerificationV extends StatelessWidget {
                       drivingLicenseCat: vm.drivingLicenseCat,
                       drivingLicenseNum: vm.drivingLicenseNum,
                       drivingLicenseExpiry: vm.drivingLicenseExpiry,
-                      vehicleRegistrationNumber: vm.vehicleRegistrationNumber,
+                      vehicleRegistrationNum: vm.vehicleRegistrationNum,
                     ));
                     if (res) {
                       Get.delete<AssistantVM>();

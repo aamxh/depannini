@@ -8,12 +8,12 @@ class AssistantVM extends GetxController {
   final Rx<String> _phoneNumber = ''.obs;
   final RxDouble _currentLat = 0.0.obs;
   final RxDouble _currentLng = 0.0.obs;
-  final Rx<String> _serviceType = ''.obs;
+  final Rx<String> _serviceType = 'towing'.obs;
   final Rx<String> _drivingLicenseCat = ''.obs;
   final Rx<String> _vehicleType = ''.obs;
-  final RxInt _vehicleRegistrationNumber = 0.obs;
+  final RxInt _vehicleRegistrationNum = 0.obs;
   final Rx<String> _drivingLicenseNum = ''.obs;
-  final Rx<String> _drivingLicenseExpiry = ''.obs;
+  final Rx<String> _drivingLicenseExpiry = '10:02:26'.obs;
 
   set name(String val) => _name.value = val;
   set phoneNumber(String val) => _phoneNumber.value = val;
@@ -24,7 +24,7 @@ class AssistantVM extends GetxController {
   set serviceType(String val) => _serviceType.value = val;
   set drivingLicenseCat(String val) => _drivingLicenseCat.value = val;
   set vehicleType(String val) => _vehicleType.value = val;
-  set vehicleRegistrationNumber(int val) => _vehicleRegistrationNumber.value = val;
+  set vehicleRegistrationNum(int val) => _vehicleRegistrationNum.value = val;
   set drivingLicenseNum(String val) => _drivingLicenseNum.value = val;
   set drivingLicenseExpiry(String val) => _drivingLicenseExpiry.value = val;
 
@@ -37,7 +37,7 @@ class AssistantVM extends GetxController {
   String get serviceType => _serviceType.value;
   String get drivingLicenseCat => _drivingLicenseCat.value;
   String get vehicleType => _vehicleType.value;
-  int get vehicleRegistrationNumber => _vehicleRegistrationNumber.value;
+  int get vehicleRegistrationNum => _vehicleRegistrationNum.value;
   String get drivingLicenseNum => _drivingLicenseNum.value;
   String get drivingLicenseExpiry => _drivingLicenseExpiry.value;
 

@@ -54,7 +54,7 @@ class MyHelpers {
     'user_type': "assistant"
     });
     assistantMap.remove('email');
-    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'phoneNum');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'phoneNumber');
     assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'serviceType');
     assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'vehicleType');
     assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'currentLat');
@@ -62,12 +62,12 @@ class MyHelpers {
     assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'drivingLicenseCat');
     assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'drivingLicenseNum');
     assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'drivingLicenseExpiry');
-    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'vehicleRegistrationNumber');
+    assistantMap = modifyCamelToSnakeForOneKey(assistantMap, 'vehicleRegistrationNum');
     return assistantMap;
   }
 
   static Map<String, dynamic> modifyCamelToSnakeForOneKey(Map<String, dynamic> map, String key) {
-    final String val = map[key];
+    final val = map[key];
     map.remove(key);
     map[camelToSnake(key)] = val;
     return map;
