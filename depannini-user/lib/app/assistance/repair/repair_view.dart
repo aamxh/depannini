@@ -1,3 +1,5 @@
+import 'package:depannini_user/app/assistance/assistance_api.dart';
+import 'package:depannini_user/app/assistance/models/assistance_request.dart';
 import 'package:depannini_user/app/assistance/repair/repair_assistant_view.dart';
 import 'package:depannini_user/app/assistance/repair/repair_view_model.dart';
 import 'package:depannini_user/app/assistance/location_field_widget.dart';
@@ -64,6 +66,7 @@ class RepairV extends StatelessWidget {
                     ),
                   ),
                 ),
+                onChanged: (val) => _vm.desc = val,
                 style: theme.textTheme.bodyLarge,
                 validator: (val) {
                   if (val!.isEmpty) return 'Description field cannot be empty!';
@@ -74,12 +77,33 @@ class RepairV extends StatelessWidget {
               Center(
                 child: Obx(() =>
                   ElevatedButton(
-                    onPressed: () {
-                      //if (_vm.isReady) {
-                        if (_formKey.currentState!.validate()) {
-                          Get.to(() => RepairAssistantV());
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate()) {
+                        Get.dialog(
+                          Center(
+                            child: CircularProgressIndicator(
+                              color: MyConstants.primaryC,
+                            ),
+                          ),
+                          barrierDismissible: false,
+                        );
+                        final res = await AssistanceAPI.requestAssistance(AssistanceRequest(
+                          assistanceType: 'repair',
+                          vehicleType: 'light',
+                          pickup: {
+                            "lat": _vm.location.latitude,
+                            "lng": _vm.location.longitude
+                          },
+                          dropOff: {
+                            "lat": _vm.location.latitude,
+                            "lng": _vm.location.longitude
+                          },
+                        ));
+                        Get.back();
+                        if (res) {
+                          Get.off(() => RepairAssistantV());
                         }
-                      //}
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       fixedSize: Size(size.width * 0.6, size.height * 0.064),

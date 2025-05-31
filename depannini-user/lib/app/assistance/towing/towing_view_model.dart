@@ -22,7 +22,7 @@ class TowingVM extends GetxController {
   String get toAddress => _toAddress.value;
   bool get isReady {
     if (fromAddress == "Location not specified." || fromAddress.isEmpty) return false;
-    if (toAddress == "Location not specified." || fromAddress.isEmpty) return false;
+    if (toAddress == "Location not specified." || toAddress.isEmpty) return false;
     return true;
   }
 

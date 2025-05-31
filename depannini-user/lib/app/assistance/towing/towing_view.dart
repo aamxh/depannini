@@ -1,3 +1,5 @@
+import 'package:depannini_user/app/assistance/assistance_api.dart';
+import 'package:depannini_user/app/assistance/models/assistance_request.dart';
 import 'package:depannini_user/app/assistance/towing/towing_assistant_view.dart';
 import 'package:depannini_user/app/assistance/location_view.dart';
 import 'package:depannini_user/app/assistance/location_field_widget.dart';
@@ -63,10 +65,31 @@ class TowingV extends StatelessWidget {
             Center(
               child: Obx(() =>
                 ElevatedButton(
-                  onPressed: () {
-                    //if (_vm.isReady) {
-                      Get.to(() => TowingAssistantV());
-                    //}
+                  onPressed: () async {
+                    if (_vm.isReady) {
+                      Get.dialog(
+                        Center(child: CircularProgressIndicator(
+                          color: MyConstants.primaryC,
+                        ),),
+                        barrierDismissible: false,
+                      );
+                      final res = await AssistanceAPI.requestAssistance(AssistanceRequest(
+                        assistanceType: 'towing',
+                        vehicleType: _vm.isHeavy ? 'heavy' : 'light',
+                        pickup: {
+                          "lat": _vm.fromLocation.latitude,
+                          "lng": _vm.fromLocation.longitude
+                        },
+                        dropOff: {
+                          "lat": _vm.toLocation.latitude,
+                          "lng": _vm.toLocation.longitude
+                        },
+                      ));
+                      Get.back();
+                      if (res) {
+                        Get.off(() => TowingAssistantV());
+                      }
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(size.width * 0.6, size.height * 0.064),

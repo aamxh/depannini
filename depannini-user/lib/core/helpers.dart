@@ -25,4 +25,18 @@ class MyHelpers {
     }
   }
 
+  static Map<String, dynamic> modifyCamelToSnakeForOneKey(Map<String, dynamic> map, String key) {
+    final val = map[key];
+    map.remove(key);
+    map[camelToSnake(key)] = val;
+    return map;
+  }
+
+  static String camelToSnake(String input) {
+    return input.replaceAllMapped(
+      RegExp(r'([a-z])([A-Z])'),
+          (Match m) => '${m.group(1)}_${m.group(2)}',
+    ).toLowerCase();
+  }
+
 }
