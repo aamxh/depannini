@@ -1,3 +1,4 @@
+import 'package:depannini_user/app/auth/auth_wrapper_view.dart';
 import 'package:depannini_user/app/main/welcome_view.dart';
 import 'package:depannini_user/core/theme_controller.dart';
 import 'core/theme.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
         theme: MyTheme.lightTheme,
         darkTheme: MyTheme.darkTheme,
         themeMode: theme.isDark ? ThemeMode.dark : ThemeMode.light,
-        home: WelcomeV(),
+        home: AuthWrapperV(),
       ),
     );
   }

@@ -1,5 +1,5 @@
 import 'package:depannini_assistant/app/assistance/repair_request_details_view.dart';
-import 'package:depannini_assistant/app/main/enable_location_view.dart';
+import 'package:depannini_assistant/app/auth/auth_wrapper_view.dart';
 import 'package:depannini_assistant/core/theme_controller.dart';
 import 'core/theme.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
       theme: MyTheme.lightTheme,
       darkTheme: MyTheme.darkTheme,
       themeMode: themeCtrl.isDark ? ThemeMode.dark : ThemeMode.light,
-      home: EnableLocationV(),
+      home: AuthWrapperV(),
     );
   }
 
