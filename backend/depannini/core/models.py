@@ -124,8 +124,9 @@ class Assistance(models.Model):
     ]
 
     VEHICLE_TYPE_CHOICES = [
-        ('light', 'Light'),
-        ('heavy', 'Heavy'),
+        ('car', 'Car'),
+        ('van', 'Van'),
+        ('truck', 'Truck')
     ]
 
     client = models.ForeignKey(

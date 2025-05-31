@@ -37,23 +37,27 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:8000/api/auth/verify-email/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MjA3Nzg4LCJpYXQiOjE3NDg2MDI5ODgsImp0aSI6IjlkN2I1ODJjMGIyODQ2MjFhMjNlNzU5YTQyNjhkOThjIiwidXNlcl9pZCI6MX0.044c8GhgTMOnJthdkjaMMo19f0Y0hPFMq3grN1Q6VGA
 
+###
 
 POST http://localhost:8000/api/auth/verify-email/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3OTM1ODUzLCJpYXQiOjE3NDczMzEwNTMsImp0aSI6IjM4MWRmNDIzMjAyODRiYWY5ZDliYWE2ODVkMTQ0YTkxIiwidXNlcl9pZCI6MTh9.M8sSNcV9ON1VBS_L9HHjYb3y1-pvXIpvMSjgHs5TS6w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MjA3Nzg4LCJpYXQiOjE3NDg2MDI5ODgsImp0aSI6IjlkN2I1ODJjMGIyODQ2MjFhMjNlNzU5YTQyNjhkOThjIiwidXNlcl9pZCI6MX0.044c8GhgTMOnJthdkjaMMo19f0Y0hPFMq3grN1Q6VGA
 
 ###
-
 
 POST http://localhost:8000/api/auth/verify-email/confirm/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3OTM1ODUzLCJpYXQiOjE3NDczMzEwNTMsImp0aSI6IjM4MWRmNDIzMjAyODRiYWY5ZDliYWE2ODVkMTQ0YTkxIiwidXNlcl9pZCI6MTh9.M8sSNcV9ON1VBS_L9HHjYb3y1-pvXIpvMSjgHs5TS6w
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MjA3Nzg4LCJpYXQiOjE3NDg2MDI5ODgsImp0aSI6IjlkN2I1ODJjMGIyODQ2MjFhMjNlNzU5YTQyNjhkOThjIiwidXNlcl9pZCI6MX0.044c8GhgTMOnJthdkjaMMo19f0Y0hPFMq3grN1Q6VGA
 
 {
-    "code" : 14884
+    "code" : 71230
 }
 ###
+
 POST http://localhost:8000/api/auth/password-reset/ HTTP/1.1
 Content-Type: application/json
 
@@ -79,7 +83,7 @@ POST http://localhost:8000/api/auth/login/phone/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "phone_number": "0658025173",
+    "phone_number": "0540",
     "password": "test"
 }
 
@@ -107,7 +111,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 }
 
 ### update location
-PATCH http://localhost:8000/api/profile/update-location/ HTTP/1.1
+PUT http://localhost:8000/api/profile/update-location/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY4NzkzLCJpYXQiOjE3NDg0NjM5OTMsImp0aSI6ImJjYTQxYjY2MjUzMDRlYTE5MjI3ODNjMDk2N2IxN2RjIiwidXNlcl9pZCI6Mn0.VKiEcPV_-LoMoyonbNiWJ3kl5Z5fAgiUb648Ffqz5z4
 
@@ -116,7 +120,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "lng" : -118.243683
 }
 ### update status
-PATCH http://localhost:8000/api/profile/update-status/ HTTP/1.1
+PUT http://localhost:8000/api/profile/update-status/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY5MjMyLCJpYXQiOjE3NDg0NjQ0MzIsImp0aSI6ImZlOGM3ODhhMTIwMzQ0ZTVhZmMzZDM2ZTMwYTMwY2U4IiwidXNlcl9pZCI6Nn0.nCz6xlZegzSkVQO-wFvv1FV1-VdS6QJCF1XiLjFOTt4
 
@@ -135,18 +139,14 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY0NDY3LCJpYXQiOjE3NDg0NTk2NjcsImp0aSI6ImU5N2E1NjliNTk4MTRkMTJhYWNmYzk3NTc4YzA0ZWU4IiwidXNlcl9pZCI6NH0.pR3WCC2PHj5d5TdCLaCAawTUyT7DHSHgnU96bYaSaU4
 
 {
-    "driving_license_expiry": "20:03:50"
+    "driving_license_expiry": "20:03:54"
 }
 ###
 get http://localhost:8000/api/assistants/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDY0NDY3LCJpYXQiOjE3NDg0NTk2NjcsImp0aSI6ImU5N2E1NjliNTk4MTRkMTJhYWNmYzk3NTc4YzA0ZWU4IiwidXNlcl9pZCI6NH0.pR3WCC2PHj5d5TdCLaCAawTUyT7DHSHgnU96bYaSaU4
 
-{
-    "vehicle_registration_num": "4342342"
-}
-
-###
+### Assistance flow endpoints
 
 POST http://localhost:8000/api/assistance/request/ HTTP/1.1
 Content-Type: application/json
@@ -170,8 +170,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 Patch http://localhost:8000/api/assistance/accept/7/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4OTc2MDU3LCJpYXQiOjE3NDgzNzEyNTcsImp0aSI6IjNhYmRhYjg1N2Y5NjQ1ZDk4Mzg2OWYyZDU3MWY1YTM2IiwidXNlcl9pZCI6MjF9.jERb-hxATE3kF0en1iwa-a73-paDirT50VQ6LqGpIRQ
-### assistant update
 
+### assistant update
 Patch http://localhost:8000/api/assistance/update/status/32/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjkxMTAxLCJpYXQiOjE3NDU2ODYzMDEsImp0aSI6IjRmM2U0YjEzOTRjNDQ3MmFhODQ4ODBmZTdkNGU3MjUyIiwidXNlcl9pZCI6MTd9.vUINAeoFTlw7OSluueNXOIE3rLBFYHaYz5KZSSsTkPo
