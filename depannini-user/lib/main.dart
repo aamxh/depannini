@@ -1,4 +1,4 @@
-import 'package:depannini_user/app/main/enable_location_view.dart';
+import 'package:depannini_user/app/main/welcome_view.dart';
 import 'package:depannini_user/core/theme_controller.dart';
 import 'core/theme.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         theme: MyTheme.lightTheme,
         darkTheme: MyTheme.darkTheme,
         themeMode: theme.isDark ? ThemeMode.dark : ThemeMode.light,
-        home: EnableLocationV(),
+        home: WelcomeV(),
       ),
     );
   }

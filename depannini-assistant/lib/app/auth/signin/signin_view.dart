@@ -1,5 +1,7 @@
+import 'package:depannini_assistant/app/auth/auth_api.dart';
 import 'package:depannini_assistant/app/auth/signin/reset_password_view.dart';
 import 'package:depannini_assistant/app/auth/signup/phone_number_view.dart';
+import 'package:depannini_assistant/app/main/assistant_view_model.dart';
 import 'package:depannini_assistant/app/main/home_view.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:depannini_assistant/core/helpers.dart';
@@ -169,9 +171,23 @@ class _SignInVS extends State<SignInV> {
               ),
               SizedBox(height: size.height * 0.08),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    Get.offAll(() => HomeV());
+                    Get.dialog(
+                      Center(child: CircularProgressIndicator(
+                        color: MyConstants.primaryC,
+                      ),),
+                      barrierDismissible: false,
+                    );
+                    final res = await AuthApi.signInUserWithPhoneNum(
+                        "+213${_phoneNumCtrl.text}",
+                        _passwordCtrl.text,
+                    );
+                    Get.back();
+                    if (res) {
+                      Get.delete<AssistantVM>();
+                      Get.offAll(() => HomeV());
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(

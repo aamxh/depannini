@@ -32,7 +32,26 @@ class AuthApi {
       print(ex);
       return false;
     }
+  }
 
+  static Future<bool> signInUserWithPhoneNum(String phoneNum, String password) async {
+    final baseUrl = MyConstants.djangoApiBaseUrl;
+    final dio = Dio();
+    final payload = {
+      'phone_number': phoneNum,
+      'password': password,
+    };
+    print(payload);
+    try {
+      final res = await dio.post('$baseUrl/auth/login/phone/',
+        data: jsonEncode(payload),);
+      print(res);
+      if (MyHelpers.resIsOk(res.statusCode)) return true;
+      return false;
+    } catch(ex) {
+      print(ex);
+      return false;
+    }
   }
 
 }
