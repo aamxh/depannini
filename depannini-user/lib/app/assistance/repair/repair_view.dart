@@ -94,14 +94,16 @@ class RepairV extends StatelessWidget {
                             "lat": _vm.location.latitude,
                             "lng": _vm.location.longitude
                           },
-                          dropOff: {
+                          dropoff: {
                             "lat": _vm.location.latitude,
                             "lng": _vm.location.longitude
                           },
+                          description: _descCtrl.text,
                         ));
                         Get.back();
+                        await Future.delayed(Duration(milliseconds: 100));
                         if (res) {
-                          Get.off(() => RepairAssistantV());
+                          Get.offAll(() => RepairAssistantV());
                         }
                       }
                     },

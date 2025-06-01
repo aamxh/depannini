@@ -226,22 +226,24 @@ class AssistanceRequestSerializer(serializers.Serializer):
     ]
 
     pickup = serializers.DictField(child=serializers.FloatField())
-    dropoff = serializers.DictField(
-        child=serializers.FloatField(), required=False)
+    dropoff = serializers.DictField(child=serializers.FloatField(), required=False)
     assistance_type = serializers.ChoiceField(choices=ASSISTANCE_TYPE_CHOICES)
-    vehicle_type = serializers.ChoiceField(
-        choices=VEHICLE_TYPE_CHOICES, required=False)
+    vehicle_type = serializers.ChoiceField(choices=VEHICLE_TYPE_CHOICES, required=False)
+    description = serializers.CharField(required=False, allow_blank=True)  
 
     def validate(self, attrs):
         if attrs['assistance_type'] == 'repair' and not attrs.get('description'):
-            raise serializers.ValidationError(
-                {"description": "This field is required for assistance of type repair"})
+            raise serializers.ValidationError({
+                "description": "This field is required for assistance of type repair"
+            })
         if attrs['assistance_type'] == 'towing' and not attrs.get('dropoff'):
-            raise serializers.ValidationError(
-                {"dropoff": "This field is required for assistance of type towing"})
+            raise serializers.ValidationError({
+                "dropoff": "This field is required for assistance of type towing"
+            })
         if attrs['assistance_type'] == 'towing' and not attrs.get('vehicle_type'):
-            raise serializers.ValidationError(
-                {"vehicle_type": "This field is required for assistance of type towing"})
+            raise serializers.ValidationError({
+                "vehicle_type": "This field is required for assistance of type towing"
+            })
         return attrs
 
 

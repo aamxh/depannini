@@ -2,9 +2,9 @@ POST http://localhost:8000/api/auth/register/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "anes",
-    "password": "test",
-    "password_confirm": "test",
+    "name": "Mohammed0",
+    "password": "test0",
+    "password_confirm": "test0",
     "phone_number": "+213783072562",
     "user_type": "client"
 }
@@ -150,19 +150,20 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 POST http://localhost:8000/api/assistance/request/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MzE3NTE3LCJpYXQiOjE3NDg3MTI3MTcsImp0aSI6ImZhODMxODcwMTk1MzQ4MzM4Y2EyMGNmMWYwZTlkNGE5IiwidXNlcl9pZCI6NDN9.ZOVvB0GNArBZAHDeQmpiaEx7FYWZ9hPzcngM0bHkkmk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5Mzc0Mzk1LCJpYXQiOjE3NDg3Njk1OTUsImp0aSI6IjQ0YTBlOGJlODY4ODRlNDc5Mzc1MmVjN2I0MmYyNmVkIiwidXNlcl9pZCI6NDZ9.6tbIVyHEdP-nMX0qRIUAwoLFIAO4k3kvbLZfI9Gxw9A
 
 {
     "pickup": {
-        "lat" : 34.052235,
-        "lng" : -118.243683
+        "lat" : 37.431040706626916,
+        "lng" : -122.08182524889709
     },
-    "assistance_type": "towing",
+    "assistance_type": "repair",
     "dropoff": {
-        "lat" : 34.085652,
-        "lng" : -118.232176
+        "lat" : 37.431040706626916,
+        "lng" : -122.08182524889709
     },
-    "vehicle_type" : "heavy"
+    "vehicle_type" : "light",
+    "description": "A short desc."
 }
 
 ###

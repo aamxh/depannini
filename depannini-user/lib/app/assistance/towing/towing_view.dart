@@ -80,14 +80,16 @@ class TowingV extends StatelessWidget {
                           "lat": _vm.fromLocation.latitude,
                           "lng": _vm.fromLocation.longitude
                         },
-                        dropOff: {
+                        dropoff: {
                           "lat": _vm.toLocation.latitude,
                           "lng": _vm.toLocation.longitude
                         },
+                        description: '',
                       ));
                       Get.back();
+                      await Future.delayed(Duration(milliseconds: 100));
                       if (res) {
-                        Get.off(() => TowingAssistantV());
+                        Get.offAll(() => TowingAssistantV());
                       }
                     }
                   },

@@ -13,9 +13,10 @@ AssistanceRequest _$AssistanceRequestFromJson(Map<String, dynamic> json) =>
       pickup: (json['pickup'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, (e as num).toDouble()),
       ),
-      dropOff: (json['dropOff'] as Map<String, dynamic>).map(
+      dropoff: (json['dropoff'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, (e as num).toDouble()),
       ),
+      description: json['description'] as String,
     );
 
 Map<String, dynamic> _$AssistanceRequestToJson(AssistanceRequest instance) =>
@@ -23,5 +24,6 @@ Map<String, dynamic> _$AssistanceRequestToJson(AssistanceRequest instance) =>
       'assistanceType': instance.assistanceType,
       'vehicleType': instance.vehicleType,
       'pickup': instance.pickup,
-      'dropOff': instance.dropOff,
+      'dropoff': instance.dropoff,
+      'description': instance.description,
     };
