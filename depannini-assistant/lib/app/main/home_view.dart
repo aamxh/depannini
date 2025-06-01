@@ -1,3 +1,4 @@
+import 'package:depannini_assistant/app/assistance/assistance_api.dart';
 import 'package:depannini_assistant/app/assistance/notifications_api.dart';
 import 'package:depannini_assistant/app/main/home_view_model.dart';
 import 'package:depannini_assistant/app/settings/settings_view.dart';
@@ -87,18 +88,22 @@ class HomeV extends StatelessWidget {
               fontSize: 22,
               cornerRadius: 20,
               onToggle: (idx) async {
-                if (idx == 1) {
-                  final res =
-                  await NotificationsApi.verifyNotificationsEnabled();
-                  if (res) {
-                    NotificationsApi.sendNotification(
-                      'Incoming assistance request.',
-                      'Click to see more..',
-                    );
-                    _vm.changeActiveState(idx!);
-                  }
+                // if (idx == 1) {
+                //   final res =
+                //   await NotificationsApi.verifyNotificationsEnabled();
+                //   if (res) {
+                //     NotificationsApi.sendNotification(
+                //       'Incoming assistance request.',
+                //       'Click to see more..',
+                //     );
+                //     _vm.changeActiveState(idx!);
+                //   }
+                // }
+                final res =
+                await AssistanceAPI.changeAssistantState(idx == 0 ? false : true);
+                if (res) {
+                  _vm.changeActiveState(idx!); 
                 }
-                _vm.changeActiveState(idx!);
               },
             ),
           ),
