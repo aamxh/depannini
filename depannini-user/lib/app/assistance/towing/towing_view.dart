@@ -1,4 +1,5 @@
 import 'package:depannini_user/app/assistance/assistance_api.dart';
+import 'package:depannini_user/app/assistance/assistance_view_model.dart';
 import 'package:depannini_user/app/assistance/models/assistance_request.dart';
 import 'package:depannini_user/app/assistance/towing/towing_assistant_view.dart';
 import 'package:depannini_user/app/assistance/location_view.dart';
@@ -88,7 +89,10 @@ class TowingV extends StatelessWidget {
                       ));
                       Get.back();
                       await Future.delayed(Duration(milliseconds: 100));
-                      if (res) {
+                      if (res != null) {
+                        final vm = Get.find<AssistanceVM>();
+                        vm.state = 'requested';
+                        vm.channel = res;
                         Get.offAll(() => TowingAssistantV());
                       }
                     }

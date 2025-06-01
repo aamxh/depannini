@@ -155,12 +155,28 @@ class AssistantConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         await self.send(text_data=json.dumps({"message": "Echo: " + text_data}))
 
-    async def new_request(self, event):
-        # Send request to assistant
+    async def towing_request(self, event):
+        # Send towing request to assistant
         print(f'sending request to {self.assistant_id}')
         await self.send(text_data=json.dumps({
             'type': 'new_assistance_request',
+            'assistance_type': 'towing',
             'assistance_id': event['assistance_id'],
             'pickup_location': event['pickup_location'],
+            'dropoff_location': event['dropoff_location'],
+            'distance': event['distance'],
+            'vehicle_type': event['vehicle_type'],
+            'client': event.get('client')
+        }))
+
+    async def repair_request(self, event):
+        # Send repair request to assistant
+        print(f'sending request to {self.assistant_id}')
+        await self.send(text_data=json.dumps({
+            'type': 'new_assistance_request',
+            'assistance_type': 'repair',
+            'assistance_id': event['assistance_id'],
+            'pickup_location': event['pickup_location'],
+            'description': event['description'],
             'client': event.get('client')
         }))

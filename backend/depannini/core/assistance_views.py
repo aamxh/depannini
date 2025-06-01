@@ -14,11 +14,11 @@ from django.shortcuts import get_object_or_404
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-LIGHT_BASE_FARE = 1500
-LIGHT_KM_PRICE = 50
+LIGHT_BASE_FARE = 1500.00
+LIGHT_KM_PRICE = 50.00
 
-HEAVY_BASE_FARE = 3000
-HEAVY_KM_PRICE = 150
+HEAVY_BASE_FARE = 3000.00
+HEAVY_KM_PRICE = 150.00
 
 
 def calculate_fare(assistance_type, vehicle_type, distance_km):
@@ -53,7 +53,7 @@ class AssistanceRequestView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if serializer.validated_data.get('dropoff', None):
+        if serializer.validated_data['assistance_type'] == 'towing':
             assistance_type = serializer.validated_data['assistance_type']
             vehicle_type = serializer.validated_data['vehicle_type']
             pickup_lat = serializer.validated_data['pickup']['lat']
@@ -84,7 +84,8 @@ class AssistanceRequestView(APIView):
                 pickup_lat=serializer.validated_data['pickup']['lat'],
                 pickup_lng=serializer.validated_data['pickup']['lng'],
                 status='requested',
-                assistance_type=serializer.validated_data['assistance_type']
+                assistance_type=serializer.validated_data['assistance_type'],
+                description=serializer.validated_data['description']
             )
 
         # Find nearby drivers
@@ -109,21 +110,45 @@ class AssistanceRequestView(APIView):
             room_group_name = f'assistant_{assistant['assistant_id']}'
             print(room_group_name)
             try:
-                async_to_sync(channel_layer.group_send)(
-                    room_group_name,
-                    {
-                        'type': 'new_request',
-                        'assistance_id': assistance.id,
-                        'pickup_location': {
-                                'lat': serializer.validated_data['pickup']['lat'],
-                                'lng': serializer.validated_data['pickup']['lng']
-                        },
-                        'client': {
-                            'id': request.user.id,
-                            'name': request.user.name
+                if assistance.assistance_type == 'towing':
+                    async_to_sync(channel_layer.group_send)(
+                        room_group_name,
+                        {
+                            'type': 'towing_request',
+                            'assistance_id': assistance.id,
+                            'pickup_location': {
+                                    'lat': serializer.validated_data['pickup']['lat'],
+                                    'lng': serializer.validated_data['pickup']['lng']
+                            },
+                            'dropoff_location': {
+                                'lat': serializer.validated_data['dropoff']['lat'],
+                                'lng': serializer.validated_data['dropoff']['lng']
+                            },
+                            'distance': assistance.distance_km,
+                            'vehicle_type': assistance.vehicle_type,
+                            'client': {
+                                'id': request.user.id,
+                                'name': request.user.name
+                            }
                         }
-                    }
-                )
+                    )
+                else:
+                    async_to_sync(channel_layer.group_send)(
+                        room_group_name,
+                        {
+                            'type': 'repair_request',
+                            'assistance_id': assistance.id,
+                            'pickup_location': {
+                                    'lat': serializer.validated_data['pickup']['lat'],
+                                    'lng': serializer.validated_data['pickup']['lng']
+                            },
+                            'description': assistance.description,
+                            'client': {
+                                'id': request.user.id,
+                                'name': request.user.name
+                            }
+                        }
+                    )
             except Exception as e:
                 print(f"Error sending message: {e}")
 

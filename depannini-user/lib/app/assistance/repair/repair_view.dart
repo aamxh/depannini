@@ -1,4 +1,5 @@
 import 'package:depannini_user/app/assistance/assistance_api.dart';
+import 'package:depannini_user/app/assistance/assistance_view_model.dart';
 import 'package:depannini_user/app/assistance/models/assistance_request.dart';
 import 'package:depannini_user/app/assistance/repair/repair_assistant_view.dart';
 import 'package:depannini_user/app/assistance/repair/repair_view_model.dart';
@@ -102,7 +103,10 @@ class RepairV extends StatelessWidget {
                         ));
                         Get.back();
                         await Future.delayed(Duration(milliseconds: 100));
-                        if (res) {
+                        if (res != null) {
+                          final vm = Get.find<AssistanceVM>();
+                          vm.state = 'requested';
+                          vm.channel = res;
                           Get.offAll(() => RepairAssistantV());
                         }
                       }

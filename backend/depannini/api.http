@@ -2,9 +2,9 @@ POST http://localhost:8000/api/auth/register/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Mohammed0",
-    "password": "test0",
-    "password_confirm": "test0",
+    "name": "anes",
+    "password": "test",
+    "password_confirm": "test",
     "phone_number": "+213783072562",
     "user_type": "client"
 }
@@ -13,19 +13,19 @@ POST http://localhost:8000/api/auth/register/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "Anes Adjal",
-    "password": "test0",
-    "password_confirm": "test0",
-    "phone_number": "+213252526432",
+    "name": "anes",
+    "password": "test",
+    "password_confirm": "test",
+    "phone_number": "+213783961920",
     "user_type": "assistant",
     "service_type": "towing",
-    "vehicle_type": "truck",
-    "current_lat" : 37.4219983,
-    "current_lng" : -122.084,
-    "driving_license_cat": "c",
-    "driving_license_num": 362328,
-    "driving_license_expiry": "10:02:26",
-    "vehicle_registration_num": 252621600
+    "vehicle_type": "light",
+    "current_lat" : 3423,
+    "current_lng" : 222,
+    "driving_license_cat": "b",
+    "driving_license_num": 32434,
+    "driving_license_expiry": "20:03:26",
+    "vehicle_registration_num": 2343
 }
 
 ###
@@ -83,7 +83,7 @@ POST http://localhost:8000/api/auth/login/phone/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "phone_number": "0540",
+    "phone_number": "0658025171",
     "password": "test"
 }
 
@@ -150,32 +150,52 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 POST http://localhost:8000/api/assistance/request/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5Mzc0Mzk1LCJpYXQiOjE3NDg3Njk1OTUsImp0aSI6IjQ0YTBlOGJlODY4ODRlNDc5Mzc1MmVjN2I0MmYyNmVkIiwidXNlcl9pZCI6NDZ9.6tbIVyHEdP-nMX0qRIUAwoLFIAO4k3kvbLZfI9Gxw9A
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDQwNzgxLCJpYXQiOjE3NDg0MzU5ODEsImp0aSI6ImRiYmY1MTAxYmJlYjQ3NWFiOTY2OGE2YTgyYjIzMGM3IiwidXNlcl9pZCI6Mn0.7M4TMV5FB63lOX6Jqrc1ysbC9weUnwaVeemdfmRpg94
 
 {
     "pickup": {
-        "lat" : 37.431040706626916,
-        "lng" : -122.08182524889709
+        "lat" : 34.052235,
+        "lng" : -118.243683
+    },
+    "assistance_type": "towing",
+    "dropoff": {
+        "lat" : 34.085652,
+        "lng" : -118.232176
+    },
+    "vehicle_type" : "heavy"
+}
+
+### Assistance flow endpoints
+
+POST http://localhost:8000/api/assistance/request/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDQwNzgxLCJpYXQiOjE3NDg0MzU5ODEsImp0aSI6ImRiYmY1MTAxYmJlYjQ3NWFiOTY2OGE2YTgyYjIzMGM3IiwidXNlcl9pZCI6Mn0.7M4TMV5FB63lOX6Jqrc1ysbC9weUnwaVeemdfmRpg94
+
+{
+    "pickup": {
+        "lat" : 34.052235,
+        "lng" : -118.243683
     },
     "assistance_type": "repair",
     "dropoff": {
-        "lat" : 37.431040706626916,
-        "lng" : -122.08182524889709
+        "lat" : 34.085652,
+        "lng" : -118.232176
     },
-    "vehicle_type" : "light",
-    "description": "A short desc."
+    "vehicle_type" : "heavy",
+    "description" : "Crivatli ronda w rahi dirati w rani nsme3 f lhes ki ndimari"
 }
+
 
 ###
 
-Patch http://localhost:8000/api/assistance/accept/7/ HTTP/1.1
+Patch http://localhost:8000/api/assistance/accept/3/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MzE3NTE3LCJpYXQiOjE3NDg3MTI3MTcsImp0aSI6ImZhODMxODcwMTk1MzQ4MzM4Y2EyMGNmMWYwZTlkNGE5IiwidXNlcl9pZCI6NDN9.ZOVvB0GNArBZAHDeQmpiaEx7FYWZ9hPzcngM0bHkkmk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDAwMzc3LCJpYXQiOjE3NDg3OTU1NzcsImp0aSI6IjQ4NTg2MGQ2OTVlODRmYjhhODUzNDkzYmRhMWE2YWE3IiwidXNlcl9pZCI6NH0.EHeDLc2KZYxFnK06O8i3ZlTRD_RsIKaHOkzIKJdKQF0
 
 ### assistant update
 Patch http://localhost:8000/api/assistance/update/status/32/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MzE3NTE3LCJpYXQiOjE3NDg3MTI3MTcsImp0aSI6ImZhODMxODcwMTk1MzQ4MzM4Y2EyMGNmMWYwZTlkNGE5IiwidXNlcl9pZCI6NDN9.ZOVvB0GNArBZAHDeQmpiaEx7FYWZ9hPzcngM0bHkkmk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjkxMTAxLCJpYXQiOjE3NDU2ODYzMDEsImp0aSI6IjRmM2U0YjEzOTRjNDQ3MmFhODQ4ODBmZTdkNGU3MjUyIiwidXNlcl9pZCI6MTd9.vUINAeoFTlw7OSluueNXOIE3rLBFYHaYz5KZSSsTkPo
 
 {
     "status" : "canceled"
@@ -185,7 +205,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 Patch http://localhost:8000/api/assistance/update/status/7/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MzE3NTE3LCJpYXQiOjE3NDg3MTI3MTcsImp0aSI6ImZhODMxODcwMTk1MzQ4MzM4Y2EyMGNmMWYwZTlkNGE5IiwidXNlcl9pZCI6NDN9.ZOVvB0GNArBZAHDeQmpiaEx7FYWZ9hPzcngM0bHkkmk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4OTc2MDU3LCJpYXQiOjE3NDgzNzEyNTcsImp0aSI6IjNhYmRhYjg1N2Y5NjQ1ZDk4Mzg2OWYyZDU3MWY1YTM2IiwidXNlcl9pZCI6MjF9.jERb-hxATE3kF0en1iwa-a73-paDirT50VQ6LqGpIRQ
 
 {
     "status" : "completed"

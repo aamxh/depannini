@@ -95,7 +95,7 @@ urlpatterns = [
     ),
     path(
         'assistance/view/', AssistanceListDetailView.as_view(),
-        name='assistance-view'
+        name='assistance-view-all'
     ),
     path(
         'assistance/view/<int:assistance_id>/', AssistanceListDetailView.as_view(),
