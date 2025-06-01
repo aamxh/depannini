@@ -202,7 +202,7 @@ class AssistanceSerializer(serializers.ModelSerializer):
             'id', 'status', 'client', 'assistant',
             'pickupLocation', 'dropoffLocation',
             'distance_km', 'total_price',
-            'createdAt', 'updatedAt', 'assistance_type', 'rating'
+            'createdAt', 'updatedAt', 'description', 'assistance_type', 'rating'
         ]
 
     def get_pickupLocation(self, obj):
@@ -231,6 +231,7 @@ class AssistanceRequestSerializer(serializers.Serializer):
     assistance_type = serializers.ChoiceField(choices=ASSISTANCE_TYPE_CHOICES)
     vehicle_type = serializers.ChoiceField(
         choices=VEHICLE_TYPE_CHOICES, required=False)
+    description = serializers.CharField(required=False)
 
     def validate(self, attrs):
         if attrs['assistance_type'] == 'repair' and not attrs.get('description'):

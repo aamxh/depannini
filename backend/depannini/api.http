@@ -83,7 +83,7 @@ POST http://localhost:8000/api/auth/login/phone/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "phone_number": "0540",
+    "phone_number": "0658025171",
     "password": "test"
 }
 
@@ -165,11 +165,32 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "vehicle_type" : "heavy"
 }
 
+### Assistance flow endpoints
+
+POST http://localhost:8000/api/assistance/request/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDQwNzgxLCJpYXQiOjE3NDg0MzU5ODEsImp0aSI6ImRiYmY1MTAxYmJlYjQ3NWFiOTY2OGE2YTgyYjIzMGM3IiwidXNlcl9pZCI6Mn0.7M4TMV5FB63lOX6Jqrc1ysbC9weUnwaVeemdfmRpg94
+
+{
+    "pickup": {
+        "lat" : 34.052235,
+        "lng" : -118.243683
+    },
+    "assistance_type": "repair",
+    "dropoff": {
+        "lat" : 34.085652,
+        "lng" : -118.232176
+    },
+    "vehicle_type" : "heavy",
+    "description" : "Crivatli ronda w rahi dirati w rani nsme3 f lhes ki ndimari"
+}
+
+
 ###
 
-Patch http://localhost:8000/api/assistance/accept/7/ HTTP/1.1
+Patch http://localhost:8000/api/assistance/accept/3/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4OTc2MDU3LCJpYXQiOjE3NDgzNzEyNTcsImp0aSI6IjNhYmRhYjg1N2Y5NjQ1ZDk4Mzg2OWYyZDU3MWY1YTM2IiwidXNlcl9pZCI6MjF9.jERb-hxATE3kF0en1iwa-a73-paDirT50VQ6LqGpIRQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDAwMzc3LCJpYXQiOjE3NDg3OTU1NzcsImp0aSI6IjQ4NTg2MGQ2OTVlODRmYjhhODUzNDkzYmRhMWE2YWE3IiwidXNlcl9pZCI6NH0.EHeDLc2KZYxFnK06O8i3ZlTRD_RsIKaHOkzIKJdKQF0
 
 ### assistant update
 Patch http://localhost:8000/api/assistance/update/status/32/ HTTP/1.1
