@@ -1,8 +1,10 @@
 import 'package:depannini_assistant/app/auth/auth_api.dart';
 import 'package:depannini_assistant/app/main/enable_location_view.dart';
 import 'package:depannini_assistant/app/main/home_view.dart';
+import 'package:depannini_assistant/app/main/home_view_model.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AuthWrapperV extends StatelessWidget {
 
@@ -19,7 +21,11 @@ class AuthWrapperV extends StatelessWidget {
           ),),);
         }
         final tokenIsValid = snapshot.data!;
-        return tokenIsValid ? HomeV() : EnableLocationV();
+        if (tokenIsValid) {
+          Get.put(HomeVM());
+          return HomeV();
+        }
+        return EnableLocationV();
       },
     );
   }

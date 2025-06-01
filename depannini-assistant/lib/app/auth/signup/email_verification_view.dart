@@ -1,6 +1,7 @@
 import 'package:depannini_assistant/app/auth/auth_api.dart';
 import 'package:depannini_assistant/app/auth/signup/email_verification_view_model.dart';
 import 'package:depannini_assistant/app/main/assistant_view_model.dart';
+import 'package:depannini_assistant/app/main/home_view_model.dart';
 import 'package:depannini_assistant/app/main/models/assistant.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:email_otp/email_otp.dart';
@@ -113,6 +114,7 @@ class EmailVerificationV extends StatelessWidget {
                     ));
                     if (res) {
                       Get.delete<AssistantVM>();
+                      Get.put(HomeVM());
                       Get.offAll(() => HomeV());
                     }
                   } else {

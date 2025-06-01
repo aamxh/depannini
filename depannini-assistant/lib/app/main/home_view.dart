@@ -13,7 +13,7 @@ class HomeV extends StatelessWidget {
 
   HomeV({super.key});
 
-  final _vm = HomeVM();
+  final _vm = Get.find<HomeVM>();
   final _ctrl = Get.find<ThemeCtrl>();
 
   @override
@@ -62,7 +62,7 @@ class HomeV extends StatelessWidget {
           SizedBox(height: size.height * 0.01,),
           Obx(() =>
             Text(
-              _vm.isActive.value ?
+              _vm.isActive ?
               'switching to inactive mode will make you unavailable for requests from clients.' :
               'you can switch to active mode to receive requests from clients.',
               style: theme.textTheme.titleSmall!.copyWith(
@@ -99,10 +99,15 @@ class HomeV extends StatelessWidget {
                 //     _vm.changeActiveState(idx!);
                 //   }
                 // }
+                if (idx == 1) {
+                  _vm.channel = await AssistanceAPI.connectToWS(42.toString());
+                } else {
+                  await AssistanceAPI.closeWSConnection(_vm.channel);
+                }
                 final res =
                 await AssistanceAPI.changeAssistantState(idx == 0 ? false : true);
                 if (res) {
-                  _vm.changeActiveState(idx!); 
+                  _vm.isActive = idx == 0 ? false : true;
                 }
               },
             ),

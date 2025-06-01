@@ -10,7 +10,7 @@ class AuthApi {
   AuthApi._();
 
   static Future<bool> signUpUser(Assistant assistant) async {
-    final baseUrl = MyConstants.djangoApiBaseUrl;
+    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
     final dio = Dio();
     final assistantMap = MyHelpers.modifySignUpDataFormat(assistant);
     print(assistantMap);
@@ -34,7 +34,7 @@ class AuthApi {
   }
 
   static Future<bool> signInUserWithPhoneNum(String phoneNum, String password) async {
-    final baseUrl = MyConstants.djangoApiBaseUrl;
+    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
     final dio = Dio();
     final payload = {
       'phone_number': phoneNum,
@@ -96,7 +96,7 @@ class AuthApi {
     final prefs = await SharedPreferences.getInstance();
     final refreshToken = prefs.getString('refresh_token');
     if (refreshToken == null) return false;
-    final baseUrl = MyConstants.djangoApiBaseUrl;
+    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
     try {
       final response = await Dio().post(
         "$baseUrl/auth/token/refresh/",
