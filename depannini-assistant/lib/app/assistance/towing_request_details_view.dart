@@ -1,6 +1,7 @@
 import 'package:depannini_assistant/app/assistance/assistance_api.dart';
 import 'package:depannini_assistant/app/assistance/assistance_view_model.dart';
 import 'package:depannini_assistant/app/assistance/location_view.dart';
+import 'package:depannini_assistant/app/assistance/location_view_model.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -83,7 +84,14 @@ class TowingRequestDetailsV extends StatelessWidget {
                 onPressed: () async {
                   final res = await AssistanceAPI.acceptAssistance(_assistanceVM.assistance.id.toString());
                   if (res) {
-                    Get.to(() => LocationV());
+                    final res = await AssistanceAPI.updateAssistanceState(
+                        _assistanceVM.assistance.id.toString(),
+                        'on-going',
+                    );
+                    if (res) {
+                      Get.put(LocationVM());
+                      Get.off(() => LocationV());
+                    }
                   }
                 },
                 style: ElevatedButton.styleFrom(

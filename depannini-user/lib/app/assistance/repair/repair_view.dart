@@ -1,7 +1,7 @@
 import 'package:depannini_user/app/assistance/assistance_api.dart';
 import 'package:depannini_user/app/assistance/assistance_view_model.dart';
+import 'package:depannini_user/app/assistance/location_view.dart';
 import 'package:depannini_user/app/assistance/models/assistance_request.dart';
-import 'package:depannini_user/app/assistance/repair/repair_assistant_view.dart';
 import 'package:depannini_user/app/assistance/repair/repair_view_model.dart';
 import 'package:depannini_user/app/assistance/location_field_widget.dart';
 import 'package:depannini_user/core/constants.dart';
@@ -107,7 +107,7 @@ class RepairV extends StatelessWidget {
                           final vm = Get.find<AssistanceVM>();
                           vm.state = 'requested';
                           vm.channel = res;
-                          Get.offAll(() => RepairAssistantV());
+                          vm.startListening();
                         }
                       }
                     },

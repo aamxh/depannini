@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:depannini_assistant/app/assistance/location_view_model.dart';
 import 'package:depannini_assistant/app/assistance/models/assistance.dart';
 import 'package:depannini_assistant/app/assistance/models/client.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class AssistanceVM extends GetxController {
@@ -24,12 +26,15 @@ class AssistanceVM extends GetxController {
     ),
   ).obs;
   final Rx<WebSocketChannel?> _channel = null.obs;
+  final Rx<bool> _arrived = false.obs;
 
   WebSocketChannel? get channel => _channel.value;
   Assistance get assistance => _assistance.value;
+  bool get arrived => _arrived.value;
 
   set assistance(Assistance val) => _assistance.value = val;
   set channel(WebSocketChannel? val) => _channel.value = val;
+  set arrived(bool val) => _arrived.value = val;
   set phoneNum(String val) => _assistance.value.client.phoneNum = val;
 
   void startListening() {
@@ -37,10 +42,17 @@ class AssistanceVM extends GetxController {
       channel!.stream.listen((event) {
         final data = jsonDecode(event);
         print("Received data in VM: $data");
+        if (data['type'] == 'location') {
+          Get.find<LocationVM>().assistantLocation = LatLng(
+              double.parse(data['lat']),
+              double.parse(data['lng']),
+          );
+        } else {
 
+        }
       },
           onDone: () {
-            print('Assistant ws closed.');
+            print('Assistance ws closed.');
           },
           onError: (ex) {
             print(ex);

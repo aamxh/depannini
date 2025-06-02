@@ -1,4 +1,5 @@
-import 'package:depannini_assistant/app/assistance/location_api.dart';
+import 'package:depannini_assistant/app/assistance/assistance_api.dart';
+import 'package:depannini_assistant/app/assistance/assistance_view_model.dart';
 import 'package:depannini_assistant/app/assistance/location_view_model.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:depannini_assistant/core/helpers.dart';
@@ -19,7 +20,8 @@ class LocationV extends StatefulWidget {
 class _LocationVS extends State<LocationV> {
 
   late final GoogleMapController _ctrl;
-  final _vm = Get.find<LocationVM>();
+  final _locationVM = Get.find<LocationVM>();
+  final _assistanceVM = Get.find<AssistanceVM>();
   final _location = Location();
 
   @override
@@ -29,8 +31,8 @@ class _LocationVS extends State<LocationV> {
   }
 
   Future<void> _initialize() async {
-    await _vm.initializeCurrentLocation();
-    await _vm.setPath(_vm.userLocation, _vm.assistantLocation);
+    await _locationVM.initializeCurrentLocation();
+    await _locationVM.setPath(_locationVM.assistantLocation, _locationVM.clientLocation);
   }
 
   @override
@@ -43,6 +45,34 @@ class _LocationVS extends State<LocationV> {
       ),
       body: SingleChildScrollView(
         child: Obx(() =>
+        _assistanceVM.assistance.state == 'canceled' ?
+            Center(child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'The assistance has been canceled /:',
+                  style: theme.textTheme.titleSmall,
+                ),
+                SizedBox(height: size.height * 0.1,),
+                ElevatedButton(
+                  onPressed: () {
+                    Get.delete<LocationVM>();
+                    Get.delete<AssistanceVM>();
+                    Get.back();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(size.width * 0.5, size.height * 0.064),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Return',
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            )) :
             Column(
               children: [
                 SizedBox(
@@ -50,16 +80,16 @@ class _LocationVS extends State<LocationV> {
                   child: GoogleMap(
                     onMapCreated: (GoogleMapController ctrl) {
                       _ctrl = ctrl;
-                      print("Map created - User: ${_vm.userLocation}, Assistant: ${_vm.assistantLocation}");
-                      print("Path polylines count: ${_vm.path.length}");
+                      print("Map created - Assistant: ${_locationVM.assistantLocation}, Client: ${_locationVM.clientLocation}");
+                      print("Path polylines count: ${_locationVM.path.length}");
                       _location.onLocationChanged.listen((LocationData loc) =>
                           _ctrl.animateCamera(CameraUpdate.newLatLng(
                               LatLng(loc.latitude!, loc.longitude!)
                           )));
                     },
                     initialCameraPosition: CameraPosition(
-                      target: _vm.userLocation,
-                      zoom: 13,
+                      target: _locationVM.assistantLocation,
+                      zoom: 15,
                     ),
                     myLocationEnabled: true,
                     myLocationButtonEnabled: true,
@@ -70,12 +100,12 @@ class _LocationVS extends State<LocationV> {
                     markers: {
                       Marker(
                         markerId: MarkerId('assistant'),
-                        position: _vm.assistantLocation,
+                        position: _locationVM.assistantLocation,
                         infoWindow: InfoWindow(title: "Assistant"),
                         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
                       ),
                     },
-                    polylines: _vm.path.toSet(),
+                    polylines: _locationVM.path.toSet(),
                   ),
                 ),
                 SizedBox(height: size.height * 0.01,),
@@ -87,11 +117,11 @@ class _LocationVS extends State<LocationV> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            'Assistant phone number: ${_vm.assistantPhoneNum}',
+                            'Client phone number: ${_assistanceVM.assistance.client.phoneNum}',
                             style: theme.textTheme.bodyMedium,
                           ),
                           TextButton(
-                            onPressed: () => MyHelpers.makePhoneCall(_vm.assistantPhoneNum),
+                            onPressed: () => MyHelpers.makePhoneCall(_assistanceVM.assistance.client.phoneNum),
                             child: Text(
                               'Call',
                               style: theme.textTheme.bodyMedium!.copyWith(
@@ -109,55 +139,65 @@ class _LocationVS extends State<LocationV> {
                             style: theme.textTheme.bodyMedium,
                           ),
                           Text(
-                            _vm.assistanceStatus,
+                            _assistanceVM.assistance.state,
                             style: theme.textTheme.bodyMedium,
                           ),
                         ],
                       ),
                       SizedBox(height: size.height * 0.03,),
-                      _vm.assistanceStatus == 'on-going' ? Container() :
+                      _assistanceVM.assistance.state == 'completed' ?
+                      Container() :
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () => AssistanceAPI.updateAssistanceState(
+                              _assistanceVM.assistance.id.toString(),
+                              'canceled',
+                            ),
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
                               fixedSize: Size(size.width * 0.35, size.height * 0.064),
-                              backgroundColor: _vm.assistanceStatus == 'arrived' ?
-                              MyConstants.primaryC :
-                              theme.scaffoldBackgroundColor == Colors.white ?
-                              MyConstants.lightGrey :
-                              MyConstants.darkGrey,
-                              side: BorderSide(
-                                color: _vm.assistanceStatus == 'arrived' ?
-                                MyConstants.primaryC :
-                                theme.scaffoldBackgroundColor == Colors.white ?
-                                MyConstants.darkGrey! :
-                                MyConstants.lightGrey!,
-                              ),
+                              backgroundColor: theme.scaffoldBackgroundColor,
+                              side: BorderSide(color: MyConstants.primaryC),
                             ),
                             child: Text(
-                              'Completed',
-                              style: theme.textTheme.bodyLarge,
+                              'Cancel',
+                              style: theme.textTheme.bodyLarge!.copyWith(
+                                color: MyConstants.primaryC,
+                              ),
                             ),
                           ),
                           ElevatedButton(
-                            onPressed: () {
-                              Get.back();
+                            onPressed: () async {
+                              if (!_assistanceVM.arrived) {
+                                final res = await AssistanceAPI.updateAssistanceState(
+                                  _assistanceVM.assistance.id.toString(),
+                                  'completed',
+                                );
+                                if (res) {
+                                  _assistanceVM.arrived = true;
+                                }
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
                               fixedSize: Size(size.width * 0.35, size.height * 0.064),
-                              backgroundColor: theme.scaffoldBackgroundColor == Colors.white ?
-                              MyConstants.lightGrey : MyConstants.darkGrey,
+                              backgroundColor: _assistanceVM.arrived ?
+                              theme.scaffoldBackgroundColor == Colors.white ?
+                              MyConstants.lightGrey :
+                              MyConstants.darkGrey :
+                              MyConstants.primaryC,
                               side: BorderSide(
-                                color: theme.scaffoldBackgroundColor == Colors.white ?
-                                MyConstants.darkGrey! : MyConstants.lightGrey!,
+                                color: _assistanceVM.arrived ?
+                                theme.scaffoldBackgroundColor == Colors.white ?
+                                MyConstants.darkGrey! :
+                                MyConstants.lightGrey! :
+                                MyConstants.primaryC ,
                               ),
                             ),
                             child: Text(
-                              'Cancel',
+                              'Arrived',
                               style: theme.textTheme.bodyLarge,
                             ),
                           ),
