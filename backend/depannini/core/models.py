@@ -42,6 +42,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('b', 'B'),
     ]
 
+    VEHICLE_TYPE_CHOICES = [
+        ('car', 'Car'),
+        ('van', 'Van'),
+        ('truck', 'Truck')
+    ]
+
     email = models.EmailField(unique=True, null=True, blank=True)
     name = models.CharField(max_length=255, null=False,
                             blank=False)  # not null
@@ -58,7 +64,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=10, choices=USER_TYPE_CHOICES, default='client')
     service_type = models.CharField(
         max_length=10, choices=SERVICE_TYPE_CHOICES, blank=True, null=True)
-    vehicle_type = models.CharField(max_length=100, blank=True, null=True)
+    vehicle_type = models.CharField(
+        max_length=100, blank=True, null=True, choices=VEHICLE_TYPE_CHOICES)
     is_active_assistant = models.BooleanField(default=False)
 
     driving_license_cat = models.CharField(
@@ -124,9 +131,8 @@ class Assistance(models.Model):
     ]
 
     VEHICLE_TYPE_CHOICES = [
-        ('car', 'Car'),
-        ('van', 'Van'),
-        ('truck', 'Truck')
+        ('light', 'Light'),
+        ('heavy', 'Heavy'),
     ]
 
     client = models.ForeignKey(
@@ -150,8 +156,7 @@ class Assistance(models.Model):
     rating = models.FloatField(default=0)
 
     distance_km = models.FloatField(default=0.0)
-    total_price = models.DecimalField(
-        max_digits=8, decimal_places=2, default=0.0)
+    total_price = models.FloatField(default=0.0)
 
     class Meta:
         indexes = [

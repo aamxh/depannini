@@ -112,6 +112,16 @@ class AssistanceConsumer(AsyncWebsocketConsumer):
             'client': event.get('client')
         }))
 
+    async def end_assistance(self, event):
+        # Send status updates to client
+        await self.send(text_data=json.dumps({
+            'type': 'status',
+            'status': event['status'],
+            'total_price': event['total_price'],
+            'assistant': event.get('assistant'),
+            'client': event.get('client')
+        }))
+
     async def location_update(self, event):
         # Send location updates to client
         await self.send(text_data=json.dumps({

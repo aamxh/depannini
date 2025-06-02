@@ -93,7 +93,7 @@ POST http://localhost:8000/api/auth/login/email/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "assistant1@example.com",
+    "email": "assistant2@example.com",
     "password": "test"
 }
 
@@ -150,7 +150,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 POST http://localhost:8000/api/assistance/request/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDQwNzgxLCJpYXQiOjE3NDg0MzU5ODEsImp0aSI6ImRiYmY1MTAxYmJlYjQ3NWFiOTY2OGE2YTgyYjIzMGM3IiwidXNlcl9pZCI6Mn0.7M4TMV5FB63lOX6Jqrc1ysbC9weUnwaVeemdfmRpg94
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDkwNjI4LCJpYXQiOjE3NDg4ODU4MjgsImp0aSI6Ijc5ZTdkMWViMzRhZDQ0NGFhNTE3ZmE1MDZkNjhjZmZhIiwidXNlcl9pZCI6Mn0.n85JHzDpXj0ssDh8T5WwEGxuZoFvBCbsudAYkMYIfwI
 
 {
     "pickup": {
@@ -169,7 +169,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 
 POST http://localhost:8000/api/assistance/request/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDQwNzgxLCJpYXQiOjE3NDg0MzU5ODEsImp0aSI6ImRiYmY1MTAxYmJlYjQ3NWFiOTY2OGE2YTgyYjIzMGM3IiwidXNlcl9pZCI6Mn0.7M4TMV5FB63lOX6Jqrc1ysbC9weUnwaVeemdfmRpg94
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDkwNjI4LCJpYXQiOjE3NDg4ODU4MjgsImp0aSI6Ijc5ZTdkMWViMzRhZDQ0NGFhNTE3ZmE1MDZkNjhjZmZhIiwidXNlcl9pZCI6Mn0.n85JHzDpXj0ssDh8T5WwEGxuZoFvBCbsudAYkMYIfwI
 
 {
     "pickup": {
@@ -186,19 +186,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
 }
 
 
-###
+### accept assistance
 
-Patch http://localhost:8000/api/assistance/accept/3/ HTTP/1.1
+Patch http://localhost:8000/api/assistance/accept/17/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDAwMzc3LCJpYXQiOjE3NDg3OTU1NzcsImp0aSI6IjQ4NTg2MGQ2OTVlODRmYjhhODUzNDkzYmRhMWE2YWE3IiwidXNlcl9pZCI6NH0.EHeDLc2KZYxFnK06O8i3ZlTRD_RsIKaHOkzIKJdKQF0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDkxOTI0LCJpYXQiOjE3NDg4ODcxMjQsImp0aSI6IjFhNjdiM2VjN2IxODRkZGRiNjhkZGI2MDRjOWM3NDFhIiwidXNlcl9pZCI6NX0.Kky-D5V3wgbnzTXM5KT3gZRSxid0Y6idGm6YxW4Zm4k
 
 ### assistant update
-Patch http://localhost:8000/api/assistance/update/status/32/ HTTP/1.1
+Patch http://localhost:8000/api/assistance/update/status/17/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjkxMTAxLCJpYXQiOjE3NDU2ODYzMDEsImp0aSI6IjRmM2U0YjEzOTRjNDQ3MmFhODQ4ODBmZTdkNGU3MjUyIiwidXNlcl9pZCI6MTd9.vUINAeoFTlw7OSluueNXOIE3rLBFYHaYz5KZSSsTkPo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDkxOTI0LCJpYXQiOjE3NDg4ODcxMjQsImp0aSI6IjFhNjdiM2VjN2IxODRkZGRiNjhkZGI2MDRjOWM3NDFhIiwidXNlcl9pZCI6NX0.Kky-D5V3wgbnzTXM5KT3gZRSxid0Y6idGm6YxW4Zm4k
 
 {
-    "status" : "canceled"
+    "status" : "ongoing"
 }
 
 ### status update
@@ -221,11 +221,21 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiY
     "price" : "1800.34"
 }
 
+### end assistance
+
+Patch http://localhost:8000/api/assistance/update/end/17/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDkxOTI0LCJpYXQiOjE3NDg4ODcxMjQsImp0aSI6IjFhNjdiM2VjN2IxODRkZGRiNjhkZGI2MDRjOWM3NDFhIiwidXNlcl9pZCI6NX0.Kky-D5V3wgbnzTXM5KT3gZRSxid0Y6idGm6YxW4Zm4k
+
+{
+    "total_price" : 4000
+}
+
 ### rating update
 
-Patch http://localhost:8000/api/assistance/update/rating/7/ HTTP/1.1
+Patch http://localhost:8000/api/assistance/update/rating/9/ HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5MDI3MDMzLCJpYXQiOjE3NDg0MjIyMzMsImp0aSI6IjAzZTA3ZmMwMDEzYTRhN2FhYjdhOGFlNDBhM2Q1MTU1IiwidXNlcl9pZCI6MTh9.SzXlG2CLN6ZsBaZBvPwAA6C102zT-qHSUs9iMo0P4X4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ5NDg4MjgyLCJpYXQiOjE3NDg4ODM0ODIsImp0aSI6ImNkZjRkZDZlZmRiNDQ1NDI5NTI2ZjM1OGJmYTFlZWQ2IiwidXNlcl9pZCI6Mn0.496SP9nHlafIK3vOTtso6D1TsRtxSN-NigKF4TXf3KE
 
 {
     "rating" : "3.5"
