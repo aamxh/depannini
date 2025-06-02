@@ -1,35 +1,23 @@
 import 'package:depannini_user/app/auth/auth_api.dart';
+import 'package:depannini_user/app/auth/signin/phone_number_signin_view.dart';
 import 'package:depannini_user/app/auth/signin/reset_password_view.dart';
 import 'package:depannini_user/app/auth/signup/phone_number_view.dart';
 import 'package:depannini_user/app/main/client_view_model.dart';
 import 'package:depannini_user/app/main/home_view.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:depannini_user/core/helpers.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignInV extends StatefulWidget {
+class EmailSignInV extends StatelessWidget {
 
-  const SignInV({super.key});
+  EmailSignInV({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _SignInVS();
-
-}
-
-class _SignInVS extends State<SignInV> {
-
-  final _phoneNumCtrl = TextEditingController();
+  final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  final _focusNode = FocusNode();
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,71 +40,39 @@ class _SignInVS extends State<SignInV> {
               ),
               SizedBox(height: size.height * 0.1),
               Text(
-                'Your phone number',
+                'Your email',
                 style: theme.textTheme.bodyLarge,
               ),
               SizedBox(height: size.height * 0.01),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: _focusNode.hasFocus ?
-                    MyConstants.primaryC :
-                    theme.colorScheme.secondary,
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Ex: h_zohir@gmail.com',
+                  hintStyle: theme.textTheme.bodyLarge!.copyWith(
+                    color: MyConstants.mediumGrey,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide(
+                      color: theme.colorScheme.secondary,
+                      width: 2,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: MyConstants.primaryC,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
                   ),
                 ),
-                height: size.height * 0.068,
-                child: Row(
-                  children: [
-                    SizedBox(width: size.width * 0.04),
-                    Text(
-                      '+213',
-                      style: theme.textTheme.titleSmall,
-                    ),
-                    SizedBox(width: size.width * 0.03),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Container(
-                        width: 2,
-                        decoration: BoxDecoration(
-                          color: MyConstants.mediumGrey,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        validator: (val) {
-                          if (val == null || val.length != 9 || !val.isNum) {
-                            return "Invalid phone number format!";
-                          }
-                          return null;
-                        },
-                        focusNode: _focusNode,
-                        style: theme.textTheme.headlineSmall!.copyWith(
-                          color: MyConstants.primaryC,
-                          letterSpacing: 5,
-                        ),
-                        buildCounter: (context, {
-                          required currentLength,
-                          required isFocused,
-                          required maxLength,
-                        }) => null,
-                        textAlign: TextAlign.center,
-                        maxLength: 10,
-                        decoration: InputDecoration(
-                          hintText: "Ex: 0557038640",
-                          hintStyle: theme.textTheme.bodyLarge!.copyWith(
-                            color: MyConstants.mediumGrey,
-                          ),
-                          border: InputBorder.none,
-                        ),
-                        //style: ,
-                        controller: _phoneNumCtrl,
-                        keyboardType: TextInputType.phone,
-                      ),
-                    ),
-                  ],
-                ),
+                controller: _emailCtrl,
+                cursorColor: MyConstants.primaryC,
+                style: theme.textTheme.bodyLarge,
+                keyboardType: TextInputType.emailAddress,
+                validator: (val) {
+                  return EmailValidator.validate(val!) ? null :
+                  'Invalid email!';
+                },
               ),
               SizedBox(height: size.height * 0.03),
               Text(
@@ -171,8 +127,8 @@ class _SignInVS extends State<SignInV> {
                         ),),
                         barrierDismissible: false,
                       );
-                      final res = await AuthApi.signInUserWithPhoneNum(
-                        "+213${_phoneNumCtrl.text}",
+                      final res = await AuthApi.signInUserWithEmail(
+                        _emailCtrl.text,
                         _passwordCtrl.text,
                       );
                       Get.back();
@@ -222,7 +178,7 @@ class _SignInVS extends State<SignInV> {
               SizedBox(height: size.height * 0.03,),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () => Get.off(() => PhoneNumberSignInV()),
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(size.width * 0.64, size.height * 0.064),
                     foregroundColor: theme.colorScheme.secondary,
@@ -234,11 +190,11 @@ class _SignInVS extends State<SignInV> {
                     side: BorderSide(color: theme.colorScheme.secondary, width: 2),
                   ),
                   child:
-                      Text(
-                        'Sign-in with Email',
-                        style: theme.textTheme.titleSmall!.copyWith(
-                          color: theme.colorScheme.secondary,
-                        ),
+                  Text(
+                    'Sign-in with Phone',
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: theme.colorScheme.secondary,
+                    ),
                   ),
                 ),
               ),

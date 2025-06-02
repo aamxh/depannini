@@ -60,6 +60,32 @@ class AuthApi {
     }
   }
 
+  static Future<bool> signInUserWithEmail(String email, String password) async {
+    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
+    final dio = Dio();
+    final payload = {
+      'email': email,
+      'password': password,
+    };
+    print(payload);
+    try {
+      final res = await dio.post('$baseUrl/auth/login/email/',
+        data: jsonEncode(payload),);
+      print(res);
+      if (MyHelpers.resIsOk(res.statusCode)) {
+        await saveAccessToken(
+          res.data['tokens']['access'],
+          res.data['tokens']['refresh'],
+          DateTime.now().add(const Duration(days: 7)),
+        );
+        return true;
+      }
+      return false;
+    } catch(ex) {
+      print(ex);
+      return false;
+    }
+  }
 
   static Future<void> saveAccessToken(
       String accessToken,

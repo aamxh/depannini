@@ -1,4 +1,5 @@
 import 'package:depannini_assistant/app/auth/auth_api.dart';
+import 'package:depannini_assistant/app/auth/signin/email_sign_in_view.dart';
 import 'package:depannini_assistant/app/auth/signin/reset_password_view.dart';
 import 'package:depannini_assistant/app/auth/signup/phone_number_view.dart';
 import 'package:depannini_assistant/app/main/assistant_view_model.dart';
@@ -11,16 +12,16 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignInV extends StatefulWidget {
+class PhoneNumberSignInV extends StatefulWidget {
 
-  const SignInV({super.key});
+  const PhoneNumberSignInV({super.key});
 
   @override
   State<StatefulWidget> createState() => _SignInVS();
 
 }
 
-class _SignInVS extends State<SignInV> {
+class _SignInVS extends State<PhoneNumberSignInV> {
 
   final _phoneNumCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
@@ -229,7 +230,7 @@ class _SignInVS extends State<SignInV> {
               ),
               SizedBox(height: size.height * 0.03,),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () => Get.off(() => EmailSignInV()),
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(size.width * 0.64, size.height * 0.064),
                   foregroundColor: theme.colorScheme.secondary,

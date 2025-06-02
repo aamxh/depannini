@@ -2,7 +2,7 @@ import 'package:depannini_user/app/main/client_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../auth/signin/signin_view.dart';
+import '../auth/signin/phone_number_signin_view.dart';
 import '../auth/signup/phone_number_view.dart';
 
 class WelcomeV extends StatelessWidget {
@@ -53,7 +53,7 @@ class WelcomeV extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Get.put(ClientVM());
-                Get.to(SignInV());
+                Get.to(PhoneNumberSignInV());
               },
               style: ElevatedButton.styleFrom(
                 elevation: 0,

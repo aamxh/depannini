@@ -1,4 +1,4 @@
-import 'package:depannini_assistant/app/auth/signin/signin_view.dart';
+import 'package:depannini_assistant/app/auth/signin/phone_number_signin_view.dart';
 import 'package:depannini_assistant/app/auth/signup/email_verification_view.dart';
 import 'package:depannini_assistant/app/auth/signup/email_verification_view_model.dart';
 import 'package:depannini_assistant/app/main/assistant_view_model.dart';
@@ -275,38 +275,12 @@ class SignUp2V extends StatelessWidget {
                         color: MyConstants.primaryC,
                       ),
                       recognizer: TapGestureRecognizer()..onTap =
-                          () => Get.to(() => SignInV()),
+                          () => Get.to(() => PhoneNumberSignInV()),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: size.height * 0.03,),
-              Text(
-                'Or',
-                style: theme.textTheme.titleSmall,
-              ),
-              SizedBox(height: size.height * 0.03,),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  fixedSize: Size(size.width * 0.64, size.height * 0.064),
-                  backgroundColor: theme.scaffoldBackgroundColor,
-                  foregroundColor: theme.colorScheme.secondary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(28),
-                  ),
-                  elevation: 0,
-                  side: BorderSide(
-                    color: theme.colorScheme.secondary,
-                    width: 2,
-                  ),
-                ),
-                child: Text(
-                      'Sign-in with Email',
-                      style: theme.textTheme.titleSmall,
-                    ),
-              ),
-              SizedBox(height: size.height * 0.15,),
+              SizedBox(height: size.height * 0.1,),
             ],
           ),
         ),
