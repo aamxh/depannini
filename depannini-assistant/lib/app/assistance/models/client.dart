@@ -6,19 +6,17 @@ part 'client.g.dart';
 class Client {
 
   final String name;
-  final String email;
-  final String password;
-  final String phoneNum;
-  final double currentLat;
-  final double currentLng;
+  String phoneNum = '';
+  final double lat;
+  final double lng;
+  final String address;
 
   Client({
     required this.name,
-    required this.email,
-    required this.password,
     required this.phoneNum,
-    required this.currentLat,
-    required this.currentLng,
+    required this.lat,
+    required this.lng,
+    required this.address,
   });
 
   factory Client.fromJson(Map<String, dynamic> json) => _$ClientFromJson(json);

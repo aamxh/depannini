@@ -15,32 +15,32 @@ class AssistanceAPI {
   static Future<WebSocketChannel?> requestAssistance(AssistanceRequest assistance) async {
     final baseUrl = MyConstants.httpDjangoApiBaseUrl;
     final dio = Dio();
+    try {
     final token = await AuthApi.getAccessToken();
     dio.options.headers['Authorization'] = 'Bearer $token';
     Map<String, dynamic> payload = assistance.toJson();
     payload = MyHelpers.modifyCamelToSnakeForOneKey(payload, 'assistanceType');
     payload = MyHelpers.modifyCamelToSnakeForOneKey(payload, 'vehicleType');
     print(payload);
-    try {
-      final res = await dio.post('$baseUrl/assistance/request/',
-        data: jsonEncode(payload),);
-      print(res);
-      if (MyHelpers.resIsOk(res.statusCode)) {
-        final channel = await openAssistanceWSConnection(res.data['id']);
-        if (channel != null) {
-          Get.put(AssistanceVM());
-          Get.find<AssistanceVM>().id = res.data['id'];
-        }
-        return channel;
+    final res = await dio.post('$baseUrl/assistance/request/',
+      data: jsonEncode(payload),);
+    print(res);
+    if (MyHelpers.resIsOk(res.statusCode)) {
+      final channel = await connectToAssistanceWS(res.data['id']);
+      if (channel != null) {
+        Get.put(AssistanceVM());
+        Get.find<AssistanceVM>().id = res.data['id'];
       }
-      return null;
+      return channel;
+    }
+    return null;
     } catch(ex) {
       print(ex);
       return null;
     }
   }
 
-  static Future<WebSocketChannel?> openAssistanceWSConnection(String id) async {
+  static Future<WebSocketChannel?> connectToAssistanceWS(String id) async {
     final baseUrl = MyConstants.wsDjangoApiBaseUrl;
     final url = "$baseUrl/assistance/$id/";
     print("Connecting to: $url");
@@ -51,6 +51,33 @@ class AssistanceAPI {
     } on Exception catch(ex) {
       print(ex);
       return null;
+    }
+  }
+
+  static Future<bool> updateAssistanceState(String id, String state) async {
+    final dio = Dio();
+    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
+    try {
+      final token = await AuthApi.getAccessToken();
+      dio.options.headers['Authorization'] = 'Bearer $token';
+      final res = await dio.patch(
+        "$baseUrl/assistance/update/status/$id/",
+        data: {"status": state},
+      );
+      if (MyHelpers.resIsOk(res.statusCode)) return true;
+      return false;
+    } on Exception catch (ex) {
+      print(ex);
+      return false;
+    }
+  }
+
+  static Future<void> closeWSConnection(WebSocketChannel? channel) async {
+    if (channel == null) return;
+    try {
+      await channel.sink.close();
+    } on Exception catch(ex) {
+      print(ex);
     }
   }
 

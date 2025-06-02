@@ -1,6 +1,5 @@
 import 'package:depannini_assistant/app/assistance/assistance_api.dart';
-import 'package:depannini_assistant/app/assistance/notifications_api.dart';
-import 'package:depannini_assistant/app/main/home_view_model.dart';
+import 'package:depannini_assistant/app/main/assistant_ws_view_model.dart';
 import 'package:depannini_assistant/app/settings/settings_view.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,7 @@ class HomeV extends StatelessWidget {
 
   HomeV({super.key});
 
-  final _vm = Get.find<HomeVM>();
+  final _homeVM = Get.find<HomeVM>();
   final _ctrl = Get.find<ThemeCtrl>();
 
   @override
@@ -62,7 +61,7 @@ class HomeV extends StatelessWidget {
           SizedBox(height: size.height * 0.01,),
           Obx(() =>
             Text(
-              _vm.isActive ?
+              _homeVM.channel != null ?
               'switching to inactive mode will make you unavailable for requests from clients.' :
               'you can switch to active mode to receive requests from clients.',
               style: theme.textTheme.titleSmall!.copyWith(
@@ -88,26 +87,15 @@ class HomeV extends StatelessWidget {
               fontSize: 22,
               cornerRadius: 20,
               onToggle: (idx) async {
-                // if (idx == 1) {
-                //   final res =
-                //   await NotificationsApi.verifyNotificationsEnabled();
-                //   if (res) {
-                //     NotificationsApi.sendNotification(
-                //       'Incoming assistance request.',
-                //       'Click to see more..',
-                //     );
-                //     _vm.changeActiveState(idx!);
-                //   }
-                // }
                 if (idx == 1) {
-                  _vm.channel = await AssistanceAPI.connectToWS(42.toString());
+                  final res = await AssistanceAPI.changeAssistantState(true);
+                  _homeVM.channel = await AssistanceAPI.connectToAssistantWS(42.toString());
+                  if (_homeVM.channel != null && res) {
+                    _homeVM.startListening();
+                  }
                 } else {
-                  await AssistanceAPI.closeWSConnection(_vm.channel);
-                }
-                final res =
-                await AssistanceAPI.changeAssistantState(idx == 0 ? false : true);
-                if (res) {
-                  _vm.isActive = idx == 0 ? false : true;
+                  await AssistanceAPI.changeAssistantState(false);
+                  await AssistanceAPI.closeWSConnection(_homeVM.channel);
                 }
               },
             ),

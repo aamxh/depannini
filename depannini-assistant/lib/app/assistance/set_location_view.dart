@@ -1,4 +1,4 @@
-import 'package:depannini_assistant/app/assistance/location_repo.dart';
+import 'package:depannini_assistant/app/assistance/location_api.dart';
 import 'package:depannini_assistant/app/assistance/set_location_view_model.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class _SetLocationVS extends State<SetLocationV> {
   Marker? _marker;
 
   Future<void> _initState() async {
-    final locData = await MyLocationRepo.getCurrentLocation();
+    final locData = await LocationApi.getCurrentLocation();
     if (locData == null) return;
     _vm.location = (LatLng(locData.latitude ?? 0, locData.longitude ?? 0));
     _vm.changeAddress(LatLng(locData.latitude ?? 0, locData.longitude ?? 0));

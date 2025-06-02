@@ -1,10 +1,15 @@
+import 'package:depannini_assistant/app/assistance/assistance_api.dart';
+import 'package:depannini_assistant/app/assistance/assistance_view_model.dart';
+import 'package:depannini_assistant/app/assistance/location_view.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class TowingRequestDetailsV extends StatelessWidget {
 
-  const TowingRequestDetailsV({super.key});
+  TowingRequestDetailsV({super.key});
+
+  final _assistanceVM = Get.find<AssistanceVM>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,7 @@ class TowingRequestDetailsV extends StatelessWidget {
                   size: 80,
                 ),
                 Text(
-                  'Mohammed',
+                  _assistanceVM.assistance.client.name,
                   style: theme.textTheme.titleSmall,
                 ),
               ],
@@ -45,7 +50,7 @@ class TowingRequestDetailsV extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.01,),
             Text(
-              '12 Rue Didouche Mourad, Alger Centre, Algiers, Algeria',
+              _assistanceVM.assistance.client.address,
               style: theme.textTheme.bodyLarge,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -57,7 +62,7 @@ class TowingRequestDetailsV extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.01,),
             Text(
-              '8 Rue Didouche Mourad, Alger Centre, Algiers, Algeria',
+              _assistanceVM.assistance.toAddress,
               style: theme.textTheme.bodyLarge,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -69,14 +74,17 @@ class TowingRequestDetailsV extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.01,),
             Text(
-              'Heavy',
+              _assistanceVM.assistance.vehicleType,
               style: theme.textTheme.bodyLarge,
             ),
             SizedBox(height: size.height * 0.06,),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-
+                onPressed: () async {
+                  final res = await AssistanceAPI.acceptAssistance(_assistanceVM.assistance.id.toString());
+                  if (res) {
+                    Get.to(() => LocationV());
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(size.width * 0.5, size.height * 0.064),
@@ -92,6 +100,7 @@ class TowingRequestDetailsV extends StatelessWidget {
             Center(
               child: TextButton(
                 onPressed: () {
+                  Get.delete<AssistanceVM>();
                   Get.back();
                 },
                 child: Text(

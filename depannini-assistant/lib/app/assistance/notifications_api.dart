@@ -38,7 +38,7 @@ class NotificationsApi {
     }
   }
 
-  static Future<void> sendNotification(String title, String body) async {
+  static Future<void> sendNotification(String title, String body, {String payload = 'default'}) async {
     final plugin = FlutterLocalNotificationsPlugin();
     final id = await _getNotificationId();
     if (id == null) return;
@@ -53,10 +53,11 @@ class NotificationsApi {
     final notificationDetails =
     NotificationDetails(android: androidNotificationDetails);
     try {
-      await plugin.show(id, title, body, notificationDetails, payload: 'payload');
+      await plugin.show(id, title, body, notificationDetails, payload: payload);
     } catch(ex) {
       print(ex);
     }
   }
+
 
 }

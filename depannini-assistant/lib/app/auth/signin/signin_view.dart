@@ -3,7 +3,8 @@ import 'package:depannini_assistant/app/auth/signin/reset_password_view.dart';
 import 'package:depannini_assistant/app/auth/signup/phone_number_view.dart';
 import 'package:depannini_assistant/app/main/assistant_view_model.dart';
 import 'package:depannini_assistant/app/main/home_view.dart';
-import 'package:depannini_assistant/app/main/home_view_model.dart';
+import 'package:depannini_assistant/app/assistance/assistance_view_model.dart';
+import 'package:depannini_assistant/app/main/assistant_ws_view_model.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:depannini_assistant/core/helpers.dart';
 import 'package:flutter/gestures.dart';
@@ -187,6 +188,7 @@ class _SignInVS extends State<SignInV> {
                     Get.back();
                     if (res) {
                       Get.delete<AssistantVM>();
+                      Get.put(AssistanceVM());
                       Get.put(HomeVM());
                       Get.offAll(() => HomeV());
                     }

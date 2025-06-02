@@ -8,18 +8,16 @@ part of 'client.dart';
 
 Client _$ClientFromJson(Map<String, dynamic> json) => Client(
       name: json['name'] as String,
-      email: json['email'] as String,
-      password: json['password'] as String,
       phoneNum: json['phoneNum'] as String,
-      currentLat: (json['currentLat'] as num).toDouble(),
-      currentLng: (json['currentLng'] as num).toDouble(),
+      lat: (json['lat'] as num).toDouble(),
+      lng: (json['lng'] as num).toDouble(),
+      address: json['address'] as String,
     );
 
 Map<String, dynamic> _$ClientToJson(Client instance) => <String, dynamic>{
       'name': instance.name,
-      'email': instance.email,
-      'password': instance.password,
       'phoneNum': instance.phoneNum,
-      'currentLat': instance.currentLat,
-      'currentLng': instance.currentLng,
+      'lat': instance.lat,
+      'lng': instance.lng,
+      'address': instance.address,
     };

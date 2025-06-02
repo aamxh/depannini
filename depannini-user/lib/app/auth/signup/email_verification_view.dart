@@ -101,7 +101,8 @@ class EmailVerificationV extends StatelessWidget {
                         email: vm.email,
                         password: vm.password,
                         phoneNum: vm.num,
-                        location: vm.location,
+                        currentLat: vm.currentLat,
+                        currentLng: vm.currentLng,
                       ));
                       Get.back();
                       if (res) {

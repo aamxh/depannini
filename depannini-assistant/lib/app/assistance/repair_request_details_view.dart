@@ -1,10 +1,15 @@
+import 'package:depannini_assistant/app/assistance/assistance_api.dart';
+import 'package:depannini_assistant/app/assistance/assistance_view_model.dart';
+import 'package:depannini_assistant/app/assistance/location_view.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class RepairRequestDetailsV extends StatelessWidget {
 
-  const RepairRequestDetailsV({super.key});
+  RepairRequestDetailsV({super.key});
+
+  final _assistanceVM = Get.find<AssistanceVM>();
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,7 @@ class RepairRequestDetailsV extends StatelessWidget {
                   size: 80,
                 ),
                 Text(
-                  'Mohammed',
+                  _assistanceVM.assistance.client.name,
                   style: theme.textTheme.titleSmall,
                 ),
               ],
@@ -45,7 +50,7 @@ class RepairRequestDetailsV extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.01,),
             Text(
-              '12 Rue Didouche Mourad, Alger Centre, Algiers, Algeria',
+              _assistanceVM.assistance.client.address,
               style: theme.textTheme.bodyLarge,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
@@ -57,8 +62,7 @@ class RepairRequestDetailsV extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.01,),
             Text(
-              'I\'ve been hearing a grinding noise coming from the front wheels whenever I brake.'
-              'It started about a week ago and has been getting louder.',
+              _assistanceVM.assistance.description,
               style: theme.textTheme.bodyLarge,
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
@@ -66,8 +70,11 @@ class RepairRequestDetailsV extends StatelessWidget {
             SizedBox(height: size.height * 0.06,),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-
+                onPressed: () async {
+                  final res = await AssistanceAPI.acceptAssistance(_assistanceVM.assistance.id.toString());
+                  if (res) {
+                    Get.to(() => LocationV());
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(size.width * 0.5, size.height * 0.064),
@@ -83,6 +90,7 @@ class RepairRequestDetailsV extends StatelessWidget {
             Center(
               child: TextButton(
                 onPressed: () {
+                  Get.delete<AssistanceVM>();
                   Get.back();
                 },
                 child: Text(
