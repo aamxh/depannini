@@ -2,7 +2,9 @@ from datetime import timedelta
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+import dj_database_url
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -14,9 +16,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-q)ic-q6puyv8rl1b+x0z2%=^mg_+9-&1+5kozy^hjf@67el%@-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*'] if DEBUG else [
+    'your-app-name.onrender.com',  # not done yet
+    'localhost',
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -27,26 +33,28 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'core',
     'rest_framework',
     'rest_framework_simplejwt',  # Add Simple JWT
-    'channels',
+    'channels'
 ]
 ASGI_APPLICATION = 'depannini.asgi.application'
 
 # Chanel layers config
 CHANNEL_LAYERS = {
     "default": {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-        # "BACKEND": "channels_redis.core.RedisChannelLayer",
-        # "CONFIG": {
-        #    "hosts": [("localhost", 6379)],
-        # },
+        'BACKEND': 'channels_redis.core.RedisChannelLayer' if not DEBUG else 'channels.layers.InMemoryChannelLayer',
+        "CONFIG": {
+            "hosts": [os.getenv('REDIS_URL', 'redis://localhost:6379')],
+        } if not DEBUG else {},
     }
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,10 +95,13 @@ WSGI_APPLICATION = 'depannini.wsgi.application'
 #   }
 # }
 
-load_dotenv()
 
 DATABASES = {
-    'default': {
+    'default': dj_database_url.parse(
+        os.getenv('DATABASE_URL'),
+        conn_max_age=600,
+        conn_health_checks=True
+    ) if os.getenv('DATABASE_URL') else {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
@@ -124,6 +135,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
