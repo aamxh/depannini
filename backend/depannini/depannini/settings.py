@@ -19,7 +19,7 @@ SECRET_KEY = 'django-insecure-q)ic-q6puyv8rl1b+x0z2%=^mg_+9-&1+5kozy^hjf@67el%@-
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = ['*'] if DEBUG else [
-    'your-app-name.onrender.com',  # not done yet
+    'Depannini.onrender.com',
     'localhost',
     '127.0.0.1'
 ]
@@ -162,10 +162,6 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
-
-
-# Email settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development
 
 
 # JWT settings
