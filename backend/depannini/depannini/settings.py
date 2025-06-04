@@ -24,6 +24,22 @@ ALLOWED_HOSTS = ['*'] if DEBUG else [
     '127.0.0.1'
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://depannini.onrender.com',
+    'https://*.onrender.com',
+]
+# In settings.py
+
+# Session Configuration
+SESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_AGE = 3600  # 1 hour
+
+# Ensure sessions work properly
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_SAVE_EVERY_REQUEST = True
+
 
 # Application definition
 INSTALLED_APPS = [
