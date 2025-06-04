@@ -107,7 +107,7 @@ class AssistanceRequestView(APIView):
             nearby_assistants, key=lambda x: x["distance"])
         # push notifications
         for assistant in sorted_nearby_assistants_list:
-            room_group_name = f'assistant_{assistant['assistant_id']}'
+            room_group_name = f"assistant_{assistant['assistant_id']}"
             print(room_group_name)
             try:
                 if assistance.assistance_type == 'towing':
