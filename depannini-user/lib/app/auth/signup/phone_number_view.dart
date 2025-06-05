@@ -30,7 +30,7 @@ class PhoneNumberVS extends State<PhoneNumberV> {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     return Scaffold(
-      body: Container(
+      body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Form(
           key: _key,

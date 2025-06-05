@@ -43,7 +43,7 @@ class EnableLocationV extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
                   child: Text(
-                    'This will enable us to find the nearest assistants for you.',
+                    'This will enable us to find the nearest assistants for you. It is necessary for registration.',
                     textAlign: TextAlign.center,
                     style: theme.textTheme.bodyMedium,
                   ),
@@ -76,17 +76,6 @@ class EnableLocationV extends StatelessWidget {
                     style: theme.textTheme.titleSmall!.copyWith(
                       color: Colors.white,
                     ),
-                  ),
-                ),
-                SizedBox(height: size.height * 0.02,),
-                TextButton(
-                  onPressed: () {
-                    Get.put(AssistantVM());
-                    Get.to(() => WelcomeV());
-                  },
-                  child: Text(
-                    'Skip for now',
-                    style: theme.textTheme.titleSmall,
                   ),
                 ),
               ],

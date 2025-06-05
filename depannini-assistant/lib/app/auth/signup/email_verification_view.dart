@@ -116,7 +116,7 @@ class EmailVerificationV extends StatelessWidget {
                     if (res) {
                       Get.delete<AssistantVM>();
                       Get.put(AssistanceVM());
-                      Get.put(HomeVM());
+                      Get.put(AssistantWSVM());
                       Get.offAll(() => HomeV());
                     }
                   } else {

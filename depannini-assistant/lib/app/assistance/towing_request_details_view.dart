@@ -17,13 +17,12 @@ class TowingRequestDetailsV extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: size.height * 0.02,),
+            SizedBox(height: size.height * 0.15,),
             Center(
               child: Text(
                 'Towing request',
@@ -84,14 +83,8 @@ class TowingRequestDetailsV extends StatelessWidget {
                 onPressed: () async {
                   final res = await AssistanceAPI.acceptAssistance(_assistanceVM.assistance.id.toString());
                   if (res) {
-                    final res = await AssistanceAPI.updateAssistanceState(
-                        _assistanceVM.assistance.id.toString(),
-                        'on-going',
-                    );
-                    if (res) {
-                      Get.put(LocationVM());
-                      Get.off(() => LocationV());
-                    }
+                    Get.put(LocationVM());
+                    Get.to(() => LocationV());
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -100,14 +93,17 @@ class TowingRequestDetailsV extends StatelessWidget {
                 ),
                 child: Text(
                   'Accept',
-                  style: theme.textTheme.titleSmall,
+                  style: theme.textTheme.titleSmall!.copyWith(
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
             SizedBox(height: size.height * 0.01,),
             Center(
               child: TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  await AssistanceAPI.closeWSConnection(Get.find<AssistanceVM>().channel);
                   Get.delete<AssistanceVM>();
                   Get.back();
                 },

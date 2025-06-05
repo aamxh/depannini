@@ -104,10 +104,10 @@ class RepairV extends StatelessWidget {
                         Get.back();
                         await Future.delayed(Duration(milliseconds: 100));
                         if (res != null) {
-                          final vm = Get.find<AssistanceVM>();
-                          vm.state = 'requested';
-                          vm.channel = res;
-                          vm.startListening();
+                          final assistanceVM = Get.find<AssistanceVM>();
+                          assistanceVM.state = 'requested';
+                          assistanceVM.channel = res;
+                          assistanceVM.startListening();
                         }
                       }
                     },

@@ -25,16 +25,16 @@ class AssistanceVM extends GetxController {
       lng: 0.0,
     ),
   ).obs;
-  final Rx<WebSocketChannel?> _channel = null.obs;
-  final Rx<bool> _arrived = false.obs;
+  final Rx<WebSocketChannel?> _channel = Rx<WebSocketChannel?>(null);
+  final Rx<String> _state = 'requested'.obs;
 
   WebSocketChannel? get channel => _channel.value;
   Assistance get assistance => _assistance.value;
-  bool get arrived => _arrived.value;
+  String get state => _state.value;
 
   set assistance(Assistance val) => _assistance.value = val;
   set channel(WebSocketChannel? val) => _channel.value = val;
-  set arrived(bool val) => _arrived.value = val;
+  set state(String val) => _state.value = val;
   set phoneNum(String val) => _assistance.value.client.phoneNum = val;
 
   void startListening() {
@@ -47,8 +47,9 @@ class AssistanceVM extends GetxController {
               double.parse(data['lat']),
               double.parse(data['lng']),
           );
-        } else {
-
+        } else if (data['type'] == 'status') {
+          state = data['status'];
+          print(state);
         }
       },
           onDone: () {

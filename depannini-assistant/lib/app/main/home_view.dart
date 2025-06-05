@@ -1,4 +1,5 @@
 import 'package:depannini_assistant/app/assistance/assistance_api.dart';
+import 'package:depannini_assistant/app/assistance/assistance_view_model.dart';
 import 'package:depannini_assistant/app/main/assistant_ws_view_model.dart';
 import 'package:depannini_assistant/app/settings/settings_view.dart';
 import 'package:depannini_assistant/core/constants.dart';
@@ -12,7 +13,7 @@ class HomeV extends StatelessWidget {
 
   HomeV({super.key});
 
-  final _homeVM = Get.find<HomeVM>();
+  final _assistantWSVM = Get.find<AssistantWSVM>();
   final _ctrl = Get.find<ThemeCtrl>();
 
   @override
@@ -61,7 +62,7 @@ class HomeV extends StatelessWidget {
           SizedBox(height: size.height * 0.01,),
           Obx(() =>
             Text(
-              _homeVM.channel != null ?
+              _assistantWSVM.channel != null ?
               'switching to inactive mode will make you unavailable for requests from clients.' :
               'you can switch to active mode to receive requests from clients.',
               style: theme.textTheme.titleSmall!.copyWith(
@@ -89,13 +90,14 @@ class HomeV extends StatelessWidget {
               onToggle: (idx) async {
                 if (idx == 1) {
                   final res = await AssistanceAPI.changeAssistantState(true);
-                  _homeVM.channel = await AssistanceAPI.connectToAssistantWS(42.toString());
-                  if (_homeVM.channel != null && res) {
-                    _homeVM.startListening();
+                  _assistantWSVM.channel = await AssistanceAPI.connectToAssistantWS(_assistantWSVM.id);
+                  if (_assistantWSVM.channel != null && res) {
+                    Get.put(AssistanceVM());
+                    _assistantWSVM.startListening();
                   }
                 } else {
                   await AssistanceAPI.changeAssistantState(false);
-                  await AssistanceAPI.closeWSConnection(_homeVM.channel);
+                  await AssistanceAPI.closeWSConnection(_assistantWSVM.channel);
                 }
               },
             ),

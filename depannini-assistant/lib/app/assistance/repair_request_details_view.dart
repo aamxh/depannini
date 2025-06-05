@@ -17,13 +17,12 @@ class RepairRequestDetailsV extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: size.height * 0.02,),
+            SizedBox(height: size.height * 0.15,),
             Center(
               child: Text(
                 'Repair request',
@@ -74,14 +73,9 @@ class RepairRequestDetailsV extends StatelessWidget {
                 onPressed: () async {
                   final res = await AssistanceAPI.acceptAssistance(_assistanceVM.assistance.id.toString());
                   if (res) {
-                    final res = await AssistanceAPI.updateAssistanceState(
-                      _assistanceVM.assistance.id.toString(),
-                      'on-going',
-                    );
-                    if (res) {
-                      Get.put(LocationVM());
-                      Get.off(() => LocationV());
-                    }
+                    Get.put(LocationVM());
+                    await Future.delayed(Duration(milliseconds: 100));
+                    Get.to(() => LocationV());
                   }
                 },
                 style: ElevatedButton.styleFrom(

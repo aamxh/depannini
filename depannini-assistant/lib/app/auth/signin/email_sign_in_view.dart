@@ -1,8 +1,10 @@
+import 'package:depannini_assistant/app/assistance/assistance_view_model.dart';
 import 'package:depannini_assistant/app/auth/auth_api.dart';
 import 'package:depannini_assistant/app/auth/signin/phone_number_signin_view.dart';
 import 'package:depannini_assistant/app/auth/signin/reset_password_view.dart';
 import 'package:depannini_assistant/app/auth/signup/phone_number_view.dart';
 import 'package:depannini_assistant/app/main/assistant_view_model.dart';
+import 'package:depannini_assistant/app/main/assistant_ws_view_model.dart';
 import 'package:depannini_assistant/app/main/home_view.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:depannini_assistant/core/helpers.dart';
@@ -85,7 +87,8 @@ class EmailSignInV extends StatelessWidget {
                 //cursorColor: MyConstants.primaryC,
                 style: theme.textTheme.bodyLarge,
                 controller: _passwordCtrl,
-                validator: (val) => MyHelpers.validatePassword(val!),
+                // validator: (val) => MyHelpers.validatePassword(val!),
+                validator: (val) => null,
                 decoration: InputDecoration(
                   hintText: 'Ex: 22GAh^sg@',
                   hintStyle: theme.textTheme.bodyLarge!.copyWith(
@@ -134,12 +137,14 @@ class EmailSignInV extends StatelessWidget {
                       Get.back();
                       if (res) {
                         Get.delete<AssistantVM>();
+                        Get.put(AssistanceVM());
                         Get.offAll(() => HomeV());
                       }
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(size.width * 0.5, size.height * 0.064),
+                    elevation: 0,
                   ),
                   child: Text(
                     'Sign-in',
@@ -178,7 +183,7 @@ class EmailSignInV extends StatelessWidget {
               SizedBox(height: size.height * 0.03,),
               Center(
                 child: ElevatedButton(
-                  onPressed: () => Get.off(() => PhoneNumberSignInV()),
+                  onPressed: () => Get.to(() => PhoneNumberSignInV()),
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(size.width * 0.64, size.height * 0.064),
                     foregroundColor: theme.colorScheme.secondary,

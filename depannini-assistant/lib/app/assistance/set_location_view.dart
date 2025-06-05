@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:depannini_assistant/app/assistance/location_api.dart';
 import 'package:depannini_assistant/app/assistance/set_location_view_model.dart';
 import 'package:depannini_assistant/core/constants.dart';
@@ -33,6 +35,13 @@ class _SetLocationVS extends State<SetLocationV> {
   void initState() {
     super.initState();
     _initState();
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    _vm.dispose();
+    super.dispose();
   }
 
   @override

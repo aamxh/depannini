@@ -19,7 +19,8 @@ class AuthWrapperV extends StatelessWidget {
           ),),);
         }
         final tokenIsValid = snapshot.data!;
-        return tokenIsValid ? HomeV() : WelcomeV();
+        // return tokenIsValid ? HomeV() : WelcomeV();
+        return WelcomeV();
       },
     );
   }

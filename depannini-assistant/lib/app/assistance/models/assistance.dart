@@ -7,7 +7,7 @@ part 'assistance.g.dart';
 class Assistance {
 
   final int id;
-  final String state;
+  String state;
   final Client client;
   final String type;
   final String description;

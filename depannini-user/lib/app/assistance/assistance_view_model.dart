@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:depannini_user/app/assistance/location_view.dart';
 import 'package:depannini_user/app/assistance/location_view_model.dart';
+import 'package:depannini_user/app/assistance/models/assistance_request.dart';
 import 'package:depannini_user/app/assistance/models/assistant.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -36,9 +37,23 @@ class AssistanceVM extends GetxController {
             double.parse(data['lat']),
             double.parse(data['lng']),
           );
-        } else {
+        } else if (data['type'] == 'status') {
+          state = data['status'];
+          print(state);
           if (data['status'] == 'accepted') {
+            assistant = Assistant(
+                name: data['assistant']['name'],
+                phoneNumber: data['assistant']['phone_number'],
+                currentLat: data['assistant']['lat'],
+                currentLng: data['assistant']['lng'],
+                serviceType: '',
+                vehicleType: '',
+            );
             Get.put(LocationVM());
+            Get.find<LocationVM>().assistantLocation = LatLng(
+              data['assistant']['lat'],
+              data['assistant']['lng'],
+            );
             Get.to(() => LocationV());
           }
         }

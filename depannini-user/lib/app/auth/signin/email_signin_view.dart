@@ -85,7 +85,8 @@ class EmailSignInV extends StatelessWidget {
                 //cursorColor: MyConstants.primaryC,
                 style: theme.textTheme.bodyLarge,
                 controller: _passwordCtrl,
-                validator: (val) => MyHelpers.validatePassword(val!),
+                // validator: (val) => MyHelpers.validatePassword(val!),
+                validator: (val) => null,
                 decoration: InputDecoration(
                   hintText: 'Ex: 22GAh^sg@',
                   hintStyle: theme.textTheme.bodyLarge!.copyWith(
@@ -178,7 +179,7 @@ class EmailSignInV extends StatelessWidget {
               SizedBox(height: size.height * 0.03,),
               Center(
                 child: ElevatedButton(
-                  onPressed: () => Get.off(() => PhoneNumberSignInV()),
+                  onPressed: () => Get.to(() => PhoneNumberSignInV()),
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(size.width * 0.64, size.height * 0.064),
                     foregroundColor: theme.colorScheme.secondary,

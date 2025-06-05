@@ -26,10 +26,10 @@ class AssistanceAPI {
       data: jsonEncode(payload),);
     print(res);
     if (MyHelpers.resIsOk(res.statusCode)) {
-      final channel = await connectToAssistanceWS(res.data['id']);
+      final channel = await connectToAssistanceWS(res.data['assistance']['id'].toString());
       if (channel != null) {
         Get.put(AssistanceVM());
-        Get.find<AssistanceVM>().id = res.data['id'];
+        Get.find<AssistanceVM>().id = res.data['assistance']['id'];
       }
       return channel;
     }

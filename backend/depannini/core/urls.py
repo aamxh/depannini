@@ -22,7 +22,8 @@ from .assistance_views import (
     AcceptAssistanceView,
     AssistanceStatusUpdateView,
     AssistancePriceUpdateView,
-    AssistanceRatingUpdateView
+    AssistanceRatingUpdateView,
+    EndAssistanceView
 )
 
 urlpatterns = [
@@ -116,5 +117,9 @@ urlpatterns = [
     path(
         'assistance/update/rating/<int:assistance_id>/', AssistanceRatingUpdateView.as_view(),
         name='rating-update'
+    ),
+    path(
+        'assistance/update/end/<int:assistance_id>/', EndAssistanceView.as_view(),
+        name='end-assistance'
     ),
 ]

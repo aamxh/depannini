@@ -24,7 +24,7 @@ class MyHelpers {
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
-
+      print('Could not launch $url');
     }
   }
 

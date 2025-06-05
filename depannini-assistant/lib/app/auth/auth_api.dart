@@ -1,7 +1,9 @@
+import 'package:depannini_assistant/app/main/assistant_ws_view_model.dart';
 import 'package:depannini_assistant/app/main/models/assistant.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:depannini_assistant/core/helpers.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,6 +53,9 @@ class AuthApi {
           res.data['tokens']['refresh'],
           DateTime.now().add(const Duration(days: 7)),
         );
+        Get.put(AssistantWSVM());
+        print(res.data['user']['id']);
+        Get.find<AssistantWSVM>().id = res.data['user']['id'].toString();
         return true;
       }
       return false;
@@ -78,6 +83,9 @@ class AuthApi {
           res.data['tokens']['refresh'],
           DateTime.now().add(const Duration(days: 7)),
         );
+        Get.put(AssistantWSVM());
+        print(res.data['user']['id']);
+        Get.find<AssistantWSVM>().id = res.data['user']['id'].toString();
         return true;
       }
       return false;

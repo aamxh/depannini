@@ -22,11 +22,11 @@ class AuthWrapperV extends StatelessWidget {
           ),),);
         }
         final tokenIsValid = snapshot.data!;
-        if (tokenIsValid) {
-          Get.put(AssistanceVM());
-          Get.put(HomeVM());
-          return HomeV();
-        }
+        // if (tokenIsValid) {
+        //   Get.put(AssistanceVM());
+        //   Get.put(AssistantWSVM());
+        //   return HomeV();
+        // }
         return EnableLocationV();
       },
     );

@@ -12,7 +12,7 @@
 - PostgreSQL (recommended) or SQLite
 The project is using postgres as a database so you have install it on your machine and configure it 
 otherwise you can go with sqlite, just uncomment the database settings for sqlite in settings.py and comment 
-those of postgres .
+those of postgres . 
 ### Installation & Setup
 
 1. Clone the repository:
@@ -29,7 +29,7 @@ source venv/bin/activate  # On Windows: venv/Scripts/Activate  #if you had probl
 ```
 
 3. Install dependencies:
-```bash
+
 pip install -r requirements.txt
 ```
 

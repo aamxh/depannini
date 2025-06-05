@@ -18,7 +18,7 @@ class PhoneNumberVerificationV extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
+      body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Column(
           children: [

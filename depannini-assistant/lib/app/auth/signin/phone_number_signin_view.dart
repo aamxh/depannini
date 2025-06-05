@@ -137,7 +137,8 @@ class _SignInVS extends State<PhoneNumberSignInV> {
                     //cursorColor: MyConstants.primaryC,
                     style: theme.textTheme.bodyLarge,
                     controller: _passwordCtrl,
-                    validator: (val) => MyHelpers.validatePassword(val!),
+                    //validator: (val) => MyHelpers.validatePassword(val!),
+                    validator: (val) => null,
                     decoration: InputDecoration(
                       hintText: 'Ex: at^#w3sD',
                       hintStyle: theme.textTheme.bodyLarge!.copyWith(
@@ -190,7 +191,6 @@ class _SignInVS extends State<PhoneNumberSignInV> {
                     if (res) {
                       Get.delete<AssistantVM>();
                       Get.put(AssistanceVM());
-                      Get.put(HomeVM());
                       Get.offAll(() => HomeV());
                     }
                   }
@@ -230,7 +230,7 @@ class _SignInVS extends State<PhoneNumberSignInV> {
               ),
               SizedBox(height: size.height * 0.03,),
               ElevatedButton(
-                onPressed: () => Get.off(() => EmailSignInV()),
+                onPressed: () => Get.to(() => EmailSignInV()),
                 style: ElevatedButton.styleFrom(
                   fixedSize: Size(size.width * 0.64, size.height * 0.064),
                   foregroundColor: theme.colorScheme.secondary,

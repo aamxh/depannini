@@ -38,8 +38,6 @@ class LocationApi {
   static Future<String?> getLocationDescription(LatLng latLng) async {
     final url = "${MyConstants.reverseGeoCodingApiBaseUrl}${latLng.latitude},"
         "${latLng.longitude}&key=$androidMapsSdkKey";
-    final setLocationVM = Get.find<SetLocationVM>();
-    setLocationVM.isAddressValid = false;
     try {
       final Response<Map<String, dynamic>> res = await Dio().get(url);
       if (res.statusCode == 200) {
@@ -47,7 +45,6 @@ class LocationApi {
         if (results.isEmpty) return null;
         final String? address =  results[0]['formatted_address'];
         if (address == null) return null;
-        setLocationVM.isAddressValid = true;
         return address;
       }
       return null;

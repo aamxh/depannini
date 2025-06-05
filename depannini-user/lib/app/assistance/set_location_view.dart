@@ -39,6 +39,13 @@ class _SetLocationVS extends State<SetLocationV> {
   }
 
   @override
+  void dispose() {
+    _ctrl.dispose();
+    _vm.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);

@@ -98,8 +98,8 @@ class AssistanceRequestView(APIView):
                 assistance.pickup_lat, assistance.pickup_lng,
                 assistant.current_lat, assistant.current_lng
             )
-            if distance <= 5:  # 5km radius
-                nearby_assistants.append(
+            #if distance <= 5:  # 5km radius
+            nearby_assistants.append(
                     {'assistant_id': assistant.id, 'distance': distance})
 
         # sorting nearby assistants
@@ -205,7 +205,15 @@ class AcceptAssistanceView(APIView):
                     "status": "accepted",
                     "assistant": {
                         "id": assistance.assistant.id,
-                        "name": assistance.assistant.name
+                        "name": assistance.assistant.name,
+                        "phone_number": assistance.assistant.phone_number,
+                        "lat" : assistance.assistant.current_lat,
+                        "lng" : assistance.assistant.current_lng
+                    },
+                    "client": {
+                        "id": assistance.client.id,
+                        "name": assistance.client.name,
+                        "phone_number": assistance.client.phone_number
                     }
                 }
             )
@@ -223,9 +231,10 @@ class AssistanceStatusUpdateView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def patch(self, request, assistance_id):
-        assistance_status = request.data['status']
+
         channel_layer = get_channel_layer()
         try:
+            assistance_status = request.data['status']
             assistance = get_object_or_404(Assistance, id=assistance_id)
             if request.user != assistance.assistant and request.user != assistance.client:
                 return Response(
@@ -233,28 +242,25 @@ class AssistanceStatusUpdateView(APIView):
                         'description': 'you must be an assistant or a client in this assistant to update it'},
                     status=status.HTTP_403_FORBIDDEN
                 )
-            if assistance_status not in ['ongoing', 'completed', 'canceled']:
+                # Only three update choices
+            if assistance_status not in ['ongoing', 'canceled']:
                 return Response(
                     {'error': 'Status not valid',
-                        'description': 'available choices: ongoing, completed, canceled'},
+                        'description': 'available choices: "ongoing", "canceled" '},
                     status=status.HTTP_404_NOT_FOUND
                 )
+                # Assistance can only perform a cancel update for an assistance
             if assistance_status != 'canceled' and request.user.user_type == 'client':
                 return Response(
                     {'error': 'Unauthorized update for a client',
                      'description': 'cannot update'},
                     status=status.HTTP_403_FORBIDDEN
                 )
+                # A completed or canceled assistance is in a final state
             if assistance.status == 'completed' or assistance.status == 'canceled':
                 return Response(
                     {'error': 'Not allowed',
                         'description': 'This assistance is no longer editable'},
-                    status=status.HTTP_406_NOT_ACCEPTABLE
-                )
-            if assistance_status == 'completed' and assistance.total_price == 0:
-                return Response(
-                    {'error': 'Status not accepted',
-                        'description': 'Cannot complete assistance before setting its price'},
                     status=status.HTTP_406_NOT_ACCEPTABLE
                 )
 
@@ -266,6 +272,59 @@ class AssistanceStatusUpdateView(APIView):
                 {
                     "type": "assistance_update",  # Maps to method name in consumer
                     "status": assistance_status,
+                    "assistant": {
+                        "id": assistance.assistant.id,
+                        "name": assistance.assistant.name
+                    },
+                    "client": {
+                        "id": assistance.client.id,
+                        "name": assistance.client.name
+                    }
+                }
+            )
+            return Response(AssistanceSerializer(assistance).data, status=status.HTTP_202_ACCEPTED)
+
+        except:
+            return Response(
+                {'error': 'Assistance not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class EndAssistanceView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, assistance_id):
+
+        channel_layer = get_channel_layer()
+        try:
+            assistance = get_object_or_404(Assistance, id=assistance_id)
+            assistance_type = assistance.assistance_type
+            if request.user != assistance.assistant:
+                return Response(
+                    {'error': 'Unauthorized update',
+                        'description': 'you must be an assistant to be able to end an assistance'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+
+            if assistance_type == 'repair':
+                if not request.data.get('total_price', None):
+                    return Response(
+                        {'error': 'Field missing',
+                         'description': 'A repair assistance cannot be ended before setting its price by the assistant'},
+                        status=status.HTTP_403_FORBIDDEN
+                    )
+                assistance.total_price = request.data['total_price']
+
+            assistance.status = 'completed'
+            assistance.save()
+
+            async_to_sync(channel_layer.group_send)(
+                f"assistance_{assistance.id}",
+                {
+                    "type": "end_assistance",  # Maps to method name in consumer
+                    "status": 'completed',
+                    "total_price": assistance.total_price,
                     "assistant": {
                         "id": assistance.assistant.id,
                         "name": assistance.assistant.name

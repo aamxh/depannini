@@ -31,7 +31,7 @@ class PhoneNumberVS extends State<PhoneNumberV> {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(),
-      body: Container(
+      body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
         child: Form(
           key: _key,

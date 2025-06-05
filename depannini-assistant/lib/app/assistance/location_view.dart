@@ -30,6 +30,14 @@ class _LocationVS extends State<LocationV> {
     _initialize();
   }
 
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    _assistanceVM.dispose();
+    _locationVM.dispose();
+    super.dispose();
+  }
+
   Future<void> _initialize() async {
     await _locationVM.initializeCurrentLocation();
     await _locationVM.setPath(_locationVM.assistantLocation, _locationVM.clientLocation);
@@ -40,12 +48,9 @@ class _LocationVS extends State<LocationV> {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),
       body: SingleChildScrollView(
         child: Obx(() =>
-        _assistanceVM.assistance.state == 'canceled' ?
+        _assistanceVM.state == 'canceled' ?
             Center(child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -75,6 +80,7 @@ class _LocationVS extends State<LocationV> {
             )) :
             Column(
               children: [
+                SizedBox(height: size.height * 0.1,),
                 SizedBox(
                   height: size.height * 0.64,
                   child: GoogleMap(
@@ -100,7 +106,7 @@ class _LocationVS extends State<LocationV> {
                     markers: {
                       Marker(
                         markerId: MarkerId('assistant'),
-                        position: _locationVM.assistantLocation,
+                        position: _locationVM.clientLocation,
                         infoWindow: InfoWindow(title: "Assistant"),
                         icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
                       ),
@@ -139,13 +145,13 @@ class _LocationVS extends State<LocationV> {
                             style: theme.textTheme.bodyMedium,
                           ),
                           Text(
-                            _assistanceVM.assistance.state,
+                            _assistanceVM.state,
                             style: theme.textTheme.bodyMedium,
                           ),
                         ],
                       ),
                       SizedBox(height: size.height * 0.03,),
-                      _assistanceVM.assistance.state == 'completed' ?
+                      _assistanceVM.state == 'ongoing' ?
                       Container() :
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -169,27 +175,20 @@ class _LocationVS extends State<LocationV> {
                             ),
                           ),
                           ElevatedButton(
-                            onPressed: () async {
-                              if (!_assistanceVM.arrived) {
-                                final res = await AssistanceAPI.updateAssistanceState(
-                                  _assistanceVM.assistance.id.toString(),
-                                  'completed',
-                                );
-                                if (res) {
-                                  _assistanceVM.arrived = true;
-                                }
-                              }
-                            },
+                            onPressed: () => AssistanceAPI.updateAssistanceState(
+                              _assistanceVM.assistance.id.toString(),
+                              'ongoing',
+                            ),
                             style: ElevatedButton.styleFrom(
                               elevation: 0,
                               fixedSize: Size(size.width * 0.35, size.height * 0.064),
-                              backgroundColor: _assistanceVM.arrived ?
+                              backgroundColor: _assistanceVM.state == 'ongoing' ?
                               theme.scaffoldBackgroundColor == Colors.white ?
                               MyConstants.lightGrey :
                               MyConstants.darkGrey :
                               MyConstants.primaryC,
                               side: BorderSide(
-                                color: _assistanceVM.arrived ?
+                                color: _assistanceVM.state == 'ongoing' ?
                                 theme.scaffoldBackgroundColor == Colors.white ?
                                 MyConstants.darkGrey! :
                                 MyConstants.lightGrey! :
@@ -198,7 +197,9 @@ class _LocationVS extends State<LocationV> {
                             ),
                             child: Text(
                               'Arrived',
-                              style: theme.textTheme.bodyLarge,
+                              style: theme.textTheme.bodyLarge!.copyWith(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],
