@@ -44,6 +44,8 @@ android {
         jvmTarget = JavaVersion.VERSION_18
     }
 
+    def MAPS_API_KEY = project.hasProperty("MAPS_API_KEY") ? project.MAPS_API_KEY : ""
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.depannini_assistant"
@@ -53,6 +55,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        resValue "string", "google_maps_key", MAPS_API_KEY
     }
 
     buildTypes {
