@@ -19,9 +19,10 @@
 - virtualenv
 - PostgreSQL or SQLite
 
-Notes: - For the moment, the frontend is only tested with SQLite. 
-       - You have to install PostgreSQL on your machine if you want to work with it.
-       - To switch between PostgreSQL and SQLite, comment/uncomment databse settings in settings.py.
+- Notes: 
+   - For the moment, the frontend is only tested with SQLite. 
+   - You have to install PostgreSQL on your machine if you want to work with it.
+   - To switch between PostgreSQL and SQLite, comment/uncomment databse settings in settings.py.
 
 ### Installation & Setup
 
