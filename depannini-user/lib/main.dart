@@ -1,11 +1,8 @@
 import 'package:depannini_user/app/auth/auth_wrapper_view.dart';
-import 'package:depannini_user/app/main/welcome_view.dart';
 import 'package:depannini_user/core/theme_controller.dart';
 import 'core/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -23,9 +20,6 @@ Future<void> main() async {
 }
 
 Future<void> _initializeApp() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         // Handle notification tap
