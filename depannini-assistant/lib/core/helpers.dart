@@ -1,5 +1,5 @@
-import 'package:depannini_assistant/app/main/assistant_view_model.dart';
-import 'package:depannini_assistant/app/main/models/assistant.dart';
+import 'package:depannini_assistant/app/common/view_models/assistant_view_model.dart';
+import 'package:depannini_assistant/app/common/models/assistant.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,8 +23,6 @@ class MyHelpers {
     final Uri url = Uri(scheme: 'tel', path: num);
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
-    } else {
-      print('Could not launch $url');
     }
   }
 

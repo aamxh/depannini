@@ -178,27 +178,27 @@ CMAKE_RUNTIME_OUTPUT_DIRECTORY:UNINITIALIZED=D:\Flutter Projects\depannini_assis
 //Flags used by the linker during the creation of dll's.
 CMAKE_SHARED_LINKER_FLAGS:STRING=
 
-//Flags used by the linker during the creation of shared libraries
+//Flags used by the linker during the creation of common libraries
 // during DEBUG builds.
 CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
 
-//Flags used by the linker during the creation of shared libraries
+//Flags used by the linker during the creation of common libraries
 // during MINSIZEREL builds.
 CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL:STRING=
 
-//Flags used by the linker during the creation of shared libraries
+//Flags used by the linker during the creation of common libraries
 // during RELEASE builds.
 CMAKE_SHARED_LINKER_FLAGS_RELEASE:STRING=
 
-//Flags used by the linker during the creation of shared libraries
+//Flags used by the linker during the creation of common libraries
 // during RELWITHDEBINFO builds.
 CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 
-//If set, runtime paths are not added when installing shared libraries,
+//If set, runtime paths are not added when installing common libraries,
 // but are added when building.
 CMAKE_SKIP_INSTALL_RPATH:BOOL=NO
 
-//If set, runtime paths are not added when using shared libraries.
+//If set, runtime paths are not added when using common libraries.
 CMAKE_SKIP_RPATH:BOOL=NO
 
 //Flags used by the linker during the creation of static libraries

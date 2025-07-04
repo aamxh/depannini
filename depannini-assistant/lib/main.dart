@@ -1,6 +1,6 @@
-import 'package:depannini_assistant/app/assistance/repair_request_details_view.dart';
-import 'package:depannini_assistant/app/assistance/towing_request_details_view.dart';
-import 'package:depannini_assistant/app/auth/auth_wrapper_view.dart';
+import 'package:depannini_assistant/app/assistance/views/repair_request_details_view.dart';
+import 'package:depannini_assistant/app/assistance/views/towing_request_details_view.dart';
+import 'package:depannini_assistant/app/auth/common/auth_wrapper_view.dart';
 import 'package:depannini_assistant/core/theme_controller.dart';
 import 'core/theme.dart';
 import 'package:flutter/material.dart';
@@ -22,15 +22,11 @@ Future<void> main() async {
 }
 
 Future<void> _initializeApp() async {
-  //  await Firebase.initializeApp(
-  //    options: DefaultFirebaseOptions.currentPlatform,
-  //  );
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
     onDidReceiveNotificationResponse: (NotificationResponse response) {
       final payload = response.payload;
       if (payload != null) {
-        print('Notification payload: $payload');
         if (payload == 'repair') {
           Get.to(() => RepairRequestDetailsV());
         } else if (payload == 'towing') {

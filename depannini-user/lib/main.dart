@@ -1,4 +1,4 @@
-import 'package:depannini_user/app/auth/auth_wrapper_view.dart';
+import 'package:depannini_user/app/auth/common/auth_wrapper_view.dart';
 import 'package:depannini_user/core/theme_controller.dart';
 import 'core/theme.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +24,7 @@ Future<void> _initializeApp() async {
       onDidReceiveNotificationResponse: (NotificationResponse response) {
         // Handle notification tap
         if (response.payload != null) {
-          print('Notification payload: ${response.payload}');
+
         }
   });
   Get.put(ThemeCtrl());

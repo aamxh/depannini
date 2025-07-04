@@ -20,8 +20,6 @@ class MyHelpers {
     final Uri url = Uri(scheme: 'tel', path: num);
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
-    } else {
-
     }
   }
 
