@@ -1,3 +1,4 @@
+import 'package:depannini_user/app/auth/common/auth_api.dart';
 import 'package:depannini_user/app/auth/common/welcome_view.dart';
 import 'package:depannini_user/app/settings/views/change_password_view.dart';
 import 'package:depannini_user/app/settings/views/edit_profile_view.dart';
@@ -108,8 +109,11 @@ class SettingsV extends StatelessWidget {
             ),
             SizedBox(height: size.height * 0.1,),
             TextButton(
-              onPressed: () {
-                Get.offAll(() => WelcomeV());
+              onPressed: () async {
+                final res = await AuthApi.signOut();
+                if (res) {
+                  Get.offAll(() => WelcomeV());
+                }
               },
               child: Text(
                 'Log out',

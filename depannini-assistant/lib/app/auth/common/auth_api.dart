@@ -11,12 +11,13 @@ class AuthApi {
 
   AuthApi._();
 
+  static final dio = Dio();
+  static final httpBaseUrl = MyConstants.httpDjangoApiBaseUrl;
+
   static Future<bool> signUpUser(Assistant assistant) async {
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
-    final dio = Dio();
     final assistantMap = MyHelpers.modifySignUpDataFormat(assistant);
     try {
-      final res = await dio.post('$baseUrl/auth/register/',
+      final res = await dio.post('$httpBaseUrl/auth/register/',
         data: jsonEncode(assistantMap),);
       if (MyHelpers.resIsOk(res.statusCode)) {
         await saveAccessToken(
@@ -34,14 +35,12 @@ class AuthApi {
   }
 
   static Future<bool> signInUserWithPhoneNum(String phoneNum, String password) async {
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
-    final dio = Dio();
     final payload = {
       'phone_number': phoneNum,
       'password': password,
     };
     try {
-      final res = await dio.post('$baseUrl/auth/login/phone/',
+      final res = await dio.post('$httpBaseUrl/auth/login/phone/',
         data: jsonEncode(payload),);
       if (MyHelpers.resIsOk(res.statusCode)) {
         await saveAccessToken(
@@ -61,14 +60,12 @@ class AuthApi {
   }
 
   static Future<bool> signInUserWithEmail(String email, String password) async {
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
-    final dio = Dio();
     final payload = {
       'email': email,
       'password': password,
     };
     try {
-      final res = await dio.post('$baseUrl/auth/login/email/',
+      final res = await dio.post('$httpBaseUrl/auth/login/email/',
         data: jsonEncode(payload),);
       if (MyHelpers.resIsOk(res.statusCode)) {
         await saveAccessToken(
@@ -122,10 +119,9 @@ class AuthApi {
     final prefs = await SharedPreferences.getInstance();
     final refreshToken = prefs.getString('refresh_token');
     if (refreshToken == null) return false;
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
     try {
       final response = await Dio().post(
-        "$baseUrl/auth/token/refresh/",
+        "$httpBaseUrl/auth/token/refresh/",
         data: {'token': refreshToken},
       );
       final newAccessToken = response.data['access_token'];
@@ -142,6 +138,20 @@ class AuthApi {
   static Future<bool> isUserAuthenticated() async {
     if (await isTokenValid()) return true;
     return await tryRefreshToken();
+  }
+
+  static Future<bool> signOut() async {
+    bool res = true;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('access_token');
+      await prefs.remove('refresh_token');
+      await prefs.remove('token_expiry');
+      return res;
+    } catch(ex) {
+      print(ex);
+      return false;
+    }
   }
 
 }

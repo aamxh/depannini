@@ -1,11 +1,8 @@
-import 'package:depannini_user/app/assistance/view_models/set_location_view_model.dart';
 import 'package:depannini_user/core/api_keys.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:depannini_user/core/helpers.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-import 'package:get/get.dart' hide Response;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:geolocator/geolocator.dart';
@@ -30,7 +27,7 @@ class LocationApi {
       }
       return await location.getLocation();
     } catch (ex) {
-      print(ex);
+      print(ex.toString());
       return null;
     }
   }
@@ -64,10 +61,8 @@ class LocationApi {
   }
 
   static Future<Set<Polyline>> getPath(LatLng start, LatLng end) async {
-
     final url = "${MyConstants.directionsApiBaseUrl}${start.latitude},${start.longitude}"
         "&destination=${end.latitude},${end.longitude}&key=$directionsKey";
-
     try {
       final res = await Dio().get(url);
       if (!MyHelpers.resIsOk(res.statusCode)) return {};
@@ -87,7 +82,7 @@ class LocationApi {
         ),
       };
     } catch (e) {
-      debugPrint("Failed to fetch directions: $e");
+      print("Failed to fetch directions: $e");
       return {};
     }
   }

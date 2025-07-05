@@ -9,9 +9,10 @@ class AuthApi {
 
   AuthApi._();
 
+  static final dio = Dio();
+  static final httpBaseUrl = MyConstants.httpDjangoApiBaseUrl;
+
   static Future<bool> signUpUser(Client client) async {
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
-    final dio = Dio();
     final clientMap = client.toJson();
     clientMap.addAll({
       'password_confirm': clientMap['password'],
@@ -23,7 +24,7 @@ class AuthApi {
     clientMap.remove('phoneNum');
     clientMap['phone_number'] = num;
     try {
-      final res = await dio.post('$baseUrl/auth/register/',
+      final res = await dio.post('$httpBaseUrl/auth/register/',
         data: jsonEncode(clientMap),);
       if (MyHelpers.resIsOk(res.statusCode)) {
         await saveAccessToken(
@@ -41,14 +42,12 @@ class AuthApi {
   }
 
   static Future<bool> signInUserWithPhoneNum(String phoneNum, String password) async {
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
-    final dio = Dio();
     final payload = {
       'phone_number': phoneNum,
       'password': password,
     };
     try {
-      final res = await dio.post('$baseUrl/auth/login/phone/',
+      final res = await dio.post('$httpBaseUrl/auth/login/phone/',
         data: jsonEncode(payload),);
       if (MyHelpers.resIsOk(res.statusCode)) {
         await saveAccessToken(
@@ -66,14 +65,12 @@ class AuthApi {
   }
 
   static Future<bool> signInUserWithEmail(String email, String password) async {
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
-    final dio = Dio();
     final payload = {
       'email': email,
       'password': password,
     };
     try {
-      final res = await dio.post('$baseUrl/auth/login/email/',
+      final res = await dio.post('$httpBaseUrl/auth/login/email/',
         data: jsonEncode(payload),);
       if (MyHelpers.resIsOk(res.statusCode)) {
         await saveAccessToken(
@@ -145,6 +142,20 @@ class AuthApi {
   static Future<bool> isUserAuthenticated() async {
     if (await isTokenValid()) return true;
     return await tryRefreshToken();
+  }
+
+  static Future<bool> signOut() async {
+    bool res = true;
+    try {
+      final refs = await SharedPreferences.getInstance();
+      res = res & await refs.remove('access_token');
+      res = res & await refs.remove('refresh_token');
+      res = res & await refs.remove('token_expiry');
+      return res;
+    } catch (ex) {
+      print(ex);
+      return false;
+    }
   }
 
 }

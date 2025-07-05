@@ -12,19 +12,21 @@ class AssistanceAPI {
 
   AssistanceAPI._();
 
+  static final dio = Dio();
+  static final httpBaseUrl = MyConstants.httpDjangoApiBaseUrl;
+  static final wsBaseUrl = MyConstants.wsDjangoApiBaseUrl;
+
   static Future<WebSocketChannel?> requestAssistance(AssistanceRequest assistance) async {
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
-    final dio = Dio();
     try {
     final token = await AuthApi.getAccessToken();
     dio.options.headers['Authorization'] = 'Bearer $token';
     Map<String, dynamic> payload = assistance.toJson();
     payload = MyHelpers.modifyCamelToSnakeForOneKey(payload, 'assistanceType');
     payload = MyHelpers.modifyCamelToSnakeForOneKey(payload, 'vehicleType');
-    print(payload);
-    final res = await dio.post('$baseUrl/assistance/request/',
+    print(payload.toString());
+    final res = await dio.post('$httpBaseUrl/assistance/request/',
       data: jsonEncode(payload),);
-    print(res);
+    print(res.toString());
     if (MyHelpers.resIsOk(res.statusCode)) {
       final channel = await connectToAssistanceWS(res.data['assistance']['id'].toString());
       if (channel != null) {
@@ -41,8 +43,7 @@ class AssistanceAPI {
   }
 
   static Future<WebSocketChannel?> connectToAssistanceWS(String id) async {
-    final baseUrl = MyConstants.wsDjangoApiBaseUrl;
-    final url = "$baseUrl/assistance/$id/";
+    final url = "$wsBaseUrl/assistance/$id/";
     print("Connecting to: $url");
     try {
       final channel = WebSocketChannel.connect(Uri.parse(url));
@@ -55,13 +56,11 @@ class AssistanceAPI {
   }
 
   static Future<bool> updateAssistanceState(String id, String state) async {
-    final dio = Dio();
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
     try {
       final token = await AuthApi.getAccessToken();
       dio.options.headers['Authorization'] = 'Bearer $token';
       final res = await dio.patch(
-        "$baseUrl/assistance/update/status/$id/",
+        "$httpBaseUrl/assistance/update/status/$id/",
         data: {"status": state},
       );
       if (MyHelpers.resIsOk(res.statusCode)) return true;

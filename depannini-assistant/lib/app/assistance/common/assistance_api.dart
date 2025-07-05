@@ -11,14 +11,16 @@ class AssistanceAPI {
 
   AssistanceAPI._();
 
+  static final dio = Dio();
+  static final httpBaseUrl = MyConstants.httpDjangoApiBaseUrl;
+  static final wsBaseUrl = MyConstants.wsDjangoApiBaseUrl;
+
   static Future<bool> changeAssistantState(bool isActive) async {
-    final dio = Dio();
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
     try {
       final token = await AuthApi.getAccessToken();
       dio.options.headers['Authorization'] = 'Bearer $token';
       final res = await dio.put(
-        "$baseUrl/profile/update-status/",
+        "$httpBaseUrl/profile/update-status/",
         data: {"is_active": isActive},
       );
       if (MyHelpers.resIsOk(res.statusCode)) return true;
@@ -30,12 +32,10 @@ class AssistanceAPI {
   }
 
   static Future<bool> acceptAssistance(String id) async {
-    final dio = Dio();
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
     try {
       final token = await AuthApi.getAccessToken();
       dio.options.headers['Authorization'] = 'Bearer $token';
-      final res = await dio.patch("$baseUrl/assistance/accept/$id/");
+      final res = await dio.patch("$httpBaseUrl/assistance/accept/$id/");
       if (MyHelpers.resIsOk(res.statusCode)) {
         Get.find<AssistanceVM>().phoneNum = res.data['client']['phone_number'];
         final res2 = await changeAssistantState(false);
@@ -56,13 +56,11 @@ class AssistanceAPI {
   }
 
   static Future<void> updateAssistanceState(String id, String state) async {
-    final dio = Dio();
-    final baseUrl = MyConstants.httpDjangoApiBaseUrl;
     try {
       final token = await AuthApi.getAccessToken();
       dio.options.headers['Authorization'] = 'Bearer $token';
       final res = await dio.patch(
-        "$baseUrl/assistance/update/status/$id/",
+        "$httpBaseUrl/assistance/update/status/$id/",
         data: {"status": state},
       );
       if (MyHelpers.resIsOk(res.statusCode)) {
@@ -75,8 +73,7 @@ class AssistanceAPI {
   }
 
   static Future<WebSocketChannel?> connectToAssistantWS(String id) async {
-    final baseUrl = MyConstants.wsDjangoApiBaseUrl;
-    final url = "$baseUrl/assistant/$id/";
+    final url = "$wsBaseUrl/assistant/$id/";
     print("Connecting to: $url");
     try {
       final channel = WebSocketChannel.connect(Uri.parse(url));
@@ -89,8 +86,7 @@ class AssistanceAPI {
   }
 
   static Future<WebSocketChannel?> connectToAssistanceWS(String id) async {
-    final baseUrl = MyConstants.wsDjangoApiBaseUrl;
-    final url = "$baseUrl/assistance/$id/";
+    final url = "$wsBaseUrl/assistance/$id/";
     print("Connecting to: $url");
     try {
       final channel = WebSocketChannel.connect(Uri.parse(url));
