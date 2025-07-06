@@ -1,5 +1,6 @@
 import 'package:depannini_user/app/auth/common/auth_api.dart';
 import 'package:depannini_user/app/auth/common/welcome_view.dart';
+import 'package:depannini_user/app/common/view_models/client_view_model.dart';
 import 'package:depannini_user/app/settings/views/change_password_view.dart';
 import 'package:depannini_user/app/settings/views/edit_profile_view.dart';
 import 'package:depannini_user/app/settings/views/history_view.dart';
@@ -18,6 +19,7 @@ class SettingsV extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
+    final vm = Get.find<ClientVM>();
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -37,14 +39,14 @@ class SettingsV extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        'Hakmi Zohir',
+                        vm.name,
                         style: theme.textTheme.titleSmall,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 5,),
                       Text(
-                        'hakmizohir@gmail.com',
+                        vm.email,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

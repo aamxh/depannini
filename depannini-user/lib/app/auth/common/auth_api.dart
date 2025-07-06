@@ -1,7 +1,10 @@
 import 'package:depannini_user/app/common/models/client.dart';
+import 'package:depannini_user/app/common/profile_api.dart';
+import 'package:depannini_user/app/common/view_models/client_view_model.dart';
 import 'package:depannini_user/core/constants.dart';
 import 'package:depannini_user/core/helpers.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -55,6 +58,7 @@ class AuthApi {
             res.data['tokens']['refresh'],
             DateTime.now().add(const Duration(days: 7)),
         );
+        await initializeProfile(res.data['tokens']['access']);
         return true;
       }
       return false;
@@ -78,6 +82,7 @@ class AuthApi {
           res.data['tokens']['refresh'],
           DateTime.now().add(const Duration(days: 7)),
         );
+        await initializeProfile(res.data['tokens']['access']);
         return true;
       }
       return false;
@@ -124,7 +129,7 @@ class AuthApi {
     if (refreshToken == null) return false;
     final baseUrl = MyConstants.httpDjangoApiBaseUrl;
     try {
-      final response = await Dio().post(
+      final response = await dio.post(
         "$baseUrl/auth/token/refresh/",
         data: {'token': refreshToken},
       );
@@ -155,6 +160,21 @@ class AuthApi {
     } catch (ex) {
       print(ex);
       return false;
+    }
+  }
+
+  static Future<void> initializeProfile(String token) async {
+    try {
+      final client = Get.find<ClientVM>();
+      final profile = await ProfileAPI.getProfile(token);
+      if (profile == null) return;
+      client.name = profile.name;
+      client.email = profile.name;
+      client.num = profile.phoneNum;
+      client.currentLat = profile.currentLat;
+      client.currentLng = profile.currentLng;
+    } catch(ex) {
+      print(ex);
     }
   }
 

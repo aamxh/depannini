@@ -4,6 +4,7 @@ import 'package:depannini_assistant/app/auth/common/welcome_view.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class EnableLocationV extends StatelessWidget {
 
@@ -58,9 +59,13 @@ class EnableLocationV extends StatelessWidget {
                     final res = await LocationApi.getCurrentLocation();
                     Get.back;
                     if (res == null) return;
+                    final address = await LocationApi.getLocationDescription(
+                        LatLng(res.latitude!, res.longitude!),
+                    );
                     Get.put(AssistantVM());
                     Get.find<AssistantVM>().currentLat = res.latitude!;
                     Get.find<AssistantVM>().currentLng = res.longitude!;
+                    Get.find<AssistantVM>().address = address ?? '';
                     Get.to(() => WelcomeV());
                   },
                   style: ElevatedButton.styleFrom(

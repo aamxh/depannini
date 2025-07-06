@@ -1,10 +1,11 @@
 import 'package:depannini_assistant/app/auth/common/auth_api.dart';
 import 'package:depannini_assistant/app/auth/common/welcome_view.dart';
+import 'package:depannini_assistant/app/common/view_models/assistant_view_model.dart';
 import 'package:depannini_assistant/app/settings/views/change_password_view.dart';
 import 'package:depannini_assistant/app/settings/views/edit_profile_view.dart';
 import 'package:depannini_assistant/app/settings/views/history_view.dart';
 import 'package:depannini_assistant/app/settings/views/privacy_policy_view.dart';
-import 'package:depannini_assistant/app/settings/views/settings_tile_widget.dart';
+import 'package:depannini_assistant/app/settings/widgets/settings_tile_widget.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ class SettingsV extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
+    final vm = AssistantVM();
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -37,14 +39,14 @@ class SettingsV extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        'Hakmi Zohir',
+                        vm.name,
                         style: theme.textTheme.titleSmall,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(height: 5,),
                       Text(
-                        'hakmizohir@gmail.com222222222',
+                        vm.email,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

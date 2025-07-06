@@ -1,4 +1,3 @@
-import "package:depannini_user/app/common/view_models/client_view_model.dart";
 import "package:depannini_user/app/auth/signup/view_models/phone_number_verification_view_model.dart";
 import "package:depannini_user/core/constants.dart";
 import "package:flutter/material.dart";

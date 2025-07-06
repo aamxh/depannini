@@ -1,12 +1,14 @@
 import 'package:depannini_assistant/app/assistance/common/assistance_api.dart';
 import 'package:depannini_assistant/app/assistance/view_models/assistance_view_model.dart';
+import 'package:depannini_assistant/app/common/view_models/assistant_view_model.dart';
 import 'package:depannini_assistant/app/main/view_models/assistant_ws_view_model.dart';
+import 'package:depannini_assistant/app/main/view_models/set_location_view_model.dart';
+import 'package:depannini_assistant/app/main/views/set_location_view.dart';
 import 'package:depannini_assistant/app/settings/views/settings_view.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-
 import '../../../core/theme_controller.dart';
 
 class HomeV extends StatelessWidget {
@@ -14,6 +16,7 @@ class HomeV extends StatelessWidget {
   HomeV({super.key});
 
   final _assistantWSVM = Get.find<AssistantWSVM>();
+  final _assistantVM = Get.find<AssistantVM>();
   final _ctrl = Get.find<ThemeCtrl>();
 
   @override
@@ -55,7 +58,7 @@ class HomeV extends StatelessWidget {
         children: [
           SizedBox(height: size.height * 0.05),
           Text(
-            'Hello Mohammed,',
+            'Hello ${_assistantVM.name},',
             style: theme.textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
@@ -103,7 +106,27 @@ class HomeV extends StatelessWidget {
             ),
           ),
           SizedBox(height: size.height * 0.02,),
+          Text(
+            _assistantVM.address,
+            style: theme.textTheme.bodyLarge,
+          ),
           SizedBox(height: size.height * 0.02,),
+          ElevatedButton(
+            onPressed: () {
+              Get.put(SetLocationVM());
+              Get.to(() => SetLocationV());
+            },
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              fixedSize: Size(size.width * 0.4, size.height * 0.064),
+            ),
+            child: Text(
+              'Update Location',
+              style: theme.textTheme.titleSmall!.copyWith(
+                color: Colors.white,
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -11,12 +11,14 @@ class Client {
   final String phoneNum;
   final double currentLat;
   final double currentLng;
+  final String address;
 
   Client({
     required this.name,
     required this.email,
     required this.password,
     required this.phoneNum,
+    required this.address,
     required this.currentLat,
     required this.currentLng,
   });

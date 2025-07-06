@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:depannini_user/app/assistance/views/location_view.dart';
 import 'package:depannini_user/app/assistance/view_models/location_view_model.dart';
-import 'package:depannini_user/app/assistance/models/assistance_request.dart';
 import 'package:depannini_user/app/assistance/models/assistant.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

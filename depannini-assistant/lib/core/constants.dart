@@ -15,8 +15,8 @@ class MyConstants {
   static const directionsApiBaseUrl =
       "https://maps.googleapis.com/maps/api/directions/json?origin=";
 
-  static const httpDjangoApiBaseUrl = 'http://192.168.6.191:8000/api';
+  static const httpDjangoApiBaseUrl = 'http://10.0.2.2:8000/api';
 
-  static const wsDjangoApiBaseUrl = 'ws://192.168.6.191:8000/ws';
+  static const wsDjangoApiBaseUrl = 'ws://10.0.2.2:8000/ws';
 
 }

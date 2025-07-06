@@ -2,10 +2,8 @@ import 'package:depannini_user/app/auth/common/auth_api.dart';
 import 'package:depannini_user/app/auth/signin/views/email_signin_view.dart';
 import 'package:depannini_user/app/auth/signin/views/reset_password_view.dart';
 import 'package:depannini_user/app/auth/signup/views/phone_number_view.dart';
-import 'package:depannini_user/app/common/view_models/client_view_model.dart';
 import 'package:depannini_user/app/main/views/home_view.dart';
 import 'package:depannini_user/core/constants.dart';
-import 'package:depannini_user/core/helpers.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -179,7 +177,6 @@ class _SignInVS extends State<PhoneNumberSignInV> {
                       );
                       Get.back();
                       if (res) {
-                        Get.delete<ClientVM>();
                         Get.offAll(() => HomeV());
                       }
                     }

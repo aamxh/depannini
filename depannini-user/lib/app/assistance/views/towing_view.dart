@@ -1,8 +1,6 @@
 import 'package:depannini_user/app/assistance/common/assistance_api.dart';
 import 'package:depannini_user/app/assistance/view_models/assistance_view_model.dart';
-import 'package:depannini_user/app/assistance/view_models/location_view_model.dart';
 import 'package:depannini_user/app/assistance/models/assistance_request.dart';
-import 'package:depannini_user/app/assistance/views/location_view.dart';
 import 'package:depannini_user/app/assistance/widgets/location_field_widget.dart';
 import 'package:depannini_user/app/assistance/view_models/towing_view_model.dart';
 import 'package:depannini_user/core/constants.dart';

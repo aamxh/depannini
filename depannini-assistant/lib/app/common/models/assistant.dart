@@ -11,6 +11,7 @@ class Assistant {
   final String phoneNumber;
   final double currentLat;
   final double currentLng;
+  final String address;
   final String serviceType;
   final String vehicleType;
   final String drivingLicenseCat;
@@ -25,6 +26,7 @@ class Assistant {
     required this.phoneNumber,
     required this.currentLat,
     required this.currentLng,
+    required this.address,
     required this.serviceType,
     required this.vehicleType,
     required this.drivingLicenseCat,

@@ -58,6 +58,7 @@ class AssistanceAPI {
   static Future<void> updateAssistanceState(String id, String state) async {
     try {
       final token = await AuthApi.getAccessToken();
+      if (token == null) return;
       dio.options.headers['Authorization'] = 'Bearer $token';
       final res = await dio.patch(
         "$httpBaseUrl/assistance/update/status/$id/",

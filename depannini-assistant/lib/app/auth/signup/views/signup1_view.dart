@@ -13,7 +13,6 @@ class SignUp1V extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final _licenseNumCtrl = TextEditingController();
   final _regNumCtrl = TextEditingController();
-  final _licenseDateCtrl = TextEditingController();
   final _vm = Get.find<AssistantVM>();
 
   @override

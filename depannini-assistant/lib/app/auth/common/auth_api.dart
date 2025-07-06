@@ -1,3 +1,5 @@
+import 'package:depannini_assistant/app/common/profile_api.dart';
+import 'package:depannini_assistant/app/common/view_models/assistant_view_model.dart';
 import 'package:depannini_assistant/app/main/view_models/assistant_ws_view_model.dart';
 import 'package:depannini_assistant/app/common/models/assistant.dart';
 import 'package:depannini_assistant/core/constants.dart';
@@ -48,6 +50,7 @@ class AuthApi {
           res.data['tokens']['refresh'],
           DateTime.now().add(const Duration(days: 7)),
         );
+        await initializeProfile(res.data['tokens']['access']);
         Get.put(AssistantWSVM());
         Get.find<AssistantWSVM>().id = res.data['user']['id'].toString();
         return true;
@@ -73,6 +76,7 @@ class AuthApi {
           res.data['tokens']['refresh'],
           DateTime.now().add(const Duration(days: 7)),
         );
+        await initializeProfile(res.data['tokens']['access']);
         Get.put(AssistantWSVM());
         Get.find<AssistantWSVM>().id = res.data['user']['id'].toString();
         return true;
@@ -120,7 +124,7 @@ class AuthApi {
     final refreshToken = prefs.getString('refresh_token');
     if (refreshToken == null) return false;
     try {
-      final response = await Dio().post(
+      final response = await dio.post(
         "$httpBaseUrl/auth/token/refresh/",
         data: {'token': refreshToken},
       );
@@ -151,6 +155,23 @@ class AuthApi {
     } catch(ex) {
       print(ex);
       return false;
+    }
+  }
+
+  static Future<void> initializeProfile(String token) async {
+    try {
+      final assistantVM = Get.find<AssistantVM>();
+      final profile = await ProfileAPI.getProfile(token);
+      if (profile == null) return;
+      assistantVM.name = profile.name;
+      assistantVM.email = profile.name;
+      assistantVM.phoneNumber = profile.phoneNumber;
+      assistantVM.currentLat = profile.currentLat;
+      assistantVM.currentLng = profile.currentLng;
+      assistantVM.serviceType = profile.serviceType;
+      assistantVM.vehicleType = profile.vehicleType;
+    } catch(ex) {
+      print(ex);
     }
   }
 

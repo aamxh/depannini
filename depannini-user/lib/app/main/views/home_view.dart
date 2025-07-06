@@ -1,5 +1,4 @@
-import 'package:depannini_user/app/assistance/view_models/repair_view_model.dart';
-import 'package:depannini_user/app/assistance/view_models/towing_view_model.dart';
+import 'package:depannini_user/app/common/view_models/client_view_model.dart';
 import 'package:depannini_user/app/main/widgets/home_card_widget.dart';
 import 'package:depannini_user/app/settings/views/settings_view.dart';
 import 'package:depannini_user/core/constants.dart';
@@ -12,6 +11,7 @@ class HomeV extends StatelessWidget {
   HomeV({super.key});
 
   final _ctrl = Get.find<ThemeCtrl>();
+  final _vm = Get.find<ClientVM>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class HomeV extends StatelessWidget {
         children: [
           SizedBox(height: size.height * 0.05),
           Text(
-            'Hello Mohammed,',
+            'Hello ${_vm.name}',
             style: theme.textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),

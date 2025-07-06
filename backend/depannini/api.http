@@ -2,10 +2,10 @@ POST http://localhost:8000/api/auth/register/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "anes",
-    "password": "test",
-    "password_confirm": "test",
-    "phone_number": "+213783072562",
+    "name": "test0",
+    "password": "test0",
+    "password_confirm": "test0",
+    "phone_number": "+213783272562",
     "user_type": "client"
 }
 
@@ -14,13 +14,13 @@ POST http://localhost:8000/api/auth/register/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "anes",
-    "password": "test",
-    "password_confirm": "test",
+    "name": "test0",
+    "password": "test0",
+    "password_confirm": "test0",
     "phone_number": "+213783961920",
     "user_type": "assistant",
     "service_type": "towing",
-    "vehicle_type": "light",
+    "vehicle_type": "car",
     "current_lat" : 3423,
     "current_lng" : 222,
     "driving_license_cat": "b",
@@ -124,3 +124,8 @@ Authorization: Bearer
 GET http://localhost:8000/api/assistance/view/7/ HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4OTc2MDU3LCJpYXQiOjE3NDgzNzEyNTcsImp0aSI6IjNhYmRhYjg1N2Y5NjQ1ZDk4Mzg2OWYyZDU3MWY1YTM2IiwidXNlcl9pZCI6MjF9.jERb-hxATE3kF0en1iwa-a73-paDirT50VQ6LqGpIRQ
+
+###
+GET http://localhost:8000/api/profile/assistant/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzUyMzY0Nzc1LCJpYXQiOjE3NTE3NTk5NzUsImp0aSI6IjcwMWQ3OTFkMTBlZTRmMmM4N2U4MzcyNzcxNzFjY2I0IiwidXNlcl9pZCI6NTl9.-7u4lOQvXPG-AZjtrQhtq-DFerOqeli9KrYA2QqRT2g

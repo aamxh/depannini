@@ -1,4 +1,5 @@
 import 'package:depannini_assistant/app/common/location_api.dart';
+import 'package:depannini_assistant/app/common/profile_api.dart';
 import 'package:depannini_assistant/app/main/view_models/set_location_view_model.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:flutter/material.dart';
@@ -104,9 +105,12 @@ class _SetLocationVS extends State<SetLocationV> {
                   ),
                   SizedBox(height: 10,),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_vm.isAddressValid) {
-                        //Handle saving the data here
+                        await ProfileAPI.updateLocation(
+                            _vm.location!.latitude,
+                            _vm.location!.longitude,
+                        );
                         Get.delete<SetLocationVM>();
                         Get.back();
                       }

@@ -14,6 +14,7 @@ class AssistantVM extends GetxController {
   final RxInt _vehicleRegistrationNum = 0.obs;
   final Rx<String> _drivingLicenseNum = ''.obs;
   final Rx<String> _drivingLicenseExpiry = '10:02:26'.obs;
+  final Rx<String> _address = ''.obs;
 
   set name(String val) => _name.value = val;
   set phoneNumber(String val) => _phoneNumber.value = val;
@@ -27,6 +28,7 @@ class AssistantVM extends GetxController {
   set vehicleRegistrationNum(int val) => _vehicleRegistrationNum.value = val;
   set drivingLicenseNum(String val) => _drivingLicenseNum.value = val;
   set drivingLicenseExpiry(String val) => _drivingLicenseExpiry.value = val;
+  set address(String val) => _address.value = val;
 
   String get name => _name.value;
   String get phoneNumber => _phoneNumber.value;
@@ -40,5 +42,6 @@ class AssistantVM extends GetxController {
   int get vehicleRegistrationNum => _vehicleRegistrationNum.value;
   String get drivingLicenseNum => _drivingLicenseNum.value;
   String get drivingLicenseExpiry => _drivingLicenseExpiry.value;
+  String get address => _address.value;
 
 }

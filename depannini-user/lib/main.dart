@@ -3,15 +3,6 @@ import 'package:depannini_user/core/theme_controller.dart';
 import 'core/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-const androidInitializationSettings =
-AndroidInitializationSettings('@mipmap/ic_launcher');
-final initializationSettings = InitializationSettings(
-  android: androidInitializationSettings,
-  iOS: DarwinInitializationSettings(),
-);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,13 +11,6 @@ Future<void> main() async {
 }
 
 Future<void> _initializeApp() async {
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        // Handle notification tap
-        if (response.payload != null) {
-
-        }
-  });
   Get.put(ThemeCtrl());
 }
 
