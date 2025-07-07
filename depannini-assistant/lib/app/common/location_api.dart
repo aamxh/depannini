@@ -12,6 +12,8 @@ class LocationApi {
 
   LocationApi._();
 
+  static final dio = Dio();
+
   static Future<LocationData?> getCurrentLocation() async {
     final location = Location();
     try {
@@ -37,8 +39,9 @@ class LocationApi {
     final url = "${MyConstants.reverseGeoCodingApiBaseUrl}${latLng.latitude},"
         "${latLng.longitude}&key=$androidMapsSdkKey";
     try {
-      final Response<Map<String, dynamic>> res = await Dio().get(url);
-      if (res.statusCode == 200) {
+      final Response<Map<String, dynamic>> res = await dio.get(url);
+      print(res);
+      if (MyHelpers.resIsOk(res.statusCode)) {
         final List results = res.data!['results'];
         if (results.isEmpty) return null;
         final String? address = results[0]['formatted_address'];
@@ -62,12 +65,10 @@ class LocationApi {
   }
 
   static Future<Set<Polyline>> getPath(LatLng start, LatLng end) async {
-
     final url = "${MyConstants.directionsApiBaseUrl}${start.latitude},${start.longitude}"
         "&destination=${end.latitude},${end.longitude}&key=$directionsKey";
-
     try {
-      final res = await Dio().get(url);
+      final res = await dio.get(url);
       if (!MyHelpers.resIsOk(res.statusCode)) return {};
       final data = res.data;
       if (data['routes'].isEmpty) return {};

@@ -19,17 +19,17 @@ class ProfileAPI {
         final assistant = Assistant(
           name: res.data['assistant']['name'] ?? '',
           email: res.data['assistant']['email'] ?? '',
-          address: res.data['address'] ?? '',
+          address: res.data['assistant']['address'] ?? '',
           phoneNumber: res.data['assistant']['phone_number'] ?? '',
-          currentLat: res.data['current_lat'] ?? '',
-          currentLng: res.data['current_lng'] ?? '',
+          currentLat: res.data['assistant']['current_lat'] ?? 0.0,
+          currentLng: res.data['assistant']['current_lng'] ?? 0.0,
           password: '',
-          serviceType: res.data['service_type'] ?? '',
-          vehicleType: res.data['vehicle_type'] ?? '',
-          drivingLicenseCat: res.data['driving_license_cat'] ?? '',
-          drivingLicenseNum: res.data['driving_license_num'] ?? '',
-          drivingLicenseExpiry: res.data['driving_license_expiry'] ?? '',
-          vehicleRegistrationNum: res.data['vehicle_registration_num'] ?? '',
+          serviceType: res.data['assistant']['service_type'] ?? '',
+          vehicleType: res.data['assistant']['vehicle_type'] ?? '',
+          drivingLicenseCat: res.data['assistant']['driving_license_cat'] ?? '',
+          drivingLicenseNum: res.data['assistant']['driving_license_num'] ?? '',
+          drivingLicenseExpiry: res.data['assistant']['driving_license_expiry'] ?? '',
+          vehicleRegistrationNum: res.data['assistant']['vehicle_registration_num'] ?? 0,
         );
         return assistant;
       }

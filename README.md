@@ -84,7 +84,7 @@ You use it to sign-in to Django admin panel, it's accessed from the web using th
 
 ## API Endpoints
 
-### Authentication
+;### Authentication
 
 - `POST /api/auth/register/` - Signing-up
 - `POST /api/auth/login/email/` - Email login

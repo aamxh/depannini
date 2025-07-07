@@ -13,13 +13,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 class SettingsV extends StatelessWidget {
 
-  const SettingsV({super.key});
+  SettingsV({super.key});
+
+  final _vm = Get.find<AssistantVM>();
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final theme = Theme.of(context);
-    final vm = AssistantVM();
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -38,17 +39,21 @@ class SettingsV extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      Text(
-                        vm.name,
-                        style: theme.textTheme.titleSmall,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Obx(() =>
+                        Text(
+                          _vm.name,
+                          style: theme.textTheme.titleSmall,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       SizedBox(height: 5,),
-                      Text(
-                        vm.email,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      Obx(() =>
+                        Text(
+                          _vm.email,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       SizedBox(height: 5,),
                       TextButton(

@@ -14,19 +14,20 @@ POST http://localhost:8000/api/auth/register/ HTTP/1.1
 Content-Type: application/json
 
 {
-    "name": "test0",
+    "name": "Anes",
     "password": "test0",
     "password_confirm": "test0",
-    "phone_number": "+213783961920",
+    "phone_number": "+213352623524",
     "user_type": "assistant",
     "service_type": "towing",
-    "vehicle_type": "car",
-    "current_lat" : 3423,
-    "current_lng" : 222,
-    "driving_license_cat": "b",
-    "driving_license_num": 32434,
-    "driving_license_expiry": "20:03:26",
-    "vehicle_registration_num": 2343
+    "vehicle_type": "truck",
+    "current_lat" : 263.22,
+    "current_lng" : 25.2525,
+    "address" : "",
+    "driving_license_cat": "c",
+    "driving_license_num": 252352,
+    "driving_license_expiry": "10:02:26",
+    "vehicle_registration_num": 246264241
 }
 
 ###

@@ -187,7 +187,7 @@ class _SignInVS extends State<PhoneNumberSignInV> {
                     Get.back();
                     if (res) {
                       Get.put(AssistanceVM());
-                      Get.offAll(() => HomeV());
+                      Get.to(() => HomeV());
                     }
                   }
                 },

@@ -2,7 +2,6 @@ import 'package:depannini_assistant/app/auth/common/auth_api.dart';
 import 'package:depannini_assistant/app/auth/signup/view_models/email_verification_view_model.dart';
 import 'package:depannini_assistant/app/common/view_models/assistant_view_model.dart';
 import 'package:depannini_assistant/app/assistance/view_models/assistance_view_model.dart';
-import 'package:depannini_assistant/app/main/view_models/assistant_ws_view_model.dart';
 import 'package:depannini_assistant/app/common/models/assistant.dart';
 import 'package:depannini_assistant/core/constants.dart';
 import 'package:email_otp/email_otp.dart';
@@ -115,9 +114,8 @@ class EmailVerificationV extends StatelessWidget {
                       vehicleRegistrationNum: vm.vehicleRegistrationNum,
                     ));
                     if (res) {
-                      Get.put(AssistanceVM());
-                      Get.put(AssistantWSVM());
-                      Get.offAll(() => HomeV());
+                      Get.put(AssistanceVM(), permanent: true);
+                      Get.to(() => HomeV());
                     }
                   } else {
                     Get.showSnackbar(GetSnackBar(

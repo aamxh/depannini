@@ -57,12 +57,16 @@ class EnableLocationV extends StatelessWidget {
                       barrierDismissible: false,
                     );
                     final res = await LocationApi.getCurrentLocation();
-                    Get.back;
-                    if (res == null) return;
+                    if (res == null || res.longitude == 0.0 || res.latitude == 0.0) {
+                      Get.back;
+                      return;
+                    }
                     final address = await LocationApi.getLocationDescription(
                         LatLng(res.latitude!, res.longitude!),
                     );
-                    Get.put(AssistantVM());
+                    Get.back;
+                    if (address == null) return;
+                    Get.put(AssistantVM(), permanent: true);
                     Get.find<AssistantVM>().currentLat = res.latitude!;
                     Get.find<AssistantVM>().currentLng = res.longitude!;
                     Get.find<AssistantVM>().address = address ?? '';

@@ -134,7 +134,7 @@ class EmailSignInV extends StatelessWidget {
                       Get.back();
                       if (res) {
                         Get.put(AssistanceVM());
-                        Get.offAll(() => HomeV());
+                        Get.to(() => HomeV());
                       }
                     }
                   },
